@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+  <meta name="apple-mobile-web-app-title" content="Plant Sale"/>
+  <title>Master Gardeners Plant Sale</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
+      background: #F2F2F7;
+      min-height: 100vh;
+      max-width: 480px;
+      margin: 0 auto;
+    }
+
+    /* HEADER */
+    #header {
+      background: linear-gradient(135deg, #1B3A2D, #2D5E45);
+      color: #fff;
+      padding: 52px 20px 0;
+      border-radius: 0 0 28px 28px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+      position: sticky; top: 0; z-index: 100;
+    }
+    .header-inner { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
+    .header-label { font-size: 11px; letter-spacing: 0.18em; color: #86EFAC; font-weight: 600; text-transform: uppercase; margin-bottom: 2px; }
+    .header-title { font-size: 30px; font-weight: 800; letter-spacing: -0.03em; }
+    .total-badge { background: rgba(255,255,255,0.1); border-radius: 16px; padding: 10px 14px; text-align: right; border: 1px solid rgba(255,255,255,0.15); }
+    .total-label { font-size: 10px; color: #86EFAC; letter-spacing: 0.1em; font-weight: 600; }
+    .total-amount { font-size: 24px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.1; }
+    .total-items { font-size: 11px; color: #86EFAC; }
+
+    .db-status { font-size: 11px; display: flex; align-items: center; gap: 6px; margin-bottom: 8px; }
+    .db-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; background: #fbbf24; }
+    .db-dot.ok { background: #4ade80; }
+    .db-dot.error { background: #f87171; }
+    .db-label { font-weight: 600; color: #fbbf24; }
+    .db-label.ok { color: #4ade80; }
+    .db-label.error { color: #f87171; }
+
+    .tabs { display: flex; gap: 0; }
+    .tab {
+      flex: 1; padding: 10px 0; border: none; background: transparent;
+      color: rgba(255,255,255,0.45); font-size: 14px; font-weight: 600;
+      cursor: pointer; border-bottom: 2px solid transparent;
+      font-family: inherit;
+    }
+    .tab.active { color: #fff; border-bottom: 2px solid #86EFAC; }
+
+    /* CONTENT */
+    #content { padding: 20px 16px; padding-bottom: 40px; }
+
+    /* GRID */
+    .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .card {
+      border-radius: 18px; border: 2px solid; padding: 14px 12px;
+      display: flex; flex-direction: column; align-items: center; gap: 10px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    }
+    .price-tag { font-size: 22px; font-weight: 800; }
+    .stepper { display: flex; align-items: center; gap: 10px; }
+    .step-btn {
+      width: 38px; height: 38px; border-radius: 12px; border: 2px solid;
+      background: rgba(255,255,255,0.6); font-size: 22px; font-weight: 700;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      font-family: inherit; line-height: 1;
+    }
+    .step-btn:active { background: rgba(255,255,255,0.9); transform: scale(0.95); }
+    .count-num { font-size: 28px; font-weight: 800; min-width: 34px; text-align: center; }
+    .subtotal { font-size: 13px; font-weight: 600; opacity: 0.75; }
+
+    /* ACTIONS */
+    .actions { display: flex; gap: 12px; margin-top: 20px; }
+    .reset-btn {
+      padding: 14px 20px; border-radius: 14px; border: 2px solid #D1D1D6;
+      background: #fff; font-size: 16px; font-weight: 600; color: #3A3A3C;
+      cursor: pointer; font-family: inherit;
+    }
+    .upload-btn {
+      flex: 1; padding: 14px 20px; border-radius: 14px; border: none;
+      background: linear-gradient(135deg, #1B3A2D, #2D5E45);
+      font-size: 16px; font-weight: 700; color: #86EFAC;
+      cursor: pointer; font-family: inherit;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+    }
+    .upload-btn:active { opacity: 0.75; }
+    .upload-btn:disabled { opacity: 0.55; }
+    .sync-note { text-align: center; font-size: 12px; color: #16A34A; margin-top: 8px; font-weight: 600; }
+    .error-box { margin-top: 10px; background: #FEE2E2; border: 1px solid #FCA5A5; border-radius: 12px; padding: 10px 14px; font-size: 12px; color: #7F1D1D; }
+
+    /* SUMMARY */
+    .summary-card { margin-top: 20px; background: #fff; border-radius: 20px; padding: 16px 18px; box-shadow: 0 2px 12px rgba(0,0,0,0.07); }
+    .summary-title { font-size: 13px; font-weight: 700; color: #8E8E93; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 12px; }
+    .summary-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+    .summary-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+    .summary-text { flex: 1; font-size: 15px; color: #3A3A3C; }
+    .summary-amt { font-size: 15px; font-weight: 600; color: #1C1C1E; }
+    .summary-divider { height: 1px; background: #F2F2F7; margin: 4px 0 12px; }
+    .grand-total-amt { font-size: 18px; font-weight: 800; color: #1C1C1E; }
+
+    /* HISTORY */
+    .all-time-banner {
+      background: linear-gradient(135deg, #1B3A2D, #2D5E45); border-radius: 20px;
+      padding: 16px 20px; display: flex; justify-content: space-around;
+      align-items: center; margin-bottom: 12px;
+    }
+    .all-time-item { text-align: center; }
+    .all-time-val { font-size: 22px; font-weight: 800; color: #fff; }
+    .all-time-label { font-size: 11px; color: #86EFAC; font-weight: 600; letter-spacing: 0.05em; }
+    .all-time-divider { width: 1px; height: 36px; background: rgba(255,255,255,0.15); }
+    .refresh-btn {
+      background: none; border: 1.5px solid #D1D1D6; border-radius: 10px;
+      padding: 6px 14px; font-size: 13px; font-weight: 600; color: #3A3A3C;
+      cursor: pointer; font-family: inherit; margin-bottom: 10px; display: block; margin-left: auto;
+    }
+    .history-card { background: #fff; border-radius: 18px; padding: 14px 16px; box-shadow: 0 2px 12px rgba(0,0,0,0.07); margin-bottom: 12px; }
+    .history-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+    .history-time { font-size: 13px; color: #8E8E93; }
+    .history-total { font-size: 20px; font-weight: 800; color: #1C1C1E; }
+    .history-meta { font-size: 12px; color: #AEAEB2; margin-bottom: 10px; }
+    .history-tiers { display: flex; flex-wrap: wrap; gap: 6px; }
+    .history-pill { font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: 20px; border: 1.5px solid; }
+    .empty-state { text-align: center; color: #8E8E93; font-size: 15px; padding: 60px 20px; line-height: 1.6; }
+
+    /* TOAST */
+    #toast {
+      position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%);
+      color: #fff; padding: 12px 24px; border-radius: 24px;
+      font-size: 14px; font-weight: 600;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.25); z-index: 999;
+      white-space: nowrap; display: none;
+      transition: opacity 0.3s;
+    }
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+
+<div id="header">
+  <div class="header-inner">
+    <div>
+      <div class="header-label">Master Gardeners</div>
+      <div class="header-title">Plant Sale</div>
+    </div>
+    <div class="total-badge">
+      <div class="total-label">THIS SALE</div>
+      <div class="total-amount" id="grand-total">$0.00</div>
+      <div class="total-items" id="total-items">0 plants</div>
+    </div>
+  </div>
+  <div class="db-status">
+    <span class="db-dot" id="db-dot"></span>
+    <span class="db-label" id="db-label">Connecting…</span>
+  </div>
+  <div class="tabs">
+    <button class="tab active" onclick="showTab('checkout')">🌱 Checkout</button>
+    <button class="tab" onclick="showTab('history')">📋 History</button>
+  </div>
+</div>
+
+<div id="content">
+  <!-- CHECKOUT TAB -->
+  <div id="tab-checkout">
+    <div class="grid" id="price-grid"></div>
+    <div class="actions">
+      <button class="reset-btn" onclick="resetCounts()">Clear</button>
+      <button class="upload-btn" id="upload-btn" onclick="uploadSale()">Save to Database ↑</button>
+    </div>
+    <div class="sync-note hidden" id="sync-note"></div>
+    <div class="error-box hidden" id="error-box"></div>
+    <div class="summary-card hidden" id="summary-card">
+      <div class="summary-title">Session Summary</div>
+      <div id="summary-rows"></div>
+    </div>
+  </div>
+
+  <!-- HISTORY TAB -->
+  <div id="tab-history" class="hidden">
+    <div class="all-time-banner hidden" id="all-time-banner">
+      <div class="all-time-item">
+        <div class="all-time-val" id="all-revenue">$0.00</div>
+        <div class="all-time-label">Total Revenue</div>
+      </div>
+      <div class="all-time-divider"></div>
+      <div class="all-time-item">
+        <div class="all-time-val" id="all-plants">0</div>
+        <div class="all-time-label">Plants Sold</div>
+      </div>
+      <div class="all-time-divider"></div>
+      <div class="all-time-item">
+        <div class="all-time-val" id="all-sessions">0</div>
+        <div class="all-time-label">Sessions</div>
+      </div>
+    </div>
+    <div class="error-box hidden" id="history-error-box"></div>
+    <button class="refresh-btn" onclick="loadHistory()">↻ Refresh</button>
+    <div id="history-list"><div class="empty-state">Loading…</div></div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+const SUPABASE_URL = "https://ctqtsgbojejlczyobkvm.supabase.co";
+const SUPABASE_KEY = "sb_publishable_KzokaEu5KYWGO6Vpk9Uu_g_qvryS4_g";
+
+const PRICE_TIERS = [
+  { price: 1,  color: "#FFFFFF", border: "#ccc",    text: "#333" },
+  { price: 2,  color: "#F9A8D4", border: "#EC4899",  text: "#831843" },
+  { price: 3,  color: "#FDE68A", border: "#F59E0B",  text: "#78350F" },
+  { price: 4,  color: "#86EFAC", border: "#22C55E",  text: "#14532D" },
+  { price: 5,  color: "#FDE68A", border: "#F59E0B",  text: "#78350F" },
+  { price: 6,  color: "#93C5FD", border: "#3B82F6",  text: "#1E3A8A" },
+  { price: 7,  color: "#FCA5A5", border: "#EF4444",  text: "#7F1D1D" },
+  { price: 8,  color: "#C4B5FD", border: "#8B5CF6",  text: "#3B0764" },
+  { price: 9,  color: "#6EE7B7", border: "#10B981",  text: "#064E3B" },
+  { price: 10, color: "#FCD34D", border: "#D97706",  text: "#451A03" },
+];
+
+// ── State ──────────────────────────────────────────────
+let counts = {};
+PRICE_TIERS.forEach(t => counts[t.price] = 0);
+try {
+  const saved = localStorage.getItem("plant-sale-counts");
+  if (saved) counts = { ...counts, ...JSON.parse(saved) };
+} catch {}
+
+function saveCounts() {
+  try { localStorage.setItem("plant-sale-counts", JSON.stringify(counts)); } catch {}
+}
+
+function getDeviceId() {
+  let id = localStorage.getItem("device-id");
+  if (!id) { id = Math.random().toString(36).slice(2,10).toUpperCase(); localStorage.setItem("device-id", id); }
+  return id;
+}
+
+// ── Supabase ───────────────────────────────────────────
+async function sbFetch(path, options = {}) {
+  // Pass API key as URL param (works with both legacy and new sb_publishable_ keys)
+  const sep = path.includes("?") ? "&" : "?";
+  const url = `${SUPABASE_URL}/rest/v1/${path}${sep}apikey=${SUPABASE_KEY}`;
+  const res = await fetch(url, {
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      "Accept": "application/json",
+      ...(options.headers || {}),
+    },
+  });
+  const text = await res.text();
+  if (!res.ok) throw new Error(`HTTP ${res.status}: ${text}`);
+  return text ? JSON.parse(text) : null;
+}
+
+// ── DB Status ──────────────────────────────────────────
+async function checkDb() {
+  try {
+    await sbFetch("sales?limit=1");
+    document.getElementById("db-dot").className = "db-dot ok";
+    document.getElementById("db-label").className = "db-label ok";
+    document.getElementById("db-label").textContent = "Connected to Supabase";
+  } catch(e) {
+    document.getElementById("db-dot").className = "db-dot error";
+    document.getElementById("db-label").className = "db-label error";
+    document.getElementById("db-label").textContent = "DB Unreachable";
+    showError(e.message);
+  }
+}
+
+// ── Toast ──────────────────────────────────────────────
+let toastTimer;
+function showToast(msg, type = "success") {
+  const el = document.getElementById("toast");
+  el.textContent = msg;
+  el.style.background = type === "error" ? "#EF4444" : "#16A34A";
+  el.style.display = "block";
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { el.style.display = "none"; }, 3000);
+}
+
+function showError(msg) {
+  const el = document.getElementById("error-box");
+  el.textContent = "DB Error: " + msg;
+  el.classList.remove("hidden");
+}
+
+// ── Render Grid ────────────────────────────────────────
+function renderGrid() {
+  const grid = document.getElementById("price-grid");
+  grid.innerHTML = "";
+  PRICE_TIERS.forEach(tier => {
+    const count = counts[tier.price] || 0;
+    const subtotal = count * tier.price;
+    const card = document.createElement("div");
+    card.className = "card";
+    card.style.background = tier.color;
+    card.style.borderColor = tier.border;
+    card.innerHTML = `
+      <div class="price-tag" style="color:${tier.text}">$${tier.price}</div>
+      <div class="stepper">
+        <button class="step-btn" style="border-color:${tier.border};color:${tier.text}"
+          onclick="adjust(${tier.price}, -1)">−</button>
+        <span class="count-num" style="color:${tier.text}" id="count-${tier.price}">${count}</span>
+        <button class="step-btn" style="border-color:${tier.border};color:${tier.text}"
+          onclick="adjust(${tier.price}, 1)">+</button>
+      </div>
+      <div class="subtotal" style="color:${tier.text}" id="subtotal-${tier.price}">
+        ${count > 0 ? "$"+subtotal.toFixed(2) : "—"}
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+  updateTotals();
+}
+
+// ── Adjust Count ───────────────────────────────────────
+function adjust(price, delta) {
+  counts[price] = Math.max(0, (counts[price] || 0) + delta);
+  saveCounts();
+  document.getElementById("count-"+price).textContent = counts[price];
+  const sub = counts[price] * price;
+  document.getElementById("subtotal-"+price).textContent = counts[price] > 0 ? "$"+sub.toFixed(2) : "—";
+  updateTotals();
+}
+
+function updateTotals() {
+  let grand = 0, total = 0;
+  PRICE_TIERS.forEach(t => { grand += t.price * (counts[t.price]||0); total += counts[t.price]||0; });
+  document.getElementById("grand-total").textContent = "$"+grand.toFixed(2);
+  document.getElementById("total-items").textContent = total + " plant" + (total !== 1 ? "s" : "");
+  renderSummary(grand, total);
+}
+
+function renderSummary(grand, total) {
+  const card = document.getElementById("summary-card");
+  if (total === 0) { card.classList.add("hidden"); return; }
+  card.classList.remove("hidden");
+  const rows = document.getElementById("summary-rows");
+  rows.innerHTML = "";
+  PRICE_TIERS.filter(t => counts[t.price] > 0).forEach(t => {
+    const row = document.createElement("div");
+    row.className = "summary-row";
+    row.innerHTML = `
+      <span class="summary-dot" style="background:${t.border}"></span>
+      <span class="summary-text">$${t.price} × ${counts[t.price]}</span>
+      <span class="summary-amt">$${(t.price*counts[t.price]).toFixed(2)}</span>
+    `;
+    rows.appendChild(row);
+  });
+  const div = document.createElement("div"); div.className = "summary-divider"; rows.appendChild(div);
+  const total_row = document.createElement("div");
+  total_row.className = "summary-row";
+  total_row.style.fontWeight = "700";
+  total_row.innerHTML = `<span style="flex:1">Grand Total</span><span class="grand-total-amt">$${grand.toFixed(2)}</span>`;
+  rows.appendChild(total_row);
+}
+
+// ── Reset ──────────────────────────────────────────────
+function resetCounts() {
+  PRICE_TIERS.forEach(t => counts[t.price] = 0);
+  saveCounts();
+  renderGrid();
+  document.getElementById("error-box").classList.add("hidden");
+  document.getElementById("sync-note").classList.add("hidden");
+  showToast("Sheet cleared!");
+}
+
+// ── Upload ─────────────────────────────────────────────
+async function uploadSale() {
+  let grand = 0, total = 0;
+  PRICE_TIERS.forEach(t => { grand += t.price*(counts[t.price]||0); total += counts[t.price]||0; });
+  if (total === 0) { showToast("Add some items first!", "error"); return; }
+
+  const btn = document.getElementById("upload-btn");
+  btn.disabled = true; btn.textContent = "Saving…";
+  document.getElementById("error-box").classList.add("hidden");
+
+  try {
+    await sbFetch("sales", {
+      method: "POST",
+      headers: { "Prefer": "return=representation" },
+      body: JSON.stringify({ device_id: getDeviceId(), counts, total_items: total, grand_total: grand }),
+    });
+    const note = document.getElementById("sync-note");
+    note.textContent = "✓ Synced to Supabase at " + new Date().toLocaleTimeString();
+    note.classList.remove("hidden");
+    showToast(`✓ Saved! $${grand.toFixed(2)} · ${total} plants`);
+  } catch(e) {
+    showError(e.message);
+    showToast("Upload failed — see error below", "error");
+  } finally {
+    btn.disabled = false; btn.textContent = "Save to Database ↑";
+  }
+}
+
+// ── History ────────────────────────────────────────────
+async function loadHistory() {
+  document.getElementById("history-list").innerHTML = '<div class="empty-state">Loading from Supabase…</div>';
+  document.getElementById("history-error-box").classList.add("hidden");
+  try {
+    const rows = await sbFetch("sales?order=created_at.desc&limit=100");
+    renderHistory(rows);
+  } catch(e) {
+    document.getElementById("history-error-box").textContent = "DB Error: " + e.message;
+    document.getElementById("history-error-box").classList.remove("hidden");
+    document.getElementById("history-list").innerHTML = "";
+  }
+}
+
+function renderHistory(rows) {
+  const list = document.getElementById("history-list");
+  if (!rows || rows.length === 0) {
+    list.innerHTML = '<div class="empty-state">No sessions yet.<br>Go to Checkout and save a sale!</div>';
+    document.getElementById("all-time-banner").classList.add("hidden");
+    return;
+  }
+  let totalRev = 0, totalPlants = 0;
+  rows.forEach(s => { totalRev += Number(s.grand_total||0); totalPlants += Number(s.total_items||0); });
+  document.getElementById("all-revenue").textContent = "$"+totalRev.toFixed(2);
+  document.getElementById("all-plants").textContent = totalPlants;
+  document.getElementById("all-sessions").textContent = rows.length;
+  document.getElementById("all-time-banner").classList.remove("hidden");
+
+  list.innerHTML = "";
+  rows.forEach(s => {
+    const card = document.createElement("div");
+    card.className = "history-card";
+    const pills = PRICE_TIERS.filter(t => s.counts?.[t.price] > 0).map(t =>
+      `<span class="history-pill" style="background:${t.color};border-color:${t.border};color:${t.text}">$${t.price} ×${s.counts[t.price]}</span>`
+    ).join("");
+    card.innerHTML = `
+      <div class="history-header">
+        <span class="history-time">${new Date(s.created_at).toLocaleString()}</span>
+        <span class="history-total">$${Number(s.grand_total).toFixed(2)}</span>
+      </div>
+      <div class="history-meta">${s.total_items} plants · Device ${(s.device_id||"").slice(-4)}</div>
+      <div class="history-tiers">${pills}</div>
+    `;
+    list.appendChild(card);
+  });
+}
+
+// ── Tabs ───────────────────────────────────────────────
+function showTab(tab) {
+  document.getElementById("tab-checkout").classList.toggle("hidden", tab !== "checkout");
+  document.getElementById("tab-history").classList.toggle("hidden", tab !== "history");
+  document.querySelectorAll(".tab").forEach((el, i) => {
+    el.classList.toggle("active", (i === 0 && tab === "checkout") || (i === 1 && tab === "history"));
+  });
+  if (tab === "history") loadHistory();
+}
+
+// ── Init ───────────────────────────────────────────────
+renderGrid();
+checkDb();
+</script>
+</body>
+</html>
