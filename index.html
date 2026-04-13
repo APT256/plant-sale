@@ -11,90 +11,59 @@
     * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
     body {
       font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
-      background: #F2F2F7;
-      min-height: 100vh;
-      max-width: 480px;
-      margin: 0 auto;
+      background: #F2F2F7; min-height: 100vh; max-width: 480px; margin: 0 auto;
     }
 
     /* HEADER */
     #header {
       background: linear-gradient(135deg, #1B3A2D, #2D5E45);
-      color: #fff;
-      padding: 52px 20px 0;
+      color: #fff; padding: 52px 20px 0;
       border-radius: 0 0 28px 28px;
       box-shadow: 0 8px 32px rgba(0,0,0,0.25);
       position: sticky; top: 0; z-index: 100;
     }
     .header-inner { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
     .header-label { font-size: 11px; letter-spacing: 0.18em; color: #86EFAC; font-weight: 600; text-transform: uppercase; margin-bottom: 2px; }
-    .header-title { font-size: 30px; font-weight: 800; letter-spacing: -0.03em; }
+    .header-title { font-size: 28px; font-weight: 800; letter-spacing: -0.03em; }
     .total-badge { background: rgba(255,255,255,0.1); border-radius: 16px; padding: 10px 14px; text-align: right; border: 1px solid rgba(255,255,255,0.15); }
     .total-label { font-size: 10px; color: #86EFAC; letter-spacing: 0.1em; font-weight: 600; }
     .total-amount { font-size: 24px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.1; }
     .total-items { font-size: 11px; color: #86EFAC; }
-
     .db-status { font-size: 11px; display: flex; align-items: center; gap: 6px; margin-bottom: 8px; }
     .db-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; background: #fbbf24; }
-    .db-dot.ok { background: #4ade80; }
-    .db-dot.error { background: #f87171; }
+    .db-dot.ok { background: #4ade80; } .db-dot.error { background: #f87171; }
     .db-label { font-weight: 600; color: #fbbf24; }
-    .db-label.ok { color: #4ade80; }
-    .db-label.error { color: #f87171; }
-
-    .tabs { display: flex; gap: 0; }
-    .tab {
-      flex: 1; padding: 10px 0; border: none; background: transparent;
-      color: rgba(255,255,255,0.45); font-size: 14px; font-weight: 600;
-      cursor: pointer; border-bottom: 2px solid transparent;
-      font-family: inherit;
-    }
+    .db-label.ok { color: #4ade80; } .db-label.error { color: #f87171; }
+    .tabs { display: flex; }
+    .tab { flex: 1; padding: 10px 0; border: none; background: transparent; color: rgba(255,255,255,0.45); font-size: 12px; font-weight: 600; cursor: pointer; border-bottom: 2px solid transparent; font-family: inherit; }
     .tab.active { color: #fff; border-bottom: 2px solid #86EFAC; }
 
     /* CONTENT */
-    #content { padding: 20px 16px; padding-bottom: 40px; }
+    #content { padding: 20px 16px 60px; }
+    .hidden { display: none !important; }
+    .section-title { font-size: 13px; font-weight: 700; color: #8E8E93; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 12px; }
 
     /* GRID */
     .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
-    .card {
-      border-radius: 18px; border: 2px solid; padding: 14px 12px;
-      display: flex; flex-direction: column; align-items: center; gap: 10px;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
-    }
+    .card { border-radius: 18px; border: 2px solid; padding: 14px 12px; display: flex; flex-direction: column; align-items: center; gap: 10px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
     .price-tag { font-size: 22px; font-weight: 800; }
     .stepper { display: flex; align-items: center; gap: 10px; }
-    .step-btn {
-      width: 38px; height: 38px; border-radius: 12px; border: 2px solid;
-      background: rgba(255,255,255,0.6); font-size: 22px; font-weight: 700;
-      cursor: pointer; display: flex; align-items: center; justify-content: center;
-      font-family: inherit; line-height: 1;
-    }
+    .step-btn { width: 38px; height: 38px; border-radius: 12px; border: 2px solid; background: rgba(255,255,255,0.6); font-size: 22px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; font-family: inherit; line-height: 1; }
     .step-btn:active { background: rgba(255,255,255,0.9); transform: scale(0.95); }
     .count-num { font-size: 28px; font-weight: 800; min-width: 34px; text-align: center; }
     .subtotal { font-size: 13px; font-weight: 600; opacity: 0.75; }
 
     /* ACTIONS */
     .actions { display: flex; gap: 12px; margin-top: 20px; }
-    .reset-btn {
-      padding: 14px 20px; border-radius: 14px; border: 2px solid #D1D1D6;
-      background: #fff; font-size: 16px; font-weight: 600; color: #3A3A3C;
-      cursor: pointer; font-family: inherit;
-    }
-    .upload-btn {
-      flex: 1; padding: 14px 20px; border-radius: 14px; border: none;
-      background: linear-gradient(135deg, #1B3A2D, #2D5E45);
-      font-size: 16px; font-weight: 700; color: #86EFAC;
-      cursor: pointer; font-family: inherit;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.2);
-    }
-    .upload-btn:active { opacity: 0.75; }
-    .upload-btn:disabled { opacity: 0.55; }
+    .btn { padding: 14px 20px; border-radius: 14px; border: 2px solid #D1D1D6; background: #fff; font-size: 16px; font-weight: 600; color: #3A3A3C; cursor: pointer; font-family: inherit; }
+    .btn-primary { flex: 1; border: none; background: linear-gradient(135deg, #1B3A2D, #2D5E45); color: #86EFAC; box-shadow: 0 4px 16px rgba(0,0,0,0.2); }
+    .btn-primary:active { opacity: 0.75; } .btn-primary:disabled { opacity: 0.55; }
+    .btn-danger { border-color: #FCA5A5; color: #DC2626; }
     .sync-note { text-align: center; font-size: 12px; color: #16A34A; margin-top: 8px; font-weight: 600; }
     .error-box { margin-top: 10px; background: #FEE2E2; border: 1px solid #FCA5A5; border-radius: 12px; padding: 10px 14px; font-size: 12px; color: #7F1D1D; }
 
-    /* SUMMARY */
+    /* SUMMARY CARD */
     .summary-card { margin-top: 20px; background: #fff; border-radius: 20px; padding: 16px 18px; box-shadow: 0 2px 12px rgba(0,0,0,0.07); }
-    .summary-title { font-size: 13px; font-weight: 700; color: #8E8E93; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 12px; }
     .summary-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
     .summary-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
     .summary-text { flex: 1; font-size: 15px; color: #3A3A3C; }
@@ -102,40 +71,57 @@
     .summary-divider { height: 1px; background: #F2F2F7; margin: 4px 0 12px; }
     .grand-total-amt { font-size: 18px; font-weight: 800; color: #1C1C1E; }
 
-    /* HISTORY */
-    .all-time-banner {
-      background: linear-gradient(135deg, #1B3A2D, #2D5E45); border-radius: 20px;
-      padding: 16px 20px; display: flex; justify-content: space-around;
-      align-items: center; margin-bottom: 12px;
-    }
-    .all-time-item { text-align: center; }
-    .all-time-val { font-size: 22px; font-weight: 800; color: #fff; }
-    .all-time-label { font-size: 11px; color: #86EFAC; font-weight: 600; letter-spacing: 0.05em; }
-    .all-time-divider { width: 1px; height: 36px; background: rgba(255,255,255,0.15); }
-    .refresh-btn {
-      background: none; border: 1.5px solid #D1D1D6; border-radius: 10px;
-      padding: 6px 14px; font-size: 13px; font-weight: 600; color: #3A3A3C;
-      cursor: pointer; font-family: inherit; margin-bottom: 10px; display: block; margin-left: auto;
-    }
-    .history-card { background: #fff; border-radius: 18px; padding: 14px 16px; box-shadow: 0 2px 12px rgba(0,0,0,0.07); margin-bottom: 12px; }
-    .history-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
-    .history-time { font-size: 13px; color: #8E8E93; }
-    .history-total { font-size: 20px; font-weight: 800; color: #1C1C1E; }
-    .history-meta { font-size: 12px; color: #AEAEB2; margin-bottom: 10px; }
-    .history-tiers { display: flex; flex-wrap: wrap; gap: 6px; }
+    /* STAT BANNER */
+    .stat-banner { background: linear-gradient(135deg, #1B3A2D, #2D5E45); border-radius: 20px; padding: 16px 20px; display: flex; justify-content: space-around; align-items: center; margin-bottom: 16px; }
+    .stat-item { text-align: center; }
+    .stat-val { font-size: 20px; font-weight: 800; color: #fff; }
+    .stat-label { font-size: 10px; color: #86EFAC; font-weight: 600; letter-spacing: 0.05em; margin-top: 2px; }
+    .stat-divider { width: 1px; height: 36px; background: rgba(255,255,255,0.15); }
+
+    /* REPORT CONTROLS */
+    .report-controls { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+    .report-period-btn { padding: 7px 16px; border-radius: 20px; border: 1.5px solid #D1D1D6; background: #fff; font-size: 13px; font-weight: 600; color: #3A3A3C; cursor: pointer; font-family: inherit; }
+    .report-period-btn.active { background: #1B3A2D; border-color: #1B3A2D; color: #86EFAC; }
+    .report-nav { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+    .report-nav-btn { width: 34px; height: 34px; border-radius: 10px; border: 1.5px solid #D1D1D6; background: #fff; font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-family: inherit; flex-shrink: 0; }
+    .report-nav-label { flex: 1; text-align: center; font-size: 15px; font-weight: 700; color: #1C1C1E; }
+    .report-section { background: #fff; border-radius: 18px; padding: 16px; box-shadow: 0 2px 12px rgba(0,0,0,0.07); margin-bottom: 12px; }
+    .report-section-title { font-size: 12px; font-weight: 700; color: #8E8E93; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 12px; }
+    .report-row { display: flex; align-items: center; gap: 8px; padding: 6px 0; border-bottom: 1px solid #F2F2F7; }
+    .report-row:last-child { border-bottom: none; }
+    .report-row-label { flex: 1; font-size: 14px; color: #3A3A3C; }
+    .report-row-count { font-size: 13px; color: #8E8E93; margin-right: 8px; }
+    .report-row-amt { font-size: 15px; font-weight: 700; color: #1C1C1E; }
+    .report-total-row { display: flex; justify-content: space-between; align-items: center; padding-top: 10px; margin-top: 4px; border-top: 2px solid #F2F2F7; }
+    .report-total-label { font-size: 15px; font-weight: 700; color: #1C1C1E; }
+    .report-total-amt { font-size: 20px; font-weight: 800; color: #1B3A2D; }
+    .bar-wrap { flex: 1; height: 6px; background: #F2F2F7; border-radius: 3px; overflow: hidden; margin: 0 8px; }
+    .bar-fill { height: 100%; border-radius: 3px; background: linear-gradient(90deg, #2D5E45, #86EFAC); }
+
+    /* HISTORY / SESSION CARDS */
+    .refresh-btn { background: none; border: 1.5px solid #D1D1D6; border-radius: 10px; padding: 6px 14px; font-size: 13px; font-weight: 600; color: #3A3A3C; cursor: pointer; font-family: inherit; margin-bottom: 10px; display: block; margin-left: auto; }
+    .session-card { background: #fff; border-radius: 18px; padding: 14px 16px; box-shadow: 0 2px 12px rgba(0,0,0,0.07); margin-bottom: 12px; }
+    .session-card.voided { opacity: 0.5; }
+    .session-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+    .session-time { font-size: 13px; color: #8E8E93; }
+    .session-total { font-size: 20px; font-weight: 800; color: #1C1C1E; }
+    .session-total.voided { text-decoration: line-through; color: #8E8E93; }
+    .session-meta { font-size: 12px; color: #AEAEB2; margin-bottom: 8px; }
+    .session-tiers { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
     .history-pill { font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: 20px; border: 1.5px solid; }
+    .void-btn { font-size: 12px; font-weight: 600; color: #DC2626; background: #FEE2E2; border: none; border-radius: 8px; padding: 5px 12px; cursor: pointer; font-family: inherit; }
+    .voided-badge { font-size: 11px; font-weight: 700; color: #DC2626; background: #FEE2E2; border-radius: 6px; padding: 2px 8px; display: inline-block; }
     .empty-state { text-align: center; color: #8E8E93; font-size: 15px; padding: 60px 20px; line-height: 1.6; }
 
+    /* MODAL */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 500; display: flex; align-items: flex-end; justify-content: center; }
+    .modal { background: #fff; border-radius: 24px 24px 0 0; padding: 24px 24px 40px; width: 100%; max-width: 480px; }
+    .modal-title { font-size: 18px; font-weight: 800; color: #1C1C1E; margin-bottom: 8px; }
+    .modal-body { font-size: 15px; color: #3A3A3C; margin-bottom: 24px; line-height: 1.5; }
+    .modal-actions { display: flex; gap: 12px; }
+
     /* TOAST */
-    #toast {
-      position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%);
-      color: #fff; padding: 12px 24px; border-radius: 24px;
-      font-size: 14px; font-weight: 600;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.25); z-index: 999;
-      white-space: nowrap; display: none;
-      transition: opacity 0.3s;
-    }
-    .hidden { display: none !important; }
+    #toast { position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%); color: #fff; padding: 12px 24px; border-radius: 24px; font-size: 14px; font-weight: 600; box-shadow: 0 8px 24px rgba(0,0,0,0.25); z-index: 999; white-space: nowrap; display: none; }
   </style>
 </head>
 <body>
@@ -157,48 +143,70 @@
     <span class="db-label" id="db-label">Connecting…</span>
   </div>
   <div class="tabs">
-    <button class="tab active" onclick="showTab('checkout')">🌱 Checkout</button>
-    <button class="tab" onclick="showTab('history')">📋 History</button>
+    <button class="tab active" onclick="showTab('checkout')">🌱 Sale</button>
+    <button class="tab" onclick="showTab('history')">🧾 Sessions</button>
+    <button class="tab" onclick="showTab('reports')">📊 Reports</button>
   </div>
 </div>
 
 <div id="content">
-  <!-- CHECKOUT TAB -->
+
+  <!-- ── CHECKOUT TAB ── -->
   <div id="tab-checkout">
     <div class="grid" id="price-grid"></div>
     <div class="actions">
-      <button class="reset-btn" onclick="resetCounts()">Clear</button>
-      <button class="upload-btn" id="upload-btn" onclick="uploadSale()">Save to Database ↑</button>
+      <button class="btn" onclick="resetCounts()">Clear</button>
+      <button class="btn btn-primary" id="upload-btn" onclick="uploadSale()">Save to Database ↑</button>
     </div>
     <div class="sync-note hidden" id="sync-note"></div>
     <div class="error-box hidden" id="error-box"></div>
     <div class="summary-card hidden" id="summary-card">
-      <div class="summary-title">Session Summary</div>
+      <div class="section-title">Session Summary</div>
       <div id="summary-rows"></div>
     </div>
   </div>
 
-  <!-- HISTORY TAB -->
+  <!-- ── HISTORY TAB ── -->
   <div id="tab-history" class="hidden">
-    <div class="all-time-banner hidden" id="all-time-banner">
-      <div class="all-time-item">
-        <div class="all-time-val" id="all-revenue">$0.00</div>
-        <div class="all-time-label">Total Revenue</div>
-      </div>
-      <div class="all-time-divider"></div>
-      <div class="all-time-item">
-        <div class="all-time-val" id="all-plants">0</div>
-        <div class="all-time-label">Plants Sold</div>
-      </div>
-      <div class="all-time-divider"></div>
-      <div class="all-time-item">
-        <div class="all-time-val" id="all-sessions">0</div>
-        <div class="all-time-label">Sessions</div>
-      </div>
+    <div class="stat-banner hidden" id="history-banner">
+      <div class="stat-item"><div class="stat-val" id="h-revenue">$0</div><div class="stat-label">REVENUE</div></div>
+      <div class="stat-divider"></div>
+      <div class="stat-item"><div class="stat-val" id="h-plants">0</div><div class="stat-label">PLANTS</div></div>
+      <div class="stat-divider"></div>
+      <div class="stat-item"><div class="stat-val" id="h-sessions">0</div><div class="stat-label">SESSIONS</div></div>
     </div>
-    <div class="error-box hidden" id="history-error-box"></div>
-    <button class="refresh-btn" onclick="loadHistory()">↻ Refresh</button>
-    <div id="history-list"><div class="empty-state">Loading…</div></div>
+    <div class="error-box hidden" id="history-error"></div>
+    <button class="refresh-btn" onclick="loadSessions()">↻ Refresh</button>
+    <div id="session-list"><div class="empty-state">Loading…</div></div>
+  </div>
+
+  <!-- ── REPORTS TAB ── -->
+  <div id="tab-reports" class="hidden">
+    <div class="report-controls">
+      <button class="report-period-btn active" onclick="setPeriod('daily')">Daily</button>
+      <button class="report-period-btn" onclick="setPeriod('monthly')">Monthly</button>
+      <button class="report-period-btn" onclick="setPeriod('annual')">Annual</button>
+    </div>
+    <div class="report-nav">
+      <button class="report-nav-btn" onclick="navReport(-1)">‹</button>
+      <div class="report-nav-label" id="report-nav-label">—</div>
+      <button class="report-nav-btn" onclick="navReport(1)">›</button>
+    </div>
+    <div class="error-box hidden" id="report-error"></div>
+    <div id="report-content"><div class="empty-state">Loading…</div></div>
+  </div>
+
+</div>
+
+<!-- VOID CONFIRM MODAL -->
+<div class="modal-overlay hidden" id="void-modal">
+  <div class="modal">
+    <div class="modal-title">Void this sale?</div>
+    <div class="modal-body" id="void-modal-body">This will mark the sale as voided. It will be excluded from all reports.</div>
+    <div class="modal-actions">
+      <button class="btn" style="flex:1" onclick="closeVoidModal()">Cancel</button>
+      <button class="btn btn-danger" style="flex:1;border:none;background:#DC2626;color:#fff;" onclick="confirmVoid()">Void Sale</button>
+    </div>
   </div>
 </div>
 
@@ -224,15 +232,14 @@ const PRICE_TIERS = [
 // ── State ──────────────────────────────────────────────
 let counts = {};
 PRICE_TIERS.forEach(t => counts[t.price] = 0);
-try {
-  const saved = localStorage.getItem("plant-sale-counts");
-  if (saved) counts = { ...counts, ...JSON.parse(saved) };
-} catch {}
+try { const s = localStorage.getItem("plant-counts"); if (s) counts = {...counts, ...JSON.parse(s)}; } catch {}
 
-function saveCounts() {
-  try { localStorage.setItem("plant-sale-counts", JSON.stringify(counts)); } catch {}
-}
+let allSessions = [];
+let reportPeriod = "daily";
+let reportOffset = 0; // 0 = current period, -1 = previous, etc.
+let pendingVoidId = null;
 
+function saveCounts() { try { localStorage.setItem("plant-counts", JSON.stringify(counts)); } catch {} }
 function getDeviceId() {
   let id = localStorage.getItem("device-id");
   if (!id) { id = Math.random().toString(36).slice(2,10).toUpperCase(); localStorage.setItem("device-id", id); }
@@ -241,16 +248,11 @@ function getDeviceId() {
 
 // ── Supabase ───────────────────────────────────────────
 async function sbFetch(path, options = {}) {
-  // Pass API key as URL param (works with both legacy and new sb_publishable_ keys)
   const sep = path.includes("?") ? "&" : "?";
   const url = `${SUPABASE_URL}/rest/v1/${path}${sep}apikey=${SUPABASE_KEY}`;
   const res = await fetch(url, {
     ...options,
-    headers: {
-      "Content-Type": "application/json",
-      "Accept": "application/json",
-      ...(options.headers || {}),
-    },
+    headers: { "Content-Type": "application/json", "Accept": "application/json", ...(options.headers||{}) },
   });
   const text = await res.text();
   if (!res.ok) throw new Error(`HTTP ${res.status}: ${text}`);
@@ -267,104 +269,81 @@ async function checkDb() {
   } catch(e) {
     document.getElementById("db-dot").className = "db-dot error";
     document.getElementById("db-label").className = "db-label error";
-    document.getElementById("db-label").textContent = "DB Unreachable";
-    showError(e.message);
+    document.getElementById("db-label").textContent = "DB Unreachable — " + e.message;
   }
 }
 
 // ── Toast ──────────────────────────────────────────────
 let toastTimer;
-function showToast(msg, type = "success") {
+function showToast(msg, type="success") {
   const el = document.getElementById("toast");
   el.textContent = msg;
   el.style.background = type === "error" ? "#EF4444" : "#16A34A";
   el.style.display = "block";
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => { el.style.display = "none"; }, 3000);
+  toastTimer = setTimeout(() => el.style.display = "none", 3000);
 }
 
-function showError(msg) {
-  const el = document.getElementById("error-box");
-  el.textContent = "DB Error: " + msg;
-  el.classList.remove("hidden");
-}
-
-// ── Render Grid ────────────────────────────────────────
+// ── Grid ───────────────────────────────────────────────
 function renderGrid() {
   const grid = document.getElementById("price-grid");
   grid.innerHTML = "";
   PRICE_TIERS.forEach(tier => {
     const count = counts[tier.price] || 0;
-    const subtotal = count * tier.price;
     const card = document.createElement("div");
     card.className = "card";
-    card.style.background = tier.color;
-    card.style.borderColor = tier.border;
+    card.style.cssText = `background:${tier.color};border-color:${tier.border}`;
     card.innerHTML = `
       <div class="price-tag" style="color:${tier.text}">$${tier.price}</div>
       <div class="stepper">
-        <button class="step-btn" style="border-color:${tier.border};color:${tier.text}"
-          onclick="adjust(${tier.price}, -1)">−</button>
+        <button class="step-btn" style="border-color:${tier.border};color:${tier.text}" onclick="adjust(${tier.price},-1)">−</button>
         <span class="count-num" style="color:${tier.text}" id="count-${tier.price}">${count}</span>
-        <button class="step-btn" style="border-color:${tier.border};color:${tier.text}"
-          onclick="adjust(${tier.price}, 1)">+</button>
+        <button class="step-btn" style="border-color:${tier.border};color:${tier.text}" onclick="adjust(${tier.price},1)">+</button>
       </div>
-      <div class="subtotal" style="color:${tier.text}" id="subtotal-${tier.price}">
-        ${count > 0 ? "$"+subtotal.toFixed(2) : "—"}
-      </div>
-    `;
+      <div class="subtotal" style="color:${tier.text}" id="sub-${tier.price}">${count>0?"$"+(count*tier.price).toFixed(2):"—"}</div>`;
     grid.appendChild(card);
   });
   updateTotals();
 }
 
-// ── Adjust Count ───────────────────────────────────────
 function adjust(price, delta) {
-  counts[price] = Math.max(0, (counts[price] || 0) + delta);
+  counts[price] = Math.max(0, (counts[price]||0) + delta);
   saveCounts();
   document.getElementById("count-"+price).textContent = counts[price];
-  const sub = counts[price] * price;
-  document.getElementById("subtotal-"+price).textContent = counts[price] > 0 ? "$"+sub.toFixed(2) : "—";
+  document.getElementById("sub-"+price).textContent = counts[price]>0 ? "$"+(counts[price]*price).toFixed(2) : "—";
   updateTotals();
 }
 
 function updateTotals() {
-  let grand = 0, total = 0;
-  PRICE_TIERS.forEach(t => { grand += t.price * (counts[t.price]||0); total += counts[t.price]||0; });
+  let grand=0, total=0;
+  PRICE_TIERS.forEach(t => { grand += t.price*(counts[t.price]||0); total += counts[t.price]||0; });
   document.getElementById("grand-total").textContent = "$"+grand.toFixed(2);
-  document.getElementById("total-items").textContent = total + " plant" + (total !== 1 ? "s" : "");
+  document.getElementById("total-items").textContent = total+" plant"+(total!==1?"s":"");
   renderSummary(grand, total);
 }
 
 function renderSummary(grand, total) {
   const card = document.getElementById("summary-card");
-  if (total === 0) { card.classList.add("hidden"); return; }
+  if (total===0) { card.classList.add("hidden"); return; }
   card.classList.remove("hidden");
   const rows = document.getElementById("summary-rows");
   rows.innerHTML = "";
-  PRICE_TIERS.filter(t => counts[t.price] > 0).forEach(t => {
-    const row = document.createElement("div");
-    row.className = "summary-row";
-    row.innerHTML = `
-      <span class="summary-dot" style="background:${t.border}"></span>
+  PRICE_TIERS.filter(t=>counts[t.price]>0).forEach(t => {
+    const r = document.createElement("div"); r.className = "summary-row";
+    r.innerHTML = `<span class="summary-dot" style="background:${t.border}"></span>
       <span class="summary-text">$${t.price} × ${counts[t.price]}</span>
-      <span class="summary-amt">$${(t.price*counts[t.price]).toFixed(2)}</span>
-    `;
-    rows.appendChild(row);
+      <span class="summary-amt">$${(t.price*counts[t.price]).toFixed(2)}</span>`;
+    rows.appendChild(r);
   });
-  const div = document.createElement("div"); div.className = "summary-divider"; rows.appendChild(div);
-  const total_row = document.createElement("div");
-  total_row.className = "summary-row";
-  total_row.style.fontWeight = "700";
-  total_row.innerHTML = `<span style="flex:1">Grand Total</span><span class="grand-total-amt">$${grand.toFixed(2)}</span>`;
-  rows.appendChild(total_row);
+  const d = document.createElement("div"); d.className = "summary-divider"; rows.appendChild(d);
+  const tot = document.createElement("div"); tot.className = "summary-row"; tot.style.fontWeight="700";
+  tot.innerHTML = `<span style="flex:1">Grand Total</span><span class="grand-total-amt">$${grand.toFixed(2)}</span>`;
+  rows.appendChild(tot);
 }
 
-// ── Reset ──────────────────────────────────────────────
 function resetCounts() {
-  PRICE_TIERS.forEach(t => counts[t.price] = 0);
-  saveCounts();
-  renderGrid();
+  PRICE_TIERS.forEach(t => counts[t.price]=0);
+  saveCounts(); renderGrid();
   document.getElementById("error-box").classList.add("hidden");
   document.getElementById("sync-note").classList.add("hidden");
   showToast("Sheet cleared!");
@@ -372,87 +351,271 @@ function resetCounts() {
 
 // ── Upload ─────────────────────────────────────────────
 async function uploadSale() {
-  let grand = 0, total = 0;
+  let grand=0, total=0;
   PRICE_TIERS.forEach(t => { grand += t.price*(counts[t.price]||0); total += counts[t.price]||0; });
-  if (total === 0) { showToast("Add some items first!", "error"); return; }
-
+  if (total===0) { showToast("Add some items first!", "error"); return; }
   const btn = document.getElementById("upload-btn");
-  btn.disabled = true; btn.textContent = "Saving…";
+  btn.disabled=true; btn.textContent="Saving…";
   document.getElementById("error-box").classList.add("hidden");
-
   try {
     await sbFetch("sales", {
-      method: "POST",
-      headers: { "Prefer": "return=representation" },
-      body: JSON.stringify({ device_id: getDeviceId(), counts, total_items: total, grand_total: grand }),
+      method:"POST",
+      headers:{"Prefer":"return=representation"},
+      body: JSON.stringify({ device_id:getDeviceId(), counts, total_items:total, grand_total:grand, voided:false }),
     });
     const note = document.getElementById("sync-note");
-    note.textContent = "✓ Synced to Supabase at " + new Date().toLocaleTimeString();
+    note.textContent = "✓ Synced at "+new Date().toLocaleTimeString();
     note.classList.remove("hidden");
     showToast(`✓ Saved! $${grand.toFixed(2)} · ${total} plants`);
   } catch(e) {
-    showError(e.message);
-    showToast("Upload failed — see error below", "error");
-  } finally {
-    btn.disabled = false; btn.textContent = "Save to Database ↑";
-  }
+    const eb = document.getElementById("error-box");
+    eb.textContent = "DB Error: "+e.message; eb.classList.remove("hidden");
+    showToast("Upload failed", "error");
+  } finally { btn.disabled=false; btn.textContent="Save to Database ↑"; }
 }
 
-// ── History ────────────────────────────────────────────
-async function loadHistory() {
-  document.getElementById("history-list").innerHTML = '<div class="empty-state">Loading from Supabase…</div>';
-  document.getElementById("history-error-box").classList.add("hidden");
+// ── Sessions ───────────────────────────────────────────
+async function loadSessions() {
+  document.getElementById("session-list").innerHTML = '<div class="empty-state">Loading…</div>';
+  document.getElementById("history-error").classList.add("hidden");
   try {
-    const rows = await sbFetch("sales?order=created_at.desc&limit=100");
-    renderHistory(rows);
+    allSessions = await sbFetch("sales?order=created_at.desc&limit=200") || [];
+    renderSessions();
   } catch(e) {
-    document.getElementById("history-error-box").textContent = "DB Error: " + e.message;
-    document.getElementById("history-error-box").classList.remove("hidden");
-    document.getElementById("history-list").innerHTML = "";
+    document.getElementById("history-error").textContent = "Error: "+e.message;
+    document.getElementById("history-error").classList.remove("hidden");
+    document.getElementById("session-list").innerHTML = "";
   }
 }
 
-function renderHistory(rows) {
-  const list = document.getElementById("history-list");
-  if (!rows || rows.length === 0) {
-    list.innerHTML = '<div class="empty-state">No sessions yet.<br>Go to Checkout and save a sale!</div>';
-    document.getElementById("all-time-banner").classList.add("hidden");
-    return;
-  }
-  let totalRev = 0, totalPlants = 0;
-  rows.forEach(s => { totalRev += Number(s.grand_total||0); totalPlants += Number(s.total_items||0); });
-  document.getElementById("all-revenue").textContent = "$"+totalRev.toFixed(2);
-  document.getElementById("all-plants").textContent = totalPlants;
-  document.getElementById("all-sessions").textContent = rows.length;
-  document.getElementById("all-time-banner").classList.remove("hidden");
+function renderSessions() {
+  const list = document.getElementById("session-list");
+  const active = allSessions.filter(s => !s.voided);
+  const rev = active.reduce((a,s)=>a+Number(s.grand_total||0),0);
+  const plants = active.reduce((a,s)=>a+Number(s.total_items||0),0);
 
+  if (allSessions.length > 0) {
+    document.getElementById("h-revenue").textContent = "$"+rev.toFixed(2);
+    document.getElementById("h-plants").textContent = plants;
+    document.getElementById("h-sessions").textContent = active.length;
+    document.getElementById("history-banner").classList.remove("hidden");
+  }
+
+  if (allSessions.length === 0) {
+    list.innerHTML = '<div class="empty-state">No sessions yet.<br>Go to Sale and save one!</div>'; return;
+  }
   list.innerHTML = "";
-  rows.forEach(s => {
+  allSessions.forEach(s => {
+    const voided = !!s.voided;
     const card = document.createElement("div");
-    card.className = "history-card";
-    const pills = PRICE_TIERS.filter(t => s.counts?.[t.price] > 0).map(t =>
-      `<span class="history-pill" style="background:${t.color};border-color:${t.border};color:${t.text}">$${t.price} ×${s.counts[t.price]}</span>`
+    card.className = "session-card" + (voided ? " voided" : "");
+    const pills = PRICE_TIERS.filter(t=>s.counts?.[t.price]>0).map(t =>
+      `<span class="history-pill" style="background:${t.color};border-color:${t.border};color:${t.text}">$${t.price}×${s.counts[t.price]}</span>`
     ).join("");
     card.innerHTML = `
-      <div class="history-header">
-        <span class="history-time">${new Date(s.created_at).toLocaleString()}</span>
-        <span class="history-total">$${Number(s.grand_total).toFixed(2)}</span>
+      <div class="session-header">
+        <span class="session-time">${new Date(s.created_at).toLocaleString()}</span>
+        <span class="session-total ${voided?'voided':''}">$${Number(s.grand_total).toFixed(2)}</span>
       </div>
-      <div class="history-meta">${s.total_items} plants · Device ${(s.device_id||"").slice(-4)}</div>
-      <div class="history-tiers">${pills}</div>
-    `;
+      <div class="session-meta">${s.total_items} plants · Device ${(s.device_id||"").slice(-4)}</div>
+      <div class="session-tiers">${pills}</div>
+      <div style="display:flex;justify-content:flex-end">
+        ${voided
+          ? '<span class="voided-badge">VOIDED</span>'
+          : `<button class="void-btn" onclick="openVoidModal('${s.id}','$${Number(s.grand_total).toFixed(2)}')">Void Sale</button>`}
+      </div>`;
     list.appendChild(card);
   });
 }
 
+// ── Void ───────────────────────────────────────────────
+function openVoidModal(id, amount) {
+  pendingVoidId = id;
+  document.getElementById("void-modal-body").textContent =
+    `This will void the ${amount} sale and exclude it from all reports. This cannot be undone.`;
+  document.getElementById("void-modal").classList.remove("hidden");
+}
+function closeVoidModal() {
+  pendingVoidId = null;
+  document.getElementById("void-modal").classList.add("hidden");
+}
+async function confirmVoid() {
+  if (!pendingVoidId) return;
+  closeVoidModal();
+  try {
+    await sbFetch(`sales?id=eq.${pendingVoidId}`, {
+      method: "PATCH",
+      headers: { "Prefer": "return=representation" },
+      body: JSON.stringify({ voided: true }),
+    });
+    showToast("Sale voided");
+    loadSessions();
+    // refresh reports if open
+    if (document.getElementById("tab-reports").style.display !== "none") renderReport();
+  } catch(e) {
+    showToast("Failed to void: "+e.message, "error");
+  }
+}
+
+// ── Reports ────────────────────────────────────────────
+function setPeriod(period) {
+  reportPeriod = period; reportOffset = 0;
+  document.querySelectorAll(".report-period-btn").forEach((b,i) => {
+    b.classList.toggle("active", ["daily","monthly","annual"][i]===period);
+  });
+  renderReport();
+}
+
+function navReport(dir) {
+  reportOffset += dir;
+  renderReport();
+}
+
+function getPeriodBounds() {
+  const now = new Date();
+  let start, end, label;
+  if (reportPeriod === "daily") {
+    const d = new Date(now); d.setDate(d.getDate() + reportOffset);
+    start = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+    end   = new Date(d.getFullYear(), d.getMonth(), d.getDate()+1);
+    label = start.toLocaleDateString("en-US", {weekday:"long", month:"long", day:"numeric", year:"numeric"});
+  } else if (reportPeriod === "monthly") {
+    const d = new Date(now.getFullYear(), now.getMonth() + reportOffset, 1);
+    start = new Date(d.getFullYear(), d.getMonth(), 1);
+    end   = new Date(d.getFullYear(), d.getMonth()+1, 1);
+    label = start.toLocaleDateString("en-US", {month:"long", year:"numeric"});
+  } else {
+    const yr = now.getFullYear() + reportOffset;
+    start = new Date(yr, 0, 1); end = new Date(yr+1, 0, 1);
+    label = String(yr);
+  }
+  return { start, end, label };
+}
+
+async function renderReport() {
+  const content = document.getElementById("report-content");
+  content.innerHTML = '<div class="empty-state">Loading…</div>';
+  document.getElementById("report-error").classList.add("hidden");
+
+  const { start, end, label } = getPeriodBounds();
+  document.getElementById("report-nav-label").textContent = label;
+
+  // Disable forward nav if at current period
+  document.querySelectorAll(".report-nav-btn")[1].disabled = reportOffset >= 0;
+
+  try {
+    const startISO = start.toISOString();
+    const endISO   = end.toISOString();
+    const rows = await sbFetch(
+      `sales?created_at=gte.${encodeURIComponent(startISO)}&created_at=lt.${encodeURIComponent(endISO)}&order=created_at.asc&limit=500`
+    ) || [];
+
+    const active = rows.filter(s => !s.voided);
+    const voided = rows.filter(s => s.voided);
+
+    if (active.length === 0 && voided.length === 0) {
+      content.innerHTML = '<div class="empty-state">No sales in this period.</div>'; return;
+    }
+
+    // Aggregate by price tier
+    const tierTotals = {};
+    PRICE_TIERS.forEach(t => tierTotals[t.price] = { count: 0, revenue: 0 });
+    active.forEach(s => {
+      PRICE_TIERS.forEach(t => {
+        const c = Number(s.counts?.[t.price]||0);
+        tierTotals[t.price].count += c;
+        tierTotals[t.price].revenue += c * t.price;
+      });
+    });
+
+    const totalRev = active.reduce((a,s)=>a+Number(s.grand_total||0),0);
+    const totalPlants = active.reduce((a,s)=>a+Number(s.total_items||0),0);
+    const avgSale = active.length > 0 ? totalRev / active.length : 0;
+    const maxRev = Math.max(...PRICE_TIERS.map(t=>tierTotals[t.price].revenue), 1);
+
+    // For monthly/annual, also build sub-period breakdown
+    let breakdownHTML = "";
+    if (reportPeriod === "monthly" || reportPeriod === "annual") {
+      const groups = {};
+      active.forEach(s => {
+        const d = new Date(s.created_at);
+        const key = reportPeriod === "monthly"
+          ? `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`
+          : `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}`;
+        const lbl = reportPeriod === "monthly"
+          ? d.toLocaleDateString("en-US",{weekday:"short",month:"short",day:"numeric"})
+          : d.toLocaleDateString("en-US",{month:"long",year:"numeric"});
+        if (!groups[key]) groups[key] = { label: lbl, revenue: 0, plants: 0, sessions: 0 };
+        groups[key].revenue += Number(s.grand_total||0);
+        groups[key].plants  += Number(s.total_items||0);
+        groups[key].sessions++;
+      });
+      const maxGroupRev = Math.max(...Object.values(groups).map(g=>g.revenue), 1);
+      const rows_html = Object.entries(groups).sort((a,b)=>a[0]<b[0]?-1:1).map(([,g]) => `
+        <div class="report-row">
+          <div class="report-row-label">${g.label}</div>
+          <div class="bar-wrap"><div class="bar-fill" style="width:${(g.revenue/maxGroupRev*100).toFixed(1)}%"></div></div>
+          <div class="report-row-count">${g.sessions} sales</div>
+          <div class="report-row-amt">$${g.revenue.toFixed(2)}</div>
+        </div>`).join("");
+      const subTitle = reportPeriod === "monthly" ? "Daily Breakdown" : "Monthly Breakdown";
+      breakdownHTML = `<div class="report-section"><div class="report-section-title">${subTitle}</div>${rows_html}</div>`;
+    }
+
+    // Price tier breakdown
+    const tierRows = PRICE_TIERS.filter(t=>tierTotals[t.price].count>0).map(t => `
+      <div class="report-row">
+        <span class="summary-dot" style="background:${t.border};width:10px;height:10px;border-radius:50%;flex-shrink:0;display:inline-block"></span>
+        <div class="report-row-label" style="margin-left:4px">$${t.price} plants</div>
+        <div class="bar-wrap"><div class="bar-fill" style="width:${(tierTotals[t.price].revenue/maxRev*100).toFixed(1)}%"></div></div>
+        <div class="report-row-count">${tierTotals[t.price].count} sold</div>
+        <div class="report-row-amt">$${tierTotals[t.price].revenue.toFixed(2)}</div>
+      </div>`).join("");
+
+    content.innerHTML = `
+      <div class="stat-banner">
+        <div class="stat-item"><div class="stat-val">$${totalRev.toFixed(2)}</div><div class="stat-label">REVENUE</div></div>
+        <div class="stat-divider"></div>
+        <div class="stat-item"><div class="stat-val">${totalPlants}</div><div class="stat-label">PLANTS</div></div>
+        <div class="stat-divider"></div>
+        <div class="stat-item"><div class="stat-val">${active.length}</div><div class="stat-label">SALES</div></div>
+        <div class="stat-divider"></div>
+        <div class="stat-item"><div class="stat-val">$${avgSale.toFixed(2)}</div><div class="stat-label">AVG SALE</div></div>
+      </div>
+      ${breakdownHTML}
+      <div class="report-section">
+        <div class="report-section-title">By Price Tier</div>
+        ${tierRows || '<div style="color:#8E8E93;font-size:14px">No data</div>'}
+        <div class="report-total-row">
+          <span class="report-total-label">Total</span>
+          <span class="report-total-amt">$${totalRev.toFixed(2)}</span>
+        </div>
+      </div>
+      ${voided.length > 0 ? `<div class="report-section" style="border:1.5px solid #FCA5A5">
+        <div class="report-section-title" style="color:#DC2626">Voided Sales (${voided.length})</div>
+        ${voided.map(s=>`<div class="report-row">
+          <div class="report-row-label">${new Date(s.created_at).toLocaleString()}</div>
+          <div class="report-row-amt" style="text-decoration:line-through;color:#8E8E93">$${Number(s.grand_total).toFixed(2)}</div>
+        </div>`).join("")}
+      </div>` : ""}
+    `;
+  } catch(e) {
+    document.getElementById("report-error").textContent = "Error: "+e.message;
+    document.getElementById("report-error").classList.remove("hidden");
+    content.innerHTML = "";
+  }
+}
+
 // ── Tabs ───────────────────────────────────────────────
 function showTab(tab) {
-  document.getElementById("tab-checkout").classList.toggle("hidden", tab !== "checkout");
-  document.getElementById("tab-history").classList.toggle("hidden", tab !== "history");
-  document.querySelectorAll(".tab").forEach((el, i) => {
-    el.classList.toggle("active", (i === 0 && tab === "checkout") || (i === 1 && tab === "history"));
+  ["checkout","history","reports"].forEach(t => {
+    document.getElementById("tab-"+t).classList.toggle("hidden", t!==tab);
   });
-  if (tab === "history") loadHistory();
+  document.querySelectorAll(".tab").forEach((el,i) => {
+    el.classList.toggle("active", ["checkout","history","reports"][i]===tab);
+  });
+  if (tab==="history") loadSessions();
+  if (tab==="reports") renderReport();
 }
 
 // ── Init ───────────────────────────────────────────────
