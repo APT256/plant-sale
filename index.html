@@ -238,6 +238,7 @@ let allSessions = [];
 let reportPeriod = "daily";
 let reportOffset = 0; // 0 = current period, -1 = previous, etc.
 let pendingVoidId = null;
+const sessionMap = {}; // id -> session, avoids passing UUIDs through HTML attrs
 
 function saveCounts() { try { localStorage.setItem("plant-counts", JSON.stringify(counts)); } catch {} }
 function getDeviceId() {
@@ -409,9 +410,11 @@ function renderSessions() {
     const voided = !!s.voided;
     const card = document.createElement("div");
     card.className = "session-card" + (voided ? " voided" : "");
+    sessionMap[s.id] = s;
     const pills = PRICE_TIERS.filter(t=>s.counts?.[t.price]>0).map(t =>
       `<span class="history-pill" style="background:${t.color};border-color:${t.border};color:${t.text}">$${t.price}×${s.counts[t.price]}</span>`
     ).join("");
+    const amount = "$"+Number(s.grand_total).toFixed(2);
     card.innerHTML = `
       <div class="session-header">
         <span class="session-time">${new Date(s.created_at).toLocaleString()}</span>
@@ -422,7 +425,7 @@ function renderSessions() {
       <div style="display:flex;justify-content:flex-end">
         ${voided
           ? '<span class="voided-badge">VOIDED</span>'
-          : `<button class="void-btn" onclick="openVoidModal('${s.id}','$${Number(s.grand_total).toFixed(2)}')">Void Sale</button>`}
+          : `<button class="void-btn" data-id="${s.id}" data-amount="${amount}" onclick="openVoidModal(this.dataset.id, this.dataset.amount)">Void Sale</button>`}
       </div>`;
     list.appendChild(card);
   });
