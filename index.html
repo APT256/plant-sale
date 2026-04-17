@@ -381,6 +381,8 @@ async function loadSessions() {
   document.getElementById("history-error").classList.add("hidden");
   try {
     allSessions = await sbFetch("sales?order=created_at.desc&limit=200") || [];
+    // Normalize voided field - Supabase may return null for old rows
+    allSessions = allSessions.map(s => ({...s, voided: s.voided === true}));
     renderSessions();
   } catch(e) {
     document.getElementById("history-error").textContent = "Error: "+e.message;
@@ -455,9 +457,9 @@ async function confirmVoid() {
       headers: { "Prefer": "return=representation" },
       body: JSON.stringify({ voided: true }),
     });
-    showToast("Sale voided");
-    loadSessions();
-    if (!document.getElementById("tab-reports").classList.contains("hidden")) renderReport();
+    showToast("Sale voided ✓");
+    await loadSessions();
+    if (!document.getElementById("tab-reports").classList.contains("hidden")) await renderReport();
   } catch(e) {
     showToast("Failed to void: "+e.message, "error");
   }
@@ -513,11 +515,12 @@ async function renderReport() {
     const startISO = start.toISOString();
     const endISO   = end.toISOString();
     const rows = await sbFetch(
-      `sales?created_at=gte.${encodeURIComponent(startISO)}&created_at=lt.${encodeURIComponent(endISO)}&order=created_at.asc&limit=500&select=*`
+      `sales?created_at=gte.${encodeURIComponent(startISO)}&created_at=lt.${encodeURIComponent(endISO)}&order=created_at.asc&limit=500`
     ) || [];
 
-    const active = rows.filter(s => s.voided !== true);
-    const voided = rows.filter(s => s.voided === true);
+    const normalized = rows.map(s => ({...s, voided: s.voided === true}));
+    const active = normalized.filter(s => !s.voided);
+    const voided = normalized.filter(s => s.voided);
 
     if (active.length === 0 && voided.length === 0) {
       content.innerHTML = '<div class="empty-state">No sales in this period.</div>'; return;
