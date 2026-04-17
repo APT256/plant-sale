@@ -443,18 +443,21 @@ function closeVoidModal() {
   document.getElementById("void-modal").classList.add("hidden");
 }
 async function confirmVoid() {
-  if (!pendingVoidId) return;
+  // Capture ID before closing modal (closeVoidModal sets it to null)
+  const idToVoid = pendingVoidId;
   closeVoidModal();
+  if (!idToVoid || idToVoid === "null") {
+    showToast("Error: no sale ID found", "error"); return;
+  }
   try {
-    await sbFetch(`sales?id=eq.${pendingVoidId}`, {
+    await sbFetch(`sales?id=eq.${idToVoid}`, {
       method: "PATCH",
       headers: { "Prefer": "return=representation" },
       body: JSON.stringify({ voided: true }),
     });
     showToast("Sale voided");
     loadSessions();
-    // refresh reports if open
-    if (document.getElementById("tab-reports").style.display !== "none") renderReport();
+    if (!document.getElementById("tab-reports").classList.contains("hidden")) renderReport();
   } catch(e) {
     showToast("Failed to void: "+e.message, "error");
   }
