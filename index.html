@@ -391,7 +391,7 @@ async function loadSessions() {
 
 function renderSessions() {
   const list = document.getElementById("session-list");
-  const active = allSessions.filter(s => !s.voided);
+  const active = allSessions.filter(s => s.voided !== true);
   const rev = active.reduce((a,s)=>a+Number(s.grand_total||0),0);
   const plants = active.reduce((a,s)=>a+Number(s.total_items||0),0);
 
@@ -407,7 +407,7 @@ function renderSessions() {
   }
   list.innerHTML = "";
   allSessions.forEach(s => {
-    const voided = !!s.voided;
+    const voided = s.voided === true;
     const card = document.createElement("div");
     card.className = "session-card" + (voided ? " voided" : "");
     sessionMap[s.id] = s;
@@ -513,11 +513,11 @@ async function renderReport() {
     const startISO = start.toISOString();
     const endISO   = end.toISOString();
     const rows = await sbFetch(
-      `sales?created_at=gte.${encodeURIComponent(startISO)}&created_at=lt.${encodeURIComponent(endISO)}&order=created_at.asc&limit=500`
+      `sales?created_at=gte.${encodeURIComponent(startISO)}&created_at=lt.${encodeURIComponent(endISO)}&order=created_at.asc&limit=500&select=*`
     ) || [];
 
-    const active = rows.filter(s => !s.voided);
-    const voided = rows.filter(s => s.voided);
+    const active = rows.filter(s => s.voided !== true);
+    const voided = rows.filter(s => s.voided === true);
 
     if (active.length === 0 && voided.length === 0) {
       content.innerHTML = '<div class="empty-state">No sales in this period.</div>'; return;
