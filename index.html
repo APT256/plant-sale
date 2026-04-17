@@ -427,8 +427,14 @@ function renderSessions() {
       <div style="display:flex;justify-content:flex-end">
         ${voided
           ? '<span class="voided-badge">VOIDED</span>'
-          : `<button class="void-btn" data-id="${s.id}" data-amount="${amount}" onclick="openVoidModal(this.dataset.id, this.dataset.amount)">Void Sale</button>`}
+          : `<button class="void-btn" id="void-${s.id}">Void Sale</button>`}
       </div>`;
+    // Attach event listener directly — avoids inline onclick losing context
+    if (!voided) {
+      card.querySelector(".void-btn").addEventListener("click", () => {
+        openVoidModal(s.id, amount);
+      });
+    }
     list.appendChild(card);
   });
 }
@@ -445,18 +451,21 @@ function closeVoidModal() {
   document.getElementById("void-modal").classList.add("hidden");
 }
 async function confirmVoid() {
-  // Capture ID before closing modal (closeVoidModal sets it to null)
   const idToVoid = pendingVoidId;
   closeVoidModal();
   if (!idToVoid || idToVoid === "null") {
-    showToast("Error: no sale ID found", "error"); return;
+    alert("Error: no sale ID captured. Please refresh and try again.");
+    return;
   }
+  // Show exactly what we are sending so we can verify
+  alert("Voiding sale ID: " + idToVoid);
   try {
-    await sbFetch(`sales?id=eq.${idToVoid}`, {
+    const result = await sbFetch(`sales?id=eq.${idToVoid}`, {
       method: "PATCH",
       headers: { "Prefer": "return=representation" },
       body: JSON.stringify({ voided: true }),
     });
+    alert("PATCH result: " + JSON.stringify(result));
     showToast("Sale voided ✓");
     await loadSessions();
     if (!document.getElementById("tab-reports").classList.contains("hidden")) await renderReport();
