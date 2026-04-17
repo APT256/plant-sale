@@ -457,18 +457,12 @@ async function confirmVoid() {
     alert("Error: no sale ID captured. Please refresh and try again.");
     return;
   }
-  alert("Voiding sale ID: " + idToVoid);
   try {
-    // First verify the row exists with this ID
-    const check = await sbFetch(`sales?id=eq.${idToVoid}&select=id,voided`);
-    alert("Row lookup: " + JSON.stringify(check));
-    
-    const result = await sbFetch(`sales?id=eq.${idToVoid}`, {
+    await sbFetch(`sales?id=eq.${idToVoid}`, {
       method: "PATCH",
       headers: { "Prefer": "return=representation", "Content-Type": "application/json" },
       body: JSON.stringify({ voided: true }),
     });
-    alert("PATCH result: " + JSON.stringify(result));
     showToast("Sale voided ✓");
     await loadSessions();
     if (!document.getElementById("tab-reports").classList.contains("hidden")) await renderReport();
