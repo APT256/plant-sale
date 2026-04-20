@@ -372,7 +372,6 @@ async function sbSignOut() {
   });
   authToken = null;
   currentUser = null;
-  try { localStorage.removeItem("plant-sale-session"); } catch {}
 }
 
 // ── DB Status ──────────────────────────────────────────
@@ -816,9 +815,22 @@ async function handleChangePassword() {
 }
 
 // ── Auth UI ────────────────────────────────────────────
-function showLoginScreen() {
+function showLoginScreen(msg) {
   document.getElementById("login-screen").classList.remove("hidden");
   document.getElementById("app").classList.add("hidden");
+  document.getElementById("login-email").value = "";
+  document.getElementById("login-password").value = "";
+  const err = document.getElementById("login-error");
+  if (msg) {
+    err.textContent = msg;
+    err.style.background = "#FEF9C3";
+    err.style.color = "#854D0E";
+    err.classList.remove("hidden");
+  } else {
+    err.classList.add("hidden");
+    err.style.background = "";
+    err.style.color = "";
+  }
 }
 
 function showApp() {
@@ -827,6 +839,37 @@ function showApp() {
   document.getElementById("user-email").textContent = currentUser?.email || "";
   renderGrid();
   checkDb();
+}
+
+// ── Inactivity Timer ───────────────────────────────────
+const INACTIVITY_MS = 10 * 60 * 1000; // 10 minutes
+let inactivityTimer = null;
+
+function resetInactivityTimer() {
+  clearTimeout(inactivityTimer);
+  inactivityTimer = setTimeout(() => {
+    forceLogout("You have been logged out due to inactivity.");
+  }, INACTIVITY_MS);
+}
+
+function startActivityTracking() {
+  ["click", "touchstart", "keydown", "scroll"].forEach(evt =>
+    document.addEventListener(evt, resetInactivityTimer, { passive: true })
+  );
+  resetInactivityTimer();
+}
+
+function stopActivityTracking() {
+  ["click", "touchstart", "keydown", "scroll"].forEach(evt =>
+    document.removeEventListener(evt, resetInactivityTimer)
+  );
+  clearTimeout(inactivityTimer);
+}
+
+async function forceLogout(reason) {
+  stopActivityTracking();
+  await sbSignOut();
+  showLoginScreen(reason);
 }
 
 async function handleLogin() {
@@ -841,9 +884,9 @@ async function handleLogin() {
     const data = await sbSignIn(email, password);
     authToken = data.access_token;
     currentUser = data.user;
-    // Persist session
-    try { localStorage.setItem("plant-sale-session", JSON.stringify({ token: authToken, email: currentUser.email })); } catch {}
+    // No persistent storage — session lives only in memory
     showApp();
+    startActivityTracking();
   } catch(e) {
     err.textContent = e.message;
     err.classList.remove("hidden");
@@ -853,8 +896,8 @@ async function handleLogin() {
 }
 
 async function handleLogout() {
+  stopActivityTracking();
   await sbSignOut();
-  try { localStorage.removeItem("plant-sale-session"); } catch {}
   showLoginScreen();
 }
 
@@ -872,27 +915,8 @@ document.getElementById("pw-confirm").addEventListener("keydown", e => {
 });
 
 // ── Init ───────────────────────────────────────────────
-(async () => {
-  // Try restoring session from localStorage
-  try {
-    const saved = localStorage.getItem("plant-sale-session");
-    if (saved) {
-      const { token, email } = JSON.parse(saved);
-      // Verify token is still valid
-      const res = await fetch(`${SUPABASE_URL}/auth/v1/user?apikey=${SUPABASE_KEY}`, {
-        headers: { "Authorization": "Bearer " + token, "apikey": SUPABASE_KEY }
-      });
-      if (res.ok) {
-        const user = await res.json();
-        authToken = token;
-        currentUser = user;
-        showApp();
-        return;
-      }
-    }
-  } catch {}
-  showLoginScreen();
-})();
+// No session persistence — always require login on load
+showLoginScreen();
 </script>
 </body>
 </html>
