@@ -120,6 +120,18 @@
     .modal-body { font-size: 15px; color: #3A3A3C; margin-bottom: 24px; line-height: 1.5; }
     .modal-actions { display: flex; gap: 12px; }
 
+    /* CHANGE PASSWORD MODAL */
+    .pw-modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 600; display: flex; align-items: flex-end; justify-content: center; }
+    .pw-modal { background: #fff; border-radius: 24px 24px 0 0; padding: 28px 24px 48px; width: 100%; max-width: 480px; }
+    .pw-modal-title { font-size: 20px; font-weight: 800; color: #1C1C1E; margin-bottom: 6px; }
+    .pw-modal-sub { font-size: 13px; color: #8E8E93; margin-bottom: 24px; }
+    .pw-field { margin-bottom: 16px; }
+    .pw-label { font-size: 12px; font-weight: 700; color: #8E8E93; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; display: block; }
+    .pw-input { width: 100%; padding: 13px 16px; border-radius: 12px; border: 1.5px solid #E5E5EA; font-size: 16px; font-family: inherit; outline: none; color: #1C1C1E; background: #F9F9F9; }
+    .pw-input:focus { border-color: #2D5E45; background: #fff; }
+    .pw-error { margin-top: 4px; font-size: 12px; color: #DC2626; font-weight: 600; }
+    .pw-success { margin-top: 12px; background: #DCFCE7; border-radius: 10px; padding: 10px 14px; font-size: 13px; color: #16A34A; font-weight: 600; }
+
     /* LOGIN */
     #login-screen {
       min-height: 100vh; display: flex; flex-direction: column;
@@ -188,7 +200,10 @@
   </div>
   <div class="user-bar">
     <span class="user-email" id="user-email"></span>
-    <button class="logout-btn" onclick="handleLogout()">Sign Out</button>
+    <div style="display:flex;gap:12px;align-items:center">
+      <button class="logout-btn" onclick="openChangePassword()">Change Password</button>
+      <button class="logout-btn" onclick="handleLogout()">Sign Out</button>
+    </div>
   </div>
   <div class="tabs">
     <button class="tab active" onclick="showTab('checkout')">🌱 Sale</button>
@@ -258,6 +273,28 @@
   </div>
 </div>
 
+<!-- CHANGE PASSWORD MODAL -->
+<div class="pw-modal-overlay hidden" id="pw-modal">
+  <div class="pw-modal">
+    <div class="pw-modal-title">Change Password</div>
+    <div class="pw-modal-sub" id="pw-modal-sub">Enter and confirm your new password.</div>
+    <div class="pw-field">
+      <label class="pw-label" for="pw-new">New Password</label>
+      <input class="pw-input" id="pw-new" type="password" placeholder="Min. 6 characters"/>
+      <div class="pw-error hidden" id="pw-new-error"></div>
+    </div>
+    <div class="pw-field">
+      <label class="pw-label" for="pw-confirm">Confirm Password</label>
+      <input class="pw-input" id="pw-confirm" type="password" placeholder="Repeat new password"/>
+      <div class="pw-error hidden" id="pw-confirm-error"></div>
+    </div>
+    <div class="pw-success hidden" id="pw-success">✓ Password changed successfully!</div>
+    <div class="actions" style="margin-top:8px">
+      <button class="btn" style="flex:1" onclick="closeChangePassword()">Cancel</button>
+      <button class="btn btn-primary" style="flex:2" id="pw-save-btn" onclick="handleChangePassword()">Save Password</button>
+    </div>
+  </div>
+</div>
 </div><!-- end #app -->
 <div id="toast"></div>
 
@@ -711,6 +748,73 @@ function showTab(tab) {
   if (tab==="reports") renderReport();
 }
 
+// ── Change Password ────────────────────────────────────
+function openChangePassword() {
+  document.getElementById("pw-new").value = "";
+  document.getElementById("pw-confirm").value = "";
+  document.getElementById("pw-new-error").classList.add("hidden");
+  document.getElementById("pw-confirm-error").classList.add("hidden");
+  document.getElementById("pw-success").classList.add("hidden");
+  document.getElementById("pw-modal-sub").textContent = "Enter and confirm your new password.";
+  document.getElementById("pw-save-btn").disabled = false;
+  document.getElementById("pw-save-btn").textContent = "Save Password";
+  document.getElementById("pw-modal").classList.remove("hidden");
+}
+
+function closeChangePassword() {
+  document.getElementById("pw-modal").classList.add("hidden");
+}
+
+async function handleChangePassword() {
+  const newPw = document.getElementById("pw-new").value;
+  const confirm = document.getElementById("pw-confirm").value;
+  const newErr = document.getElementById("pw-new-error");
+  const confirmErr = document.getElementById("pw-confirm-error");
+  const success = document.getElementById("pw-success");
+
+  // Reset errors
+  newErr.classList.add("hidden");
+  confirmErr.classList.add("hidden");
+  success.classList.add("hidden");
+
+  let valid = true;
+  if (!newPw || newPw.length < 6) {
+    newErr.textContent = "Password must be at least 6 characters.";
+    newErr.classList.remove("hidden");
+    valid = false;
+  }
+  if (newPw !== confirm) {
+    confirmErr.textContent = "Passwords do not match.";
+    confirmErr.classList.remove("hidden");
+    valid = false;
+  }
+  if (!valid) return;
+
+  const btn = document.getElementById("pw-save-btn");
+  btn.disabled = true; btn.textContent = "Saving…";
+
+  try {
+    const res = await fetch(`${SUPABASE_URL}/auth/v1/user?apikey=${SUPABASE_KEY}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        "apikey": SUPABASE_KEY,
+        "Authorization": "Bearer " + authToken,
+      },
+      body: JSON.stringify({ password: newPw }),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.msg || data.message || "Failed to update password");
+    success.classList.remove("hidden");
+    btn.textContent = "Saved!";
+    setTimeout(() => closeChangePassword(), 1500);
+  } catch(e) {
+    newErr.textContent = "Error: " + e.message;
+    newErr.classList.remove("hidden");
+    btn.disabled = false; btn.textContent = "Save Password";
+  }
+}
+
 // ── Auth UI ────────────────────────────────────────────
 function showLoginScreen() {
   document.getElementById("login-screen").classList.remove("hidden");
@@ -760,6 +864,11 @@ document.getElementById("login-password").addEventListener("keydown", e => {
 });
 document.getElementById("login-email").addEventListener("keydown", e => {
   if (e.key === "Enter") handleLogin();
+});
+
+// Allow Enter key on change password fields
+document.getElementById("pw-confirm").addEventListener("keydown", e => {
+  if (e.key === "Enter") handleChangePassword();
 });
 
 // ── Init ───────────────────────────────────────────────
