@@ -17,7 +17,7 @@
     /* HEADER */
     #header {
       background: linear-gradient(135deg, #1B3A2D, #2D5E45);
-      color: #fff; padding: 52px 20px 0;
+      color: #fff; padding: 48px 20px 0;
       border-radius: 0 0 28px 28px;
       box-shadow: 0 8px 32px rgba(0,0,0,0.25);
       position: sticky; top: 0; z-index: 100;
@@ -120,12 +120,56 @@
     .modal-body { font-size: 15px; color: #3A3A3C; margin-bottom: 24px; line-height: 1.5; }
     .modal-actions { display: flex; gap: 12px; }
 
+    /* LOGIN */
+    #login-screen {
+      min-height: 100vh; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; padding: 32px 24px;
+      background: linear-gradient(160deg, #1B3A2D 0%, #2D5E45 60%, #3a7a5a 100%);
+    }
+    .login-logo { font-size: 48px; margin-bottom: 8px; }
+    .login-title { font-size: 26px; font-weight: 800; color: #fff; letter-spacing: -0.02em; margin-bottom: 4px; }
+    .login-subtitle { font-size: 13px; color: #86EFAC; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 40px; }
+    .login-card { background: #fff; border-radius: 24px; padding: 28px 24px; width: 100%; max-width: 360px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+    .login-field { margin-bottom: 16px; }
+    .login-label { font-size: 12px; font-weight: 700; color: #8E8E93; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; display: block; }
+    .login-input { width: 100%; padding: 13px 16px; border-radius: 12px; border: 1.5px solid #E5E5EA; font-size: 16px; font-family: inherit; outline: none; color: #1C1C1E; background: #F9F9F9; }
+    .login-input:focus { border-color: #2D5E45; background: #fff; }
+    .login-btn { width: 100%; padding: 15px; border-radius: 14px; border: none; background: linear-gradient(135deg, #1B3A2D, #2D5E45); color: #86EFAC; font-size: 16px; font-weight: 700; cursor: pointer; font-family: inherit; margin-top: 8px; }
+    .login-btn:disabled { opacity: 0.6; }
+    .login-error { margin-top: 12px; background: #FEE2E2; border-radius: 10px; padding: 10px 14px; font-size: 13px; color: #DC2626; font-weight: 600; }
+
+    /* USER BAR */
+    .user-bar { display: flex; align-items: center; justify-content: space-between; padding: 8px 20px; background: rgba(0,0,0,0.2); }
+    .user-email { font-size: 11px; color: #86EFAC; font-weight: 600; }
+    .logout-btn { font-size: 11px; color: rgba(255,255,255,0.6); background: none; border: none; cursor: pointer; font-family: inherit; font-weight: 600; padding: 4px 0; }
+
     /* TOAST */
     #toast { position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%); color: #fff; padding: 12px 24px; border-radius: 24px; font-size: 14px; font-weight: 600; box-shadow: 0 8px 24px rgba(0,0,0,0.25); z-index: 999; white-space: nowrap; display: none; }
   </style>
 </head>
 <body>
 
+<!-- LOGIN SCREEN -->
+<div id="login-screen" class="hidden">
+  <div class="login-logo">🌿</div>
+  <div class="login-title">Plant Sale</div>
+  <div class="login-subtitle">Master Gardeners</div>
+  <div class="login-card">
+    <div class="login-field">
+      <label class="login-label" for="login-email">Email</label>
+      <input class="login-input" id="login-email" type="email" placeholder="you@example.com" autocomplete="email"/>
+    </div>
+    <div class="login-field">
+      <label class="login-label" for="login-password">Password</label>
+      <input class="login-input" id="login-password" type="password" placeholder="••••••••" autocomplete="current-password"/>
+    </div>
+    <button class="login-btn" id="login-btn" onclick="handleLogin()">Sign In</button>
+    <div class="login-error hidden" id="login-error"></div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app" class="hidden">
 <div id="header">
   <div class="header-inner">
     <div>
@@ -141,6 +185,10 @@
   <div class="db-status">
     <span class="db-dot" id="db-dot"></span>
     <span class="db-label" id="db-label">Connecting…</span>
+  </div>
+  <div class="user-bar">
+    <span class="user-email" id="user-email"></span>
+    <button class="logout-btn" onclick="handleLogout()">Sign Out</button>
   </div>
   <div class="tabs">
     <button class="tab active" onclick="showTab('checkout')">🌱 Sale</button>
@@ -210,6 +258,7 @@
   </div>
 </div>
 
+</div><!-- end #app -->
 <div id="toast"></div>
 
 <script>
@@ -236,9 +285,10 @@ try { const s = localStorage.getItem("plant-counts"); if (s) counts = {...counts
 
 let allSessions = [];
 let reportPeriod = "daily";
-let reportOffset = 0; // 0 = current period, -1 = previous, etc.
+let reportOffset = 0;
 let pendingVoidId = null;
-const sessionMap = {}; // id -> session, avoids passing UUIDs through HTML attrs
+const sessionMap = {};
+let currentUser = null;
 
 function saveCounts() { try { localStorage.setItem("plant-counts", JSON.stringify(counts)); } catch {} }
 function getDeviceId() {
@@ -248,16 +298,44 @@ function getDeviceId() {
 }
 
 // ── Supabase ───────────────────────────────────────────
+let authToken = null;
+
 async function sbFetch(path, options = {}) {
   const sep = path.includes("?") ? "&" : "?";
   const url = `${SUPABASE_URL}/rest/v1/${path}${sep}apikey=${SUPABASE_KEY}`;
-  const res = await fetch(url, {
-    ...options,
-    headers: { "Content-Type": "application/json", "Accept": "application/json", ...(options.headers||{}) },
-  });
+  const headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "apikey": SUPABASE_KEY,
+    ...(authToken ? { "Authorization": "Bearer " + authToken } : {}),
+    ...(options.headers || {}),
+  };
+  const res = await fetch(url, { ...options, headers });
   const text = await res.text();
   if (!res.ok) throw new Error(`HTTP ${res.status}: ${text}`);
   return text ? JSON.parse(text) : null;
+}
+
+async function sbSignIn(email, password) {
+  const res = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password&apikey=${SUPABASE_KEY}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", "apikey": SUPABASE_KEY },
+    body: JSON.stringify({ email, password }),
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error_description || data.msg || "Login failed");
+  return data;
+}
+
+async function sbSignOut() {
+  if (!authToken) return;
+  await fetch(`${SUPABASE_URL}/auth/v1/logout?apikey=${SUPABASE_KEY}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", "apikey": SUPABASE_KEY, "Authorization": "Bearer " + authToken },
+  });
+  authToken = null;
+  currentUser = null;
+  try { localStorage.removeItem("plant-sale-session"); } catch {}
 }
 
 // ── DB Status ──────────────────────────────────────────
@@ -633,9 +711,79 @@ function showTab(tab) {
   if (tab==="reports") renderReport();
 }
 
+// ── Auth UI ────────────────────────────────────────────
+function showLoginScreen() {
+  document.getElementById("login-screen").classList.remove("hidden");
+  document.getElementById("app").classList.add("hidden");
+}
+
+function showApp() {
+  document.getElementById("login-screen").classList.add("hidden");
+  document.getElementById("app").classList.remove("hidden");
+  document.getElementById("user-email").textContent = currentUser?.email || "";
+  renderGrid();
+  checkDb();
+}
+
+async function handleLogin() {
+  const email = document.getElementById("login-email").value.trim();
+  const password = document.getElementById("login-password").value;
+  const btn = document.getElementById("login-btn");
+  const err = document.getElementById("login-error");
+  err.classList.add("hidden");
+  if (!email || !password) { err.textContent = "Please enter email and password."; err.classList.remove("hidden"); return; }
+  btn.disabled = true; btn.textContent = "Signing in…";
+  try {
+    const data = await sbSignIn(email, password);
+    authToken = data.access_token;
+    currentUser = data.user;
+    // Persist session
+    try { localStorage.setItem("plant-sale-session", JSON.stringify({ token: authToken, email: currentUser.email })); } catch {}
+    showApp();
+  } catch(e) {
+    err.textContent = e.message;
+    err.classList.remove("hidden");
+  } finally {
+    btn.disabled = false; btn.textContent = "Sign In";
+  }
+}
+
+async function handleLogout() {
+  await sbSignOut();
+  try { localStorage.removeItem("plant-sale-session"); } catch {}
+  showLoginScreen();
+}
+
+// Allow Enter key on login form
+document.getElementById("login-password").addEventListener("keydown", e => {
+  if (e.key === "Enter") handleLogin();
+});
+document.getElementById("login-email").addEventListener("keydown", e => {
+  if (e.key === "Enter") handleLogin();
+});
+
 // ── Init ───────────────────────────────────────────────
-renderGrid();
-checkDb();
+(async () => {
+  // Try restoring session from localStorage
+  try {
+    const saved = localStorage.getItem("plant-sale-session");
+    if (saved) {
+      const { token, email } = JSON.parse(saved);
+      // Verify token is still valid
+      const res = await fetch(`${SUPABASE_URL}/auth/v1/user?apikey=${SUPABASE_KEY}`, {
+        headers: { "Authorization": "Bearer " + token, "apikey": SUPABASE_KEY }
+      });
+      if (res.ok) {
+        const user = await res.json();
+        authToken = token;
+        currentUser = user;
+        showApp();
+        return;
+      }
+    }
+  } catch {}
+  showLoginScreen();
+})();
 </script>
 </body>
 </html>
