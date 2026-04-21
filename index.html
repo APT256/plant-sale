@@ -120,6 +120,12 @@
     .modal-body { font-size: 15px; color: #3A3A3C; margin-bottom: 24px; line-height: 1.5; }
     .modal-actions { display: flex; gap: 12px; }
 
+    /* COUNTDOWN TIMER */
+    .session-timer { font-size: 11px; font-weight: 700; color: #86EFAC; font-variant-numeric: tabular-nums; white-space: nowrap; }
+    .session-timer.warning { color: #FCD34D; }
+    .session-timer.danger { color: #FCA5A5; animation: pulse 1s infinite; }
+    @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.4; } }
+
     /* CHANGE PASSWORD MODAL */
     .pw-modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 600; display: flex; align-items: flex-end; justify-content: center; }
     .pw-modal { background: #fff; border-radius: 24px 24px 0 0; padding: 28px 24px 48px; width: 100%; max-width: 480px; }
@@ -201,6 +207,7 @@
   <div class="user-bar">
     <span class="user-email" id="user-email"></span>
     <div style="display:flex;gap:12px;align-items:center">
+      <span class="session-timer" id="session-timer">10:00</span>
       <button class="logout-btn" onclick="openChangePassword()">Change Password</button>
       <button class="logout-btn" onclick="handleLogout()">Sign Out</button>
     </div>
@@ -842,28 +849,59 @@ function showApp() {
 }
 
 // ── Inactivity Timer ───────────────────────────────────
-const INACTIVITY_MS = 10 * 60 * 1000; // 10 minutes
-let inactivityTimer = null;
+const INACTIVITY_SECS = 10 * 60; // 10 minutes
+let countdownInterval = null;
+let secondsRemaining = INACTIVITY_SECS;
+let lastActivity = Date.now();
+
+function formatTime(secs) {
+  const m = Math.floor(secs / 60);
+  const s = secs % 60;
+  return `${String(m).padStart(2,"0")}:${String(s).padStart(2,"0")}`;
+}
+
+function updateTimerDisplay() {
+  const el = document.getElementById("session-timer");
+  if (!el) return;
+  el.textContent = formatTime(secondsRemaining);
+  el.className = "session-timer";
+  if (secondsRemaining <= 60) el.classList.add("danger");
+  else if (secondsRemaining <= 120) el.classList.add("warning");
+}
 
 function resetInactivityTimer() {
-  clearTimeout(inactivityTimer);
-  inactivityTimer = setTimeout(() => {
-    forceLogout("You have been logged out due to inactivity.");
-  }, INACTIVITY_MS);
+  lastActivity = Date.now();
+  secondsRemaining = INACTIVITY_SECS;
+  updateTimerDisplay();
 }
 
 function startActivityTracking() {
-  ["click", "touchstart", "keydown", "scroll"].forEach(evt =>
+  // Reset on any user interaction
+  ["click", "touchstart", "keydown", "scroll", "mousemove"].forEach(evt =>
     document.addEventListener(evt, resetInactivityTimer, { passive: true })
   );
-  resetInactivityTimer();
+
+  // Tick every second
+  secondsRemaining = INACTIVITY_SECS;
+  updateTimerDisplay();
+  countdownInterval = setInterval(() => {
+    secondsRemaining = Math.max(0, secondsRemaining - 1);
+    updateTimerDisplay();
+    if (secondsRemaining <= 0) {
+      forceLogout("You have been logged out due to inactivity.");
+    }
+  }, 1000);
 }
 
 function stopActivityTracking() {
-  ["click", "touchstart", "keydown", "scroll"].forEach(evt =>
+  ["click", "touchstart", "keydown", "scroll", "mousemove"].forEach(evt =>
     document.removeEventListener(evt, resetInactivityTimer)
   );
-  clearTimeout(inactivityTimer);
+  clearInterval(countdownInterval);
+  countdownInterval = null;
+  // Hide timer
+  const el = document.getElementById("session-timer");
+  if (el) el.textContent = "";
 }
 
 async function forceLogout(reason) {
