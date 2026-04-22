@@ -120,6 +120,22 @@
     .modal-body { font-size: 15px; color: #3A3A3C; margin-bottom: 24px; line-height: 1.5; }
     .modal-actions { display: flex; gap: 12px; }
 
+    /* RECEIPT MODAL */
+    .receipt-modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 700; display: flex; align-items: flex-end; justify-content: center; }
+    .receipt-modal { background: #fff; border-radius: 24px 24px 0 0; padding: 28px 24px 48px; width: 100%; max-width: 480px; }
+    .receipt-modal-title { font-size: 20px; font-weight: 800; color: #1C1C1E; margin-bottom: 4px; }
+    .receipt-modal-sub { font-size: 13px; color: #8E8E93; margin-bottom: 20px; }
+    .receipt-summary { background: #F2F2F7; border-radius: 14px; padding: 14px 16px; margin-bottom: 20px; font-size: 14px; color: #3A3A3C; line-height: 1.8; }
+    .receipt-summary strong { color: #1B3A2D; font-size: 16px; }
+    .receipt-field { margin-bottom: 14px; }
+    .receipt-label { font-size: 12px; font-weight: 700; color: #8E8E93; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; display: block; }
+    .receipt-input { width: 100%; padding: 13px 16px; border-radius: 12px; border: 1.5px solid #E5E5EA; font-size: 16px; font-family: inherit; outline: none; color: #1C1C1E; background: #F9F9F9; }
+    .receipt-input:focus { border-color: #2D5E45; background: #fff; }
+    .receipt-send-btns { display: flex; gap: 10px; margin-bottom: 12px; }
+    .receipt-btn-email { flex: 1; padding: 14px; border-radius: 14px; border: none; background: #1B3A2D; color: #86EFAC; font-size: 15px; font-weight: 700; cursor: pointer; font-family: inherit; }
+    .receipt-btn-sms { flex: 1; padding: 14px; border-radius: 14px; border: none; background: #1D4ED8; color: #BFDBFE; font-size: 15px; font-weight: 700; cursor: pointer; font-family: inherit; }
+    .receipt-btn-cancel { width: 100%; padding: 13px; border-radius: 14px; border: 2px solid #E5E5EA; background: #fff; font-size: 15px; font-weight: 600; color: #8E8E93; cursor: pointer; font-family: inherit; }
+
     /* COUNTDOWN TIMER */
     .session-timer { font-size: 11px; font-weight: 700; color: #86EFAC; font-variant-numeric: tabular-nums; white-space: nowrap; }
     .session-timer.warning { color: #FCD34D; }
@@ -277,6 +293,24 @@
       <button class="btn" style="flex:1" onclick="closeVoidModal()">Cancel</button>
       <button class="btn btn-danger" style="flex:1;border:none;background:#DC2626;color:#fff;" onclick="confirmVoid()">Void Sale</button>
     </div>
+  </div>
+</div>
+
+<!-- RECEIPT MODAL -->
+<div class="receipt-modal-overlay hidden" id="receipt-modal">
+  <div class="receipt-modal">
+    <div class="receipt-modal-title">📄 Send Receipt</div>
+    <div class="receipt-modal-sub">Send a copy of this sale to the shopper.</div>
+    <div class="receipt-summary" id="receipt-summary"></div>
+    <div class="receipt-field">
+      <label class="receipt-label" for="receipt-contact">Email or Phone Number</label>
+      <input class="receipt-input" id="receipt-contact" type="text" placeholder="email@example.com or 555-867-5309"/>
+    </div>
+    <div class="receipt-send-btns">
+      <button class="receipt-btn-email" onclick="sendReceiptEmail()">✉️ Email</button>
+      <button class="receipt-btn-sms" onclick="sendReceiptSMS()">💬 Text</button>
+    </div>
+    <button class="receipt-btn-cancel" onclick="closeReceiptModal()">Cancel</button>
   </div>
 </div>
 
@@ -489,6 +523,14 @@ async function uploadSale() {
     note.textContent = "✓ Synced at "+new Date().toLocaleTimeString();
     note.classList.remove("hidden");
     showToast(`✓ Saved! $${grand.toFixed(2)} · ${total} plants`);
+    // Offer receipt for the just-saved sale
+    const justSaved = {
+      created_at: new Date().toISOString(),
+      counts: {...counts},
+      total_items: total,
+      grand_total: grand,
+    };
+    setTimeout(() => openReceiptModal(justSaved), 600);
   } catch(e) {
     const eb = document.getElementById("error-box");
     eb.textContent = "DB Error: "+e.message; eb.classList.remove("hidden");
@@ -545,15 +587,19 @@ function renderSessions() {
       </div>
       <div class="session-meta">${s.total_items} plants · Device ${(s.device_id||"").slice(-4)}</div>
       <div class="session-tiers">${pills}</div>
-      <div style="display:flex;justify-content:flex-end">
+      <div style="display:flex;justify-content:space-between;align-items:center">
         ${voided
           ? '<span class="voided-badge">VOIDED</span>'
           : `<button class="void-btn" id="void-${s.id}">Void Sale</button>`}
+        ${!voided ? `<button class="receipt-send-btn" id="receipt-${s.id}" style="font-size:12px;font-weight:600;color:#1B3A2D;background:#DCFCE7;border:none;border-radius:8px;padding:5px 12px;cursor:pointer;font-family:inherit;">📄 Receipt</button>` : ''}
       </div>`;
-    // Attach event listener directly — avoids inline onclick losing context
+    // Attach event listeners directly
     if (!voided) {
       card.querySelector(".void-btn").addEventListener("click", () => {
         openVoidModal(s.id, amount);
+      });
+      card.querySelector(".receipt-send-btn").addEventListener("click", () => {
+        openReceiptModal(s);
       });
     }
     list.appendChild(card);
@@ -752,6 +798,102 @@ function showTab(tab) {
   });
   if (tab==="history") loadSessions();
   if (tab==="reports") renderReport();
+}
+
+// ── Receipt ────────────────────────────────────────────
+let receiptSale = null;
+
+function buildReceiptText(sale) {
+  const date = new Date(sale.created_at || Date.now()).toLocaleString("en-US", {
+    weekday:"long", year:"numeric", month:"long", day:"numeric",
+    hour:"numeric", minute:"2-digit"
+  });
+  const PRICE_TIERS = [1,2,3,4,5,6,7,8,9,10];
+  let lines = [];
+  PRICE_TIERS.forEach(p => {
+    const c = Number(sale.counts?.[p] || 0);
+    if (c > 0) lines.push(`  $${p}.00 x ${c} = $${(p*c).toFixed(2)}`);
+  });
+  return [
+    "Master Gardeners Plant Sale",
+    "─────────────────────────",
+    date,
+    "",
+    "ITEMS PURCHASED:",
+    ...lines,
+    "─────────────────────────",
+    `TOTAL: $${Number(sale.grand_total).toFixed(2)}`,
+    "",
+    "Thank you for supporting the",
+    "Master Gardeners program!",
+  ].join("\n");
+}
+
+function buildReceiptHTML(sale) {
+  const date = new Date(sale.created_at || Date.now()).toLocaleString("en-US", {
+    weekday:"long", year:"numeric", month:"long", day:"numeric",
+    hour:"numeric", minute:"2-digit"
+  });
+  const PRICE_TIERS = [1,2,3,4,5,6,7,8,9,10];
+  let rows = "";
+  PRICE_TIERS.forEach(p => {
+    const c = Number(sale.counts?.[p] || 0);
+    if (c > 0) rows += `<tr><td>$${p}.00 plant x ${c}</td><td style="text-align:right">$${(p*c).toFixed(2)}</td></tr>`;
+  });
+  return `
+    <h2 style="color:#1B3A2D;margin:0 0 4px">Master Gardeners Plant Sale</h2>
+    <p style="color:#666;margin:0 0 16px;font-size:14px">${date}</p>
+    <table style="width:100%;border-collapse:collapse;font-size:15px;margin-bottom:12px">
+      ${rows}
+      <tr style="border-top:2px solid #eee;font-weight:bold;font-size:17px">
+        <td style="padding-top:8px">Total</td>
+        <td style="padding-top:8px;text-align:right">$${Number(sale.grand_total).toFixed(2)}</td>
+      </tr>
+    </table>
+    <p style="color:#1B3A2D;font-weight:600;font-size:14px">Thank you for supporting the Master Gardeners program!</p>
+  `;
+}
+
+function openReceiptModal(sale) {
+  receiptSale = sale;
+  // Build preview
+  const PRICE_TIERS_LIST = [1,2,3,4,5,6,7,8,9,10];
+  let lines = [];
+  PRICE_TIERS_LIST.forEach(p => {
+    const c = Number(sale.counts?.[p] || 0);
+    if (c > 0) lines.push(`$${p}.00 × ${c} = $${(p*c).toFixed(2)}`);
+  });
+  document.getElementById("receipt-summary").innerHTML =
+    lines.join("<br>") + `<br><strong>Total: $${Number(sale.grand_total).toFixed(2)}</strong>`;
+  document.getElementById("receipt-contact").value = "";
+  document.getElementById("receipt-modal").classList.remove("hidden");
+  setTimeout(() => document.getElementById("receipt-contact").focus(), 100);
+}
+
+function closeReceiptModal() {
+  document.getElementById("receipt-modal").classList.add("hidden");
+  receiptSale = null;
+}
+
+function sendReceiptEmail() {
+  if (!receiptSale) return;
+  const contact = document.getElementById("receipt-contact").value.trim();
+  const subject = encodeURIComponent("Your Master Gardeners Plant Sale Receipt");
+  const body = encodeURIComponent(buildReceiptText(receiptSale));
+  const to = contact.includes("@") ? encodeURIComponent(contact) : "";
+  window.location.href = `mailto:${to}?subject=${subject}&body=${body}`;
+  closeReceiptModal();
+}
+
+function sendReceiptSMS() {
+  if (!receiptSale) return;
+  const contact = document.getElementById("receipt-contact").value.trim();
+  const body = encodeURIComponent(buildReceiptText(receiptSale));
+  // iOS uses & Android uses ?, handle both
+  const sep = /iPhone|iPad|iPod/i.test(navigator.userAgent) ? "&" : "?";
+  const to = contact.replace(/\D/g,""); // strip non-digits for phone
+  window.location.href = `sms:${to}${sep}body=${body}`;
+  closeReceiptModal();
 }
 
 // ── Change Password ────────────────────────────────────
