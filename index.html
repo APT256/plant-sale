@@ -69,9 +69,9 @@
     .summary-divider { height: 1px; background: #F2F2F7; margin: 4px 0 10px; }
 
     /* BUYER INFO */
-    .buyer-card { margin-top: 12px; background: #fff; border-radius: 18px; padding: 14px 16px; box-shadow: 0 2px 10px rgba(0,0,0,0.07); }
-    .buyer-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-    .buyer-toggle { font-size: 12px; font-weight: 600; color: #2D5E45; background: #DCFCE7; border: none; border-radius: 8px; padding: 4px 10px; cursor: pointer; font-family: inherit; }
+    .customer-card { margin-top: 12px; background: #fff; border-radius: 18px; padding: 14px 16px; box-shadow: 0 2px 10px rgba(0,0,0,0.07); }
+    .customer-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+    .customer-toggle { font-size: 12px; font-weight: 600; color: #2D5E45; background: #DCFCE7; border: none; border-radius: 8px; padding: 4px 10px; cursor: pointer; font-family: inherit; }
     .field { margin-bottom: 10px; }
     .field-label { font-size: 11px; font-weight: 700; color: #8E8E93; text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 4px; display: block; }
     .field-input { width: 100%; padding: 11px 14px; border-radius: 11px; border: 1.5px solid #E5E5EA; font-size: 15px; font-family: inherit; outline: none; color: #1C1C1E; background: #F9F9F9; }
@@ -92,7 +92,7 @@
     .session-time { font-size: 12px; color: #8E8E93; }
     .session-total { font-size: 19px; font-weight: 800; color: #1C1C1E; }
     .session-total.voided { text-decoration: line-through; color: #8E8E93; }
-    .session-buyer { font-size: 12px; color: #2D5E45; font-weight: 600; margin-bottom: 4px; }
+    .session-customer { font-size: 12px; color: #2D5E45; font-weight: 600; margin-bottom: 4px; }
     .session-meta { font-size: 11px; color: #AEAEB2; margin-bottom: 8px; }
     .session-tiers { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 9px; }
     .history-pill { font-size: 11px; font-weight: 700; padding: 2px 9px; border-radius: 18px; border: 1.5px solid; }
@@ -122,9 +122,9 @@
     .report-total-label { font-size: 14px; font-weight: 700; color: #1C1C1E; }
     .report-total-amt { font-size: 19px; font-weight: 800; color: #1B3A2D; }
     .print-btn { padding: 8px 16px; border-radius: 10px; border: 1.5px solid #D1D1D6; background: #fff; font-size: 13px; font-weight: 600; color: #3A3A3C; cursor: pointer; font-family: inherit; margin-bottom: 14px; }
-    .buyer-list-controls { display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; align-items: center; }
-    .buyer-view-btn { padding: 6px 14px; border-radius: 18px; border: 1.5px solid #D1D1D6; background: #fff; font-size: 12px; font-weight: 600; color: #3A3A3C; cursor: pointer; font-family: inherit; }
-    .buyer-view-btn.active { background: #1B3A2D; border-color: #1B3A2D; color: #86EFAC; }
+    .customer-list-controls { display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; align-items: center; }
+    .customer-view-btn { padding: 6px 14px; border-radius: 18px; border: 1.5px solid #D1D1D6; background: #fff; font-size: 12px; font-weight: 600; color: #3A3A3C; cursor: pointer; font-family: inherit; }
+    .customer-view-btn.active { background: #1B3A2D; border-color: #1B3A2D; color: #86EFAC; }
 
     /* MODALS */
     .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 500; display: flex; align-items: flex-end; justify-content: center; }
@@ -230,7 +230,7 @@
       <button class="tab active" onclick="showTab('checkout')">🌱 Sale</button>
       <button class="tab" onclick="showTab('history')">🧾 Sessions</button>
       <button class="tab" onclick="showTab('reports')">📊 Reports</button>
-      <button class="tab" onclick="showTab('buyers')">👥 Buyers</button>
+      <button class="tab" onclick="showTab('customers')">👥 Customers</button>
     </div>
   </div>
 
@@ -240,16 +240,16 @@
     <div id="tab-checkout">
       <div class="grid" id="price-grid"></div>
 
-      <!-- Buyer Info (collapsible) -->
-      <div class="buyer-card">
-        <div class="buyer-card-header">
-          <div class="section-title" style="margin:0">Buyer Info <span style="color:#ccc;font-weight:400">(optional)</span></div>
-          <button class="buyer-toggle" onclick="toggleBuyerForm()">+ Add</button>
+      <!-- Customer Info (collapsible) -->
+      <div class="customer-card">
+        <div class="customer-card-header">
+          <div class="section-title" style="margin:0">Customer Info <span style="color:#ccc;font-weight:400">(optional)</span></div>
+          <button class="customer-toggle" onclick="toggleCustomerForm()">+ Add</button>
         </div>
-        <div id="buyer-form" class="hidden">
-          <div class="field"><label class="field-label">Name</label><input class="field-input" id="buyer-name" type="text" placeholder="Jane Smith"/></div>
-          <div class="field"><label class="field-label">Email</label><input class="field-input" id="buyer-email" type="email" placeholder="jane@example.com"/></div>
-          <div class="field"><label class="field-label">Phone</label><input class="field-input" id="buyer-phone" type="tel" placeholder="555-867-5309"/></div>
+        <div id="customer-form" class="hidden">
+          <div class="field"><label class="field-label">Name</label><input class="field-input" id="customer-name" type="text" placeholder="Jane Smith"/></div>
+          <div class="field"><label class="field-label">Email</label><input class="field-input" id="customer-email" type="email" placeholder="jane@example.com"/></div>
+          <div class="field"><label class="field-label">Phone</label><input class="field-input" id="customer-phone" type="tel" placeholder="555-867-5309"/></div>
         </div>
       </div>
 
@@ -297,14 +297,14 @@
     </div>
 
     <!-- ── BUYERS TAB ── -->
-    <div id="tab-buyers" class="hidden">
-      <div class="buyer-list-controls">
-        <button class="buyer-view-btn active" onclick="setBuyerView('simple')">Simple</button>
-        <button class="buyer-view-btn" onclick="setBuyerView('detailed')">Detailed</button>
-        <button class="print-btn" onclick="printBuyerList()" style="margin:0;margin-left:auto">🖨 Print</button>
+    <div id="tab-customers" class="hidden">
+      <div class="customer-list-controls">
+        <button class="customer-view-btn active" onclick="setCustomerView('simple')">Simple</button>
+        <button class="customer-view-btn" onclick="setCustomerView('detailed')">Detailed</button>
+        <button class="print-btn" onclick="printCustomerList()" style="margin:0;margin-left:auto">🖨 Print</button>
       </div>
-      <div class="error-box hidden" id="buyers-error"></div>
-      <div id="buyers-list"><div class="empty-state">Loading…</div></div>
+      <div class="error-box hidden" id="customers-error"></div>
+      <div id="customers-list"><div class="empty-state">Loading…</div></div>
     </div>
 
   </div><!-- end #content -->
@@ -379,7 +379,7 @@ TIERS.forEach(t => counts[t.price] = 0);
 try { const s = localStorage.getItem("plant-counts"); if (s) counts = {...counts, ...JSON.parse(s)}; } catch {}
 let allSessions = [];
 let reportPeriod = "daily", reportOffset = 0;
-let buyerView = "simple";
+let customerView = "simple";
 let pendingVoidId = null;
 let receiptSale = null;
 let authToken = null, currentUser = null;
@@ -552,25 +552,25 @@ function renderSummary(grand, total) {
   rows.appendChild(tot);
 }
 
-function toggleBuyerForm() {
-  const f = document.getElementById("buyer-form");
-  const btn = document.querySelector(".buyer-toggle");
+function toggleCustomerForm() {
+  const f = document.getElementById("customer-form");
+  const btn = document.querySelector(".customer-toggle");
   const hidden = f.classList.toggle("hidden");
   btn.textContent = hidden ? "+ Add" : "− Hide";
 }
 
-function getBuyerInfo() {
+function getCustomerInfo() {
   return {
-    buyer_name:  document.getElementById("buyer-name").value.trim() || null,
-    buyer_email: document.getElementById("buyer-email").value.trim() || null,
-    buyer_phone: document.getElementById("buyer-phone").value.trim() || null,
+    customer_name:  document.getElementById("customer-name").value.trim() || null,
+    customer_email: document.getElementById("customer-email").value.trim() || null,
+    customer_phone: document.getElementById("customer-phone").value.trim() || null,
   };
 }
 
 function resetCounts() {
   TIERS.forEach(t => counts[t.price]=0);
   saveCounts(); renderGrid();
-  ["buyer-name","buyer-email","buyer-phone"].forEach(id => document.getElementById(id).value = "");
+  ["customer-name","customer-email","customer-phone"].forEach(id => document.getElementById(id).value = "");
   document.getElementById("error-box").classList.add("hidden");
   document.getElementById("sync-note").classList.add("hidden");
   showToast("Sheet cleared!");
@@ -585,17 +585,17 @@ async function uploadSale() {
   btn.disabled=true; btn.textContent="Saving…";
   document.getElementById("error-box").classList.add("hidden");
   try {
-    const buyer = getBuyerInfo();
+    const customer = getCustomerInfo();
     await sbFetch("sales", {
       method:"POST",
       headers:{"Prefer":"return=representation"},
-      body: JSON.stringify({ device_id:getDeviceId(), counts, total_items:total, grand_total:grand, voided:false, ...buyer }),
+      body: JSON.stringify({ device_id:getDeviceId(), counts, total_items:total, grand_total:grand, voided:false, ...customer }),
     });
     document.getElementById("sync-note").textContent = "✓ Synced at "+new Date().toLocaleTimeString();
     document.getElementById("sync-note").classList.remove("hidden");
     showToast(`✓ Saved! $${grand.toFixed(2)} · ${total} plants`);
     // Open receipt modal
-    const justSaved = { created_at:new Date().toISOString(), counts:{...counts}, total_items:total, grand_total:grand, ...buyer };
+    const justSaved = { created_at:new Date().toISOString(), counts:{...counts}, total_items:total, grand_total:grand, ...customer };
     setTimeout(() => openReceiptModal(justSaved), 600);
   } catch(e) {
     const eb = document.getElementById("error-box");
@@ -640,14 +640,14 @@ function renderSessions() {
     const pills = TIERS.filter(t=>s.counts?.[t.price]>0).map(t =>
       `<span class="history-pill" style="background:${t.color};border-color:${t.border};color:${t.text}">$${t.price}×${s.counts[t.price]}</span>`
     ).join("");
-    const buyerLine = s.buyer_name || s.buyer_email || s.buyer_phone
-      ? `<div class="session-buyer">👤 ${[s.buyer_name, s.buyer_email, s.buyer_phone].filter(Boolean).join(" · ")}</div>` : "";
+    const customerLine = s.customer_name || s.customer_email || s.customer_phone
+      ? `<div class="session-customer">👤 ${[s.customer_name, s.customer_email, s.customer_phone].filter(Boolean).join(" · ")}</div>` : "";
     card.innerHTML = `
       <div class="session-header">
         <span class="session-time">${new Date(s.created_at).toLocaleString()}</span>
         <span class="session-total ${voided?"voided":""}">${voided?"":""}$${Number(s.grand_total).toFixed(2)}</span>
       </div>
-      ${buyerLine}
+      ${customerLine}
       <div class="session-meta">${s.total_items} plants · Device ${(s.device_id||"").slice(-4)}</div>
       <div class="session-tiers">${pills}</div>
       <div class="session-actions">
@@ -682,7 +682,7 @@ async function confirmVoid() {
     showToast("Sale voided ✓");
     loadSessions();
     if (!document.getElementById("tab-reports").classList.contains("hidden")) renderReport();
-    if (!document.getElementById("tab-buyers").classList.contains("hidden")) loadBuyers();
+    if (!document.getElementById("tab-customers").classList.contains("hidden")) loadCustomers();
   } catch(e) { showToast("Failed to void: "+e.message, "error"); }
 }
 
@@ -694,7 +694,7 @@ function buildReceiptText(sale) {
   const date = new Date(sale.created_at||Date.now()).toLocaleString("en-US",{weekday:"long",year:"numeric",month:"long",day:"numeric",hour:"numeric",minute:"2-digit"});
   const lines = [];
   TIERS.forEach(t => { const c=Number(sale.counts?.[t.price]||0); if(c>0) lines.push(`  $${t.price}.00 x ${c} = $${(t.price*c).toFixed(2)}`); });
-  const greeting = sale.buyer_name ? `Hi ${sale.buyer_name},\n\nHere is your receipt from today's plant sale.\n\n` : "";
+  const greeting = sale.customer_name ? `Hi ${sale.customer_name},\n\nHere is your receipt from today's plant sale.\n\n` : "";
   return `${greeting}Alabama Master Gardeners - Morgan County\nPlant Sale Receipt\n─────────────────────────\n${date}\n\nITEMS PURCHASED:\n${lines.join("\n")}\n─────────────────────────\nTOTAL: $${Number(sale.grand_total).toFixed(2)}\n\nThank you for supporting the\nAlabama Master Gardeners - Morgan County!`;
 }
 
@@ -706,7 +706,7 @@ function buildReceiptHTML(sale) {
     const c = Number(sale.counts?.[t.price]||0);
     if (c>0) rows.push(`<tr><td style="padding:6px 12px;border-bottom:1px solid #e8f5e9">$${t.price}.00 plants</td><td style="padding:6px 12px;border-bottom:1px solid #e8f5e9;text-align:center">${c}</td><td style="padding:6px 12px;border-bottom:1px solid #e8f5e9;text-align:right;font-weight:600">$${(t.price*c).toFixed(2)}</td></tr>`);
   });
-  const greeting = sale.buyer_name ? `<p style="font-size:16px;color:#333;margin:0 0 16px">Hi <strong>${sale.buyer_name}</strong>,<br>Thank you for your purchase at today's plant sale!</p>` : `<p style="font-size:16px;color:#333;margin:0 0 16px">Thank you for your purchase at today's plant sale!</p>`;
+  const greeting = sale.customer_name ? `<p style="font-size:16px;color:#333;margin:0 0 16px">Hi <strong>${sale.customer_name}</strong>,<br>Thank you for your purchase at today's plant sale!</p>` : `<p style="font-size:16px;color:#333;margin:0 0 16px">Thank you for your purchase at today's plant sale!</p>`;
   return `<!DOCTYPE html><html><body style="margin:0;padding:0;background:#f0f9f4;font-family:-apple-system,BlinkMacSystemFont,sans-serif">
   <div style="max-width:480px;margin:20px auto;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.1)">
     <div style="background:#1B3A2D;padding:24px;text-align:center">
@@ -742,8 +742,8 @@ function openReceiptModal(sale) {
   const lines = [];
   TIERS.forEach(t => { const c=Number(sale.counts?.[t.price]||0); if(c>0) lines.push(`$${t.price}.00 × ${c} = $${(t.price*c).toFixed(2)}`); });
   document.getElementById("receipt-summary").innerHTML = lines.join("<br>")+`<br><strong>Total: $${Number(sale.grand_total).toFixed(2)}</strong>`;
-  document.getElementById("r-name").value = sale.buyer_name || "";
-  document.getElementById("r-contact").value = sale.buyer_email || sale.buyer_phone || "";
+  document.getElementById("r-name").value = sale.customer_name || "";
+  document.getElementById("r-contact").value = sale.customer_email || sale.customer_phone || "";
   document.getElementById("receipt-modal").classList.remove("hidden");
   setTimeout(()=>document.getElementById("r-contact").focus(), 100);
 }
@@ -754,7 +754,7 @@ function sendReceiptEmail() {
   if (!receiptSale) return;
   const contact = document.getElementById("r-contact").value.trim();
   const name = document.getElementById("r-name").value.trim();
-  if (name && !receiptSale.buyer_name) receiptSale.buyer_name = name;
+  if (name && !receiptSale.customer_name) receiptSale.customer_name = name;
   const to = contact.includes("@") ? encodeURIComponent(contact) : "";
   const subject = encodeURIComponent("Your Alabama Master Gardeners Plant Sale Receipt");
 
@@ -777,7 +777,7 @@ function sendReceiptSMS() {
   if (!receiptSale) return;
   const contact = document.getElementById("r-contact").value.trim();
   const name = document.getElementById("r-name").value.trim();
-  if (name && !receiptSale.buyer_name) receiptSale.buyer_name = name;
+  if (name && !receiptSale.customer_name) receiptSale.customer_name = name;
   const digits = contact.replace(/\D/g, "");
   const body = encodeURIComponent(buildReceiptText(receiptSale));
   const sep = /iPhone|iPad|iPod/i.test(navigator.userAgent) ? "&" : "?";
@@ -876,48 +876,48 @@ async function renderReport() {
   }
 }
 
-// ── Buyers Tab ─────────────────────────────────────────
-let buyersData = [];
+// ── Customers Tab ─────────────────────────────────────────
+let customersData = [];
 
-function setBuyerView(v) {
-  buyerView = v;
-  document.querySelectorAll(".buyer-view-btn").forEach((b,i)=>b.classList.toggle("active",["simple","detailed"][i]===v));
-  renderBuyerList();
+function setCustomerView(v) {
+  customerView = v;
+  document.querySelectorAll(".customer-view-btn").forEach((b,i)=>b.classList.toggle("active",["simple","detailed"][i]===v));
+  renderCustomerList();
 }
 
-async function loadBuyers() {
-  document.getElementById("buyers-list").innerHTML='<div class="empty-state">Loading…</div>';
-  document.getElementById("buyers-error").classList.add("hidden");
+async function loadCustomers() {
+  document.getElementById("customers-list").innerHTML='<div class="empty-state">Loading…</div>';
+  document.getElementById("customers-error").classList.add("hidden");
   try {
     const rows = await sbFetch("sales?voided=eq.false&order=created_at.desc&limit=500") || [];
-    buyersData = rows.filter(s=>s.voided!==true && (s.buyer_name||s.buyer_email||s.buyer_phone));
-    renderBuyerList();
+    customersData = rows.filter(s=>s.voided!==true && (s.customer_name||s.customer_email||s.customer_phone));
+    renderCustomerList();
   } catch(e) {
-    document.getElementById("buyers-error").textContent="Error: "+e.message;
-    document.getElementById("buyers-error").classList.remove("hidden");
-    document.getElementById("buyers-list").innerHTML="";
+    document.getElementById("customers-error").textContent="Error: "+e.message;
+    document.getElementById("customers-error").classList.remove("hidden");
+    document.getElementById("customers-list").innerHTML="";
   }
 }
 
-function renderBuyerList() {
-  const list = document.getElementById("buyers-list");
-  if (buyersData.length===0) {
-    list.innerHTML='<div class="empty-state">No buyers with contact info yet.<br>Add buyer info when saving a sale.</div>'; return;
+function renderCustomerList() {
+  const list = document.getElementById("customers-list");
+  if (customersData.length===0) {
+    list.innerHTML='<div class="empty-state">No customers with contact info yet.<br>Add customer info when saving a sale.</div>'; return;
   }
   list.innerHTML="";
-  buyersData.forEach(s => {
+  customersData.forEach(s => {
     const card = document.createElement("div");
     card.className = "session-card";
-    const tierDetail = buyerView==="detailed"
+    const tierDetail = customerView==="detailed"
       ? "<div class='session-tiers' style='margin-top:8px'>"+TIERS.filter(t=>s.counts?.[t.price]>0).map(t=>`<span class="history-pill" style="background:${t.color};border-color:${t.border};color:${t.text}">$${t.price}×${s.counts[t.price]}</span>`).join("")+"</div>" : "";
     card.innerHTML=`
       <div class="session-header">
         <span class="session-time">${new Date(s.created_at).toLocaleString()}</span>
         <span class="session-total">$${Number(s.grand_total).toFixed(2)}</span>
       </div>
-      <div class="session-buyer">👤 ${s.buyer_name||"—"}</div>
+      <div class="session-customer">👤 ${s.customer_name||"—"}</div>
       <div class="session-meta">
-        ${s.buyer_email?`✉️ ${s.buyer_email}`:""}${s.buyer_email&&s.buyer_phone?" · ":""}${s.buyer_phone?`📞 ${s.buyer_phone}`:""}
+        ${s.customer_email?`✉️ ${s.customer_email}`:""}${s.customer_email&&s.customer_phone?" · ":""}${s.customer_phone?`📞 ${s.customer_phone}`:""}
       </div>
       ${tierDetail}
       <div style="display:flex;justify-content:flex-end;margin-top:8px">
@@ -928,26 +928,26 @@ function renderBuyerList() {
   });
 }
 
-// ── Print Buyer List ───────────────────────────────────
-function printBuyerList() {
-  if (buyersData.length===0) { showToast("No buyers to print","error"); return; }
-  const title = `Buyer List — ${new Date().toLocaleDateString("en-US",{month:"long",day:"numeric",year:"numeric"})}`;
-  const isDetailed = buyerView==="detailed";
+// ── Print Customer List ───────────────────────────────────
+function printCustomerList() {
+  if (customersData.length===0) { showToast("No customers to print","error"); return; }
+  const title = `Customer List — ${new Date().toLocaleDateString("en-US",{month:"long",day:"numeric",year:"numeric"})}`;
+  const isDetailed = customerView==="detailed";
 
-  let rows = buyersData.map(s => {
+  let rows = customersData.map(s => {
     const tierDetail = isDetailed
       ? TIERS.filter(t=>s.counts?.[t.price]>0).map(t=>`$${t.price}×${s.counts[t.price]}`).join(", ")
       : "";
     return `<tr>
-      <td>${s.buyer_name||"—"}</td>
-      <td>${s.buyer_email||"—"}</td>
-      <td>${s.buyer_phone||"—"}</td>
+      <td>${s.customer_name||"—"}</td>
+      <td>${s.customer_email||"—"}</td>
+      <td>${s.customer_phone||"—"}</td>
       <td style="text-align:right;font-weight:700">$${Number(s.grand_total).toFixed(2)}</td>
       ${isDetailed?`<td>${tierDetail}</td>`:""}
     </tr>`;
   }).join("");
 
-  const totalRev = buyersData.reduce((a,s)=>a+Number(s.grand_total||0),0);
+  const totalRev = customersData.reduce((a,s)=>a+Number(s.grand_total||0),0);
 
   document.getElementById("print-title").textContent = title;
   document.getElementById("print-content").innerHTML = `
@@ -958,7 +958,7 @@ function printBuyerList() {
       </tr></thead>
       <tbody>${rows}</tbody>
       <tfoot><tr style="font-weight:bold;background:#f0f9f4">
-        <td colspan="${isDetailed?4:3}">Total Revenue (${buyersData.length} buyers)</td>
+        <td colspan="${isDetailed?4:3}">Total Revenue (${customersData.length} customers)</td>
         <td style="text-align:right">$${totalRev.toFixed(2)}</td>
         ${isDetailed?"<td></td>":""}
       </tr></tfoot>
@@ -1045,15 +1045,15 @@ async function handleChangePassword() {
 
 // ── Tabs ───────────────────────────────────────────────
 function showTab(tab) {
-  ["checkout","history","reports","buyers"].forEach(t=>{
+  ["checkout","history","reports","customers"].forEach(t=>{
     document.getElementById("tab-"+t).classList.toggle("hidden",t!==tab);
   });
   document.querySelectorAll(".tab").forEach((el,i)=>{
-    el.classList.toggle("active",["checkout","history","reports","buyers"][i]===tab);
+    el.classList.toggle("active",["checkout","history","reports","customers"][i]===tab);
   });
   if (tab==="history") loadSessions();
   if (tab==="reports") renderReport();
-  if (tab==="buyers") loadBuyers();
+  if (tab==="customers") loadCustomers();
 }
 
 // ── Key handlers ───────────────────────────────────────
