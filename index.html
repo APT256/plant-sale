@@ -9,364 +9,381 @@
   <title>Master Gardeners Plant Sale</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
-      background: #F2F2F7; min-height: 100vh; max-width: 480px; margin: 0 auto;
-    }
+    body { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif; background: #F2F2F7; min-height: 100vh; max-width: 480px; margin: 0 auto; }
 
     /* HEADER */
-    #header {
-      background: linear-gradient(135deg, #1B3A2D, #2D5E45);
-      color: #fff; padding: 48px 20px 0;
-      border-radius: 0 0 28px 28px;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.25);
-      position: sticky; top: 0; z-index: 100;
-    }
-    .header-inner { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
+    #header { background: linear-gradient(135deg, #1B3A2D, #2D5E45); color: #fff; padding: 48px 20px 0; border-radius: 0 0 28px 28px; box-shadow: 0 8px 32px rgba(0,0,0,0.25); position: sticky; top: 0; z-index: 100; }
+    .header-inner { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
     .header-label { font-size: 11px; letter-spacing: 0.18em; color: #86EFAC; font-weight: 600; text-transform: uppercase; margin-bottom: 2px; }
-    .header-title { font-size: 28px; font-weight: 800; letter-spacing: -0.03em; }
-    .total-badge { background: rgba(255,255,255,0.1); border-radius: 16px; padding: 10px 14px; text-align: right; border: 1px solid rgba(255,255,255,0.15); }
+    .header-title { font-size: 26px; font-weight: 800; letter-spacing: -0.03em; }
+    .total-badge { background: rgba(255,255,255,0.1); border-radius: 14px; padding: 8px 12px; text-align: right; border: 1px solid rgba(255,255,255,0.15); }
     .total-label { font-size: 10px; color: #86EFAC; letter-spacing: 0.1em; font-weight: 600; }
-    .total-amount { font-size: 24px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.1; }
+    .total-amount { font-size: 22px; font-weight: 800; line-height: 1.1; }
     .total-items { font-size: 11px; color: #86EFAC; }
-    .db-status { font-size: 11px; display: flex; align-items: center; gap: 6px; margin-bottom: 8px; }
-    .db-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; background: #fbbf24; }
+    .user-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+    .user-left { display: flex; align-items: center; gap: 10px; }
+    .db-dot { width: 7px; height: 7px; border-radius: 50%; background: #fbbf24; display: inline-block; }
     .db-dot.ok { background: #4ade80; } .db-dot.error { background: #f87171; }
-    .db-label { font-weight: 600; color: #fbbf24; }
-    .db-label.ok { color: #4ade80; } .db-label.error { color: #f87171; }
+    .user-email { font-size: 11px; color: #86EFAC; font-weight: 600; }
+    .session-timer { font-size: 11px; font-weight: 700; color: #86EFAC; font-variant-numeric: tabular-nums; }
+    .session-timer.warning { color: #FCD34D; }
+    .session-timer.danger { color: #FCA5A5; animation: pulse 1s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1}50%{opacity:0.4} }
+    .user-right { display: flex; gap: 10px; align-items: center; }
+    .hdr-btn { font-size: 11px; color: rgba(255,255,255,0.6); background: none; border: none; cursor: pointer; font-family: inherit; font-weight: 600; padding: 3px 0; }
     .tabs { display: flex; }
-    .tab { flex: 1; padding: 10px 0; border: none; background: transparent; color: rgba(255,255,255,0.45); font-size: 12px; font-weight: 600; cursor: pointer; border-bottom: 2px solid transparent; font-family: inherit; }
+    .tab { flex: 1; padding: 9px 0; border: none; background: transparent; color: rgba(255,255,255,0.45); font-size: 11px; font-weight: 600; cursor: pointer; border-bottom: 2px solid transparent; font-family: inherit; }
     .tab.active { color: #fff; border-bottom: 2px solid #86EFAC; }
 
     /* CONTENT */
-    #content { padding: 20px 16px 60px; }
+    #content { padding: 18px 14px 60px; }
     .hidden { display: none !important; }
-    .section-title { font-size: 13px; font-weight: 700; color: #8E8E93; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 12px; }
+    .section-title { font-size: 12px; font-weight: 700; color: #8E8E93; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 10px; }
 
     /* GRID */
-    .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
-    .card { border-radius: 18px; border: 2px solid; padding: 14px 12px; display: flex; flex-direction: column; align-items: center; gap: 10px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
-    .price-tag { font-size: 22px; font-weight: 800; }
+    .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .card { border-radius: 16px; border: 2px solid; padding: 12px 10px; display: flex; flex-direction: column; align-items: center; gap: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.07); }
+    .price-tag { font-size: 20px; font-weight: 800; }
     .stepper { display: flex; align-items: center; gap: 10px; }
-    .step-btn { width: 38px; height: 38px; border-radius: 12px; border: 2px solid; background: rgba(255,255,255,0.6); font-size: 22px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; font-family: inherit; line-height: 1; }
-    .step-btn:active { background: rgba(255,255,255,0.9); transform: scale(0.95); }
-    .count-num { font-size: 28px; font-weight: 800; min-width: 34px; text-align: center; }
-    .subtotal { font-size: 13px; font-weight: 600; opacity: 0.75; }
+    .step-btn { width: 36px; height: 36px; border-radius: 10px; border: 2px solid; background: rgba(255,255,255,0.6); font-size: 20px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; font-family: inherit; }
+    .step-btn:active { transform: scale(0.93); }
+    .count-num { font-size: 26px; font-weight: 800; min-width: 32px; text-align: center; }
+    .subtotal { font-size: 12px; font-weight: 600; opacity: 0.75; }
 
-    /* ACTIONS */
-    .actions { display: flex; gap: 12px; margin-top: 20px; }
-    .btn { padding: 14px 20px; border-radius: 14px; border: 2px solid #D1D1D6; background: #fff; font-size: 16px; font-weight: 600; color: #3A3A3C; cursor: pointer; font-family: inherit; }
-    .btn-primary { flex: 1; border: none; background: linear-gradient(135deg, #1B3A2D, #2D5E45); color: #86EFAC; box-shadow: 0 4px 16px rgba(0,0,0,0.2); }
+    /* BUTTONS */
+    .actions { display: flex; gap: 10px; margin-top: 16px; }
+    .btn { padding: 13px 18px; border-radius: 13px; border: 2px solid #D1D1D6; background: #fff; font-size: 15px; font-weight: 600; color: #3A3A3C; cursor: pointer; font-family: inherit; }
+    .btn-primary { flex: 1; border: none; background: linear-gradient(135deg, #1B3A2D, #2D5E45); color: #86EFAC; box-shadow: 0 4px 14px rgba(0,0,0,0.18); }
     .btn-primary:active { opacity: 0.75; } .btn-primary:disabled { opacity: 0.55; }
-    .btn-danger { border-color: #FCA5A5; color: #DC2626; }
-    .sync-note { text-align: center; font-size: 12px; color: #16A34A; margin-top: 8px; font-weight: 600; }
-    .error-box { margin-top: 10px; background: #FEE2E2; border: 1px solid #FCA5A5; border-radius: 12px; padding: 10px 14px; font-size: 12px; color: #7F1D1D; }
+    .btn-blue { border: none; background: #1D4ED8; color: #BFDBFE; }
+    .btn-danger { background: #DC2626; border-color: #DC2626; color: #fff; }
+    .sync-note { text-align: center; font-size: 12px; color: #16A34A; margin-top: 7px; font-weight: 600; }
+    .error-box { margin-top: 10px; background: #FEE2E2; border: 1px solid #FCA5A5; border-radius: 11px; padding: 9px 13px; font-size: 12px; color: #7F1D1D; }
 
-    /* SUMMARY CARD */
-    .summary-card { margin-top: 20px; background: #fff; border-radius: 20px; padding: 16px 18px; box-shadow: 0 2px 12px rgba(0,0,0,0.07); }
-    .summary-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
-    .summary-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
-    .summary-text { flex: 1; font-size: 15px; color: #3A3A3C; }
-    .summary-amt { font-size: 15px; font-weight: 600; color: #1C1C1E; }
-    .summary-divider { height: 1px; background: #F2F2F7; margin: 4px 0 12px; }
-    .grand-total-amt { font-size: 18px; font-weight: 800; color: #1C1C1E; }
+    /* SUMMARY */
+    .summary-card { margin-top: 16px; background: #fff; border-radius: 18px; padding: 14px 16px; box-shadow: 0 2px 10px rgba(0,0,0,0.07); }
+    .summary-row { display: flex; align-items: center; gap: 8px; margin-bottom: 7px; }
+    .summary-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+    .summary-text { flex: 1; font-size: 14px; color: #3A3A3C; }
+    .summary-amt { font-size: 14px; font-weight: 600; color: #1C1C1E; }
+    .summary-divider { height: 1px; background: #F2F2F7; margin: 4px 0 10px; }
+
+    /* BUYER INFO */
+    .buyer-card { margin-top: 12px; background: #fff; border-radius: 18px; padding: 14px 16px; box-shadow: 0 2px 10px rgba(0,0,0,0.07); }
+    .buyer-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+    .buyer-toggle { font-size: 12px; font-weight: 600; color: #2D5E45; background: #DCFCE7; border: none; border-radius: 8px; padding: 4px 10px; cursor: pointer; font-family: inherit; }
+    .field { margin-bottom: 10px; }
+    .field-label { font-size: 11px; font-weight: 700; color: #8E8E93; text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 4px; display: block; }
+    .field-input { width: 100%; padding: 11px 14px; border-radius: 11px; border: 1.5px solid #E5E5EA; font-size: 15px; font-family: inherit; outline: none; color: #1C1C1E; background: #F9F9F9; }
+    .field-input:focus { border-color: #2D5E45; background: #fff; }
 
     /* STAT BANNER */
-    .stat-banner { background: linear-gradient(135deg, #1B3A2D, #2D5E45); border-radius: 20px; padding: 16px 20px; display: flex; justify-content: space-around; align-items: center; margin-bottom: 16px; }
+    .stat-banner { background: linear-gradient(135deg, #1B3A2D, #2D5E45); border-radius: 18px; padding: 14px 18px; display: flex; justify-content: space-around; align-items: center; margin-bottom: 14px; }
     .stat-item { text-align: center; }
-    .stat-val { font-size: 20px; font-weight: 800; color: #fff; }
+    .stat-val { font-size: 19px; font-weight: 800; color: #fff; }
     .stat-label { font-size: 10px; color: #86EFAC; font-weight: 600; letter-spacing: 0.05em; margin-top: 2px; }
-    .stat-divider { width: 1px; height: 36px; background: rgba(255,255,255,0.15); }
+    .stat-divider { width: 1px; height: 32px; background: rgba(255,255,255,0.15); }
 
-    /* REPORT CONTROLS */
-    .report-controls { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
-    .report-period-btn { padding: 7px 16px; border-radius: 20px; border: 1.5px solid #D1D1D6; background: #fff; font-size: 13px; font-weight: 600; color: #3A3A3C; cursor: pointer; font-family: inherit; }
-    .report-period-btn.active { background: #1B3A2D; border-color: #1B3A2D; color: #86EFAC; }
-    .report-nav { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
-    .report-nav-btn { width: 34px; height: 34px; border-radius: 10px; border: 1.5px solid #D1D1D6; background: #fff; font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-family: inherit; flex-shrink: 0; }
-    .report-nav-label { flex: 1; text-align: center; font-size: 15px; font-weight: 700; color: #1C1C1E; }
-    .report-section { background: #fff; border-radius: 18px; padding: 16px; box-shadow: 0 2px 12px rgba(0,0,0,0.07); margin-bottom: 12px; }
-    .report-section-title { font-size: 12px; font-weight: 700; color: #8E8E93; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 12px; }
-    .report-row { display: flex; align-items: center; gap: 8px; padding: 6px 0; border-bottom: 1px solid #F2F2F7; }
-    .report-row:last-child { border-bottom: none; }
-    .report-row-label { flex: 1; font-size: 14px; color: #3A3A3C; }
-    .report-row-count { font-size: 13px; color: #8E8E93; margin-right: 8px; }
-    .report-row-amt { font-size: 15px; font-weight: 700; color: #1C1C1E; }
-    .report-total-row { display: flex; justify-content: space-between; align-items: center; padding-top: 10px; margin-top: 4px; border-top: 2px solid #F2F2F7; }
-    .report-total-label { font-size: 15px; font-weight: 700; color: #1C1C1E; }
-    .report-total-amt { font-size: 20px; font-weight: 800; color: #1B3A2D; }
-    .bar-wrap { flex: 1; height: 6px; background: #F2F2F7; border-radius: 3px; overflow: hidden; margin: 0 8px; }
-    .bar-fill { height: 100%; border-radius: 3px; background: linear-gradient(90deg, #2D5E45, #86EFAC); }
-
-    /* HISTORY / SESSION CARDS */
-    .refresh-btn { background: none; border: 1.5px solid #D1D1D6; border-radius: 10px; padding: 6px 14px; font-size: 13px; font-weight: 600; color: #3A3A3C; cursor: pointer; font-family: inherit; margin-bottom: 10px; display: block; margin-left: auto; }
-    .session-card { background: #fff; border-radius: 18px; padding: 14px 16px; box-shadow: 0 2px 12px rgba(0,0,0,0.07); margin-bottom: 12px; }
+    /* SESSION CARDS */
+    .refresh-btn { background: none; border: 1.5px solid #D1D1D6; border-radius: 9px; padding: 5px 12px; font-size: 12px; font-weight: 600; color: #3A3A3C; cursor: pointer; font-family: inherit; margin-bottom: 10px; display: block; margin-left: auto; }
+    .session-card { background: #fff; border-radius: 16px; padding: 13px 14px; box-shadow: 0 2px 10px rgba(0,0,0,0.07); margin-bottom: 10px; }
     .session-card.voided { opacity: 0.5; }
-    .session-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
-    .session-time { font-size: 13px; color: #8E8E93; }
-    .session-total { font-size: 20px; font-weight: 800; color: #1C1C1E; }
+    .session-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 3px; }
+    .session-time { font-size: 12px; color: #8E8E93; }
+    .session-total { font-size: 19px; font-weight: 800; color: #1C1C1E; }
     .session-total.voided { text-decoration: line-through; color: #8E8E93; }
-    .session-meta { font-size: 12px; color: #AEAEB2; margin-bottom: 8px; }
-    .session-tiers { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
-    .history-pill { font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: 20px; border: 1.5px solid; }
-    .void-btn { font-size: 12px; font-weight: 600; color: #DC2626; background: #FEE2E2; border: none; border-radius: 8px; padding: 5px 12px; cursor: pointer; font-family: inherit; }
-    .voided-badge { font-size: 11px; font-weight: 700; color: #DC2626; background: #FEE2E2; border-radius: 6px; padding: 2px 8px; display: inline-block; }
-    .empty-state { text-align: center; color: #8E8E93; font-size: 15px; padding: 60px 20px; line-height: 1.6; }
+    .session-buyer { font-size: 12px; color: #2D5E45; font-weight: 600; margin-bottom: 4px; }
+    .session-meta { font-size: 11px; color: #AEAEB2; margin-bottom: 8px; }
+    .session-tiers { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 9px; }
+    .history-pill { font-size: 11px; font-weight: 700; padding: 2px 9px; border-radius: 18px; border: 1.5px solid; }
+    .session-actions { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+    .void-btn { font-size: 11px; font-weight: 600; color: #DC2626; background: #FEE2E2; border: none; border-radius: 7px; padding: 5px 10px; cursor: pointer; font-family: inherit; }
+    .receipt-btn { font-size: 11px; font-weight: 600; color: #1B3A2D; background: #DCFCE7; border: none; border-radius: 7px; padding: 5px 10px; cursor: pointer; font-family: inherit; }
+    .voided-badge { font-size: 10px; font-weight: 700; color: #DC2626; background: #FEE2E2; border-radius: 5px; padding: 2px 7px; }
+    .empty-state { text-align: center; color: #8E8E93; font-size: 14px; padding: 50px 20px; line-height: 1.6; }
 
-    /* MODAL */
+    /* REPORT */
+    .report-controls { display: flex; gap: 7px; margin-bottom: 14px; flex-wrap: wrap; }
+    .report-period-btn { padding: 6px 14px; border-radius: 18px; border: 1.5px solid #D1D1D6; background: #fff; font-size: 12px; font-weight: 600; color: #3A3A3C; cursor: pointer; font-family: inherit; }
+    .report-period-btn.active { background: #1B3A2D; border-color: #1B3A2D; color: #86EFAC; }
+    .report-nav { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; }
+    .report-nav-btn { width: 32px; height: 32px; border-radius: 9px; border: 1.5px solid #D1D1D6; background: #fff; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .report-nav-label { flex: 1; text-align: center; font-size: 14px; font-weight: 700; color: #1C1C1E; }
+    .report-section { background: #fff; border-radius: 16px; padding: 14px; box-shadow: 0 2px 10px rgba(0,0,0,0.07); margin-bottom: 10px; }
+    .report-section-title { font-size: 11px; font-weight: 700; color: #8E8E93; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px; }
+    .report-row { display: flex; align-items: center; gap: 7px; padding: 5px 0; border-bottom: 1px solid #F2F2F7; }
+    .report-row:last-child { border-bottom: none; }
+    .report-row-label { flex: 1; font-size: 13px; color: #3A3A3C; }
+    .report-row-count { font-size: 12px; color: #8E8E93; }
+    .report-row-amt { font-size: 14px; font-weight: 700; color: #1C1C1E; }
+    .bar-wrap { flex: 1; height: 5px; background: #F2F2F7; border-radius: 3px; overflow: hidden; margin: 0 7px; }
+    .bar-fill { height: 100%; border-radius: 3px; background: linear-gradient(90deg, #2D5E45, #86EFAC); }
+    .report-total-row { display: flex; justify-content: space-between; align-items: center; padding-top: 9px; margin-top: 3px; border-top: 2px solid #F2F2F7; }
+    .report-total-label { font-size: 14px; font-weight: 700; color: #1C1C1E; }
+    .report-total-amt { font-size: 19px; font-weight: 800; color: #1B3A2D; }
+    .print-btn { padding: 8px 16px; border-radius: 10px; border: 1.5px solid #D1D1D6; background: #fff; font-size: 13px; font-weight: 600; color: #3A3A3C; cursor: pointer; font-family: inherit; margin-bottom: 14px; }
+    .buyer-list-controls { display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; align-items: center; }
+    .buyer-view-btn { padding: 6px 14px; border-radius: 18px; border: 1.5px solid #D1D1D6; background: #fff; font-size: 12px; font-weight: 600; color: #3A3A3C; cursor: pointer; font-family: inherit; }
+    .buyer-view-btn.active { background: #1B3A2D; border-color: #1B3A2D; color: #86EFAC; }
+
+    /* MODALS */
     .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 500; display: flex; align-items: flex-end; justify-content: center; }
-    .modal { background: #fff; border-radius: 24px 24px 0 0; padding: 24px 24px 40px; width: 100%; max-width: 480px; }
-    .modal-title { font-size: 18px; font-weight: 800; color: #1C1C1E; margin-bottom: 8px; }
-    .modal-body { font-size: 15px; color: #3A3A3C; margin-bottom: 24px; line-height: 1.5; }
-    .modal-actions { display: flex; gap: 12px; }
+    .modal { background: #fff; border-radius: 22px 22px 0 0; padding: 24px 22px 44px; width: 100%; max-width: 480px; max-height: 90vh; overflow-y: auto; }
+    .modal-title { font-size: 18px; font-weight: 800; color: #1C1C1E; margin-bottom: 5px; }
+    .modal-sub { font-size: 13px; color: #8E8E93; margin-bottom: 18px; }
+    .modal-actions { display: flex; gap: 10px; margin-top: 16px; }
 
     /* RECEIPT MODAL */
-    .receipt-modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 700; display: flex; align-items: flex-end; justify-content: center; }
-    .receipt-modal { background: #fff; border-radius: 24px 24px 0 0; padding: 28px 24px 48px; width: 100%; max-width: 480px; }
-    .receipt-modal-title { font-size: 20px; font-weight: 800; color: #1C1C1E; margin-bottom: 4px; }
-    .receipt-modal-sub { font-size: 13px; color: #8E8E93; margin-bottom: 20px; }
-    .receipt-summary { background: #F2F2F7; border-radius: 14px; padding: 14px 16px; margin-bottom: 20px; font-size: 14px; color: #3A3A3C; line-height: 1.8; }
-    .receipt-summary strong { color: #1B3A2D; font-size: 16px; }
-    .receipt-field { margin-bottom: 14px; }
-    .receipt-label { font-size: 12px; font-weight: 700; color: #8E8E93; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; display: block; }
-    .receipt-input { width: 100%; padding: 13px 16px; border-radius: 12px; border: 1.5px solid #E5E5EA; font-size: 16px; font-family: inherit; outline: none; color: #1C1C1E; background: #F9F9F9; }
-    .receipt-input:focus { border-color: #2D5E45; background: #fff; }
-    .receipt-send-btns { display: flex; gap: 10px; margin-bottom: 12px; }
-    .receipt-btn-email { flex: 1; padding: 14px; border-radius: 14px; border: none; background: #1B3A2D; color: #86EFAC; font-size: 15px; font-weight: 700; cursor: pointer; font-family: inherit; }
-    .receipt-btn-sms { flex: 1; padding: 14px; border-radius: 14px; border: none; background: #1D4ED8; color: #BFDBFE; font-size: 15px; font-weight: 700; cursor: pointer; font-family: inherit; }
-    .receipt-btn-cancel { width: 100%; padding: 13px; border-radius: 14px; border: 2px solid #E5E5EA; background: #fff; font-size: 15px; font-weight: 600; color: #8E8E93; cursor: pointer; font-family: inherit; }
-
-    /* COUNTDOWN TIMER */
-    .session-timer { font-size: 11px; font-weight: 700; color: #86EFAC; font-variant-numeric: tabular-nums; white-space: nowrap; }
-    .session-timer.warning { color: #FCD34D; }
-    .session-timer.danger { color: #FCA5A5; animation: pulse 1s infinite; }
-    @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.4; } }
-
-    /* CHANGE PASSWORD MODAL */
-    .pw-modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 600; display: flex; align-items: flex-end; justify-content: center; }
-    .pw-modal { background: #fff; border-radius: 24px 24px 0 0; padding: 28px 24px 48px; width: 100%; max-width: 480px; }
-    .pw-modal-title { font-size: 20px; font-weight: 800; color: #1C1C1E; margin-bottom: 6px; }
-    .pw-modal-sub { font-size: 13px; color: #8E8E93; margin-bottom: 24px; }
-    .pw-field { margin-bottom: 16px; }
-    .pw-label { font-size: 12px; font-weight: 700; color: #8E8E93; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; display: block; }
-    .pw-input { width: 100%; padding: 13px 16px; border-radius: 12px; border: 1.5px solid #E5E5EA; font-size: 16px; font-family: inherit; outline: none; color: #1C1C1E; background: #F9F9F9; }
-    .pw-input:focus { border-color: #2D5E45; background: #fff; }
-    .pw-error { margin-top: 4px; font-size: 12px; color: #DC2626; font-weight: 600; }
-    .pw-success { margin-top: 12px; background: #DCFCE7; border-radius: 10px; padding: 10px 14px; font-size: 13px; color: #16A34A; font-weight: 600; }
+    .receipt-summary { background: #F2F2F7; border-radius: 12px; padding: 12px 14px; margin-bottom: 16px; font-size: 13px; color: #3A3A3C; line-height: 1.9; }
+    .receipt-summary strong { color: #1B3A2D; font-size: 15px; }
+    .send-btns { display: flex; gap: 9px; margin-bottom: 10px; }
+    .send-btn-email { flex: 1; padding: 13px; border-radius: 13px; border: none; background: #1B3A2D; color: #86EFAC; font-size: 14px; font-weight: 700; cursor: pointer; font-family: inherit; }
+    .send-btn-sms { flex: 1; padding: 13px; border-radius: 13px; border: none; background: #1D4ED8; color: #BFDBFE; font-size: 14px; font-weight: 700; cursor: pointer; font-family: inherit; }
 
     /* LOGIN */
-    #login-screen {
-      min-height: 100vh; display: flex; flex-direction: column;
-      align-items: center; justify-content: center; padding: 32px 24px;
-      background: linear-gradient(160deg, #1B3A2D 0%, #2D5E45 60%, #3a7a5a 100%);
-    }
+    #login-screen { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 32px 22px; background: linear-gradient(160deg, #1B3A2D 0%, #2D5E45 60%, #3a7a5a 100%); }
     .login-logo { font-size: 48px; margin-bottom: 8px; }
     .login-title { font-size: 26px; font-weight: 800; color: #fff; letter-spacing: -0.02em; margin-bottom: 4px; }
-    .login-subtitle { font-size: 13px; color: #86EFAC; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 40px; }
-    .login-card { background: #fff; border-radius: 24px; padding: 28px 24px; width: 100%; max-width: 360px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
-    .login-field { margin-bottom: 16px; }
-    .login-label { font-size: 12px; font-weight: 700; color: #8E8E93; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; display: block; }
-    .login-input { width: 100%; padding: 13px 16px; border-radius: 12px; border: 1.5px solid #E5E5EA; font-size: 16px; font-family: inherit; outline: none; color: #1C1C1E; background: #F9F9F9; }
+    .login-subtitle { font-size: 12px; color: #86EFAC; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 36px; }
+    .login-card { background: #fff; border-radius: 22px; padding: 26px 22px; width: 100%; max-width: 360px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+    .login-input { width: 100%; padding: 12px 14px; border-radius: 11px; border: 1.5px solid #E5E5EA; font-size: 16px; font-family: inherit; outline: none; color: #1C1C1E; background: #F9F9F9; margin-bottom: 12px; }
     .login-input:focus { border-color: #2D5E45; background: #fff; }
-    .login-btn { width: 100%; padding: 15px; border-radius: 14px; border: none; background: linear-gradient(135deg, #1B3A2D, #2D5E45); color: #86EFAC; font-size: 16px; font-weight: 700; cursor: pointer; font-family: inherit; margin-top: 8px; }
+    .login-btn { width: 100%; padding: 14px; border-radius: 13px; border: none; background: linear-gradient(135deg, #1B3A2D, #2D5E45); color: #86EFAC; font-size: 16px; font-weight: 700; cursor: pointer; font-family: inherit; }
     .login-btn:disabled { opacity: 0.6; }
-    .login-error { margin-top: 12px; background: #FEE2E2; border-radius: 10px; padding: 10px 14px; font-size: 13px; color: #DC2626; font-weight: 600; }
+    .login-msg { margin-top: 11px; border-radius: 9px; padding: 9px 13px; font-size: 13px; font-weight: 600; }
+    .login-msg.error { background: #FEE2E2; color: #DC2626; }
+    .login-msg.info { background: #FEF9C3; color: #854D0E; }
 
-    /* USER BAR */
-    .user-bar { display: flex; align-items: center; justify-content: space-between; padding: 8px 20px; background: rgba(0,0,0,0.2); }
-    .user-email { font-size: 11px; color: #86EFAC; font-weight: 600; }
-    .logout-btn { font-size: 11px; color: rgba(255,255,255,0.6); background: none; border: none; cursor: pointer; font-family: inherit; font-weight: 600; padding: 4px 0; }
+    /* CHANGE PASSWORD */
+    .pw-error { font-size: 12px; color: #DC2626; font-weight: 600; margin-top: 4px; }
+    .pw-success { margin-top: 10px; background: #DCFCE7; border-radius: 9px; padding: 9px 13px; font-size: 13px; color: #16A34A; font-weight: 600; }
 
-    /* TOAST */
-    #toast { position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%); color: #fff; padding: 12px 24px; border-radius: 24px; font-size: 14px; font-weight: 600; box-shadow: 0 8px 24px rgba(0,0,0,0.25); z-index: 999; white-space: nowrap; display: none; }
+    /* PRINT STYLES */
+    @media print {
+      body { max-width: 100%; background: #fff; }
+      #header, #content, #login-screen, .modal-overlay, #toast { display: none !important; }
+      #print-area { display: block !important; }
+      .no-print { display: none !important; }
+    }
+    #print-area { display: none; padding: 20px; font-family: sans-serif; }
+    #print-area h1 { font-size: 22px; color: #1B3A2D; margin-bottom: 4px; }
+    #print-area h2 { font-size: 16px; color: #555; font-weight: normal; margin-bottom: 20px; }
+    #print-area table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    #print-area th { background: #1B3A2D; color: #fff; padding: 8px 10px; text-align: left; }
+    #print-area td { padding: 7px 10px; border-bottom: 1px solid #eee; vertical-align: top; }
+    #print-area tr:nth-child(even) td { background: #f9f9f9; }
+    #print-area .print-footer { margin-top: 20px; font-size: 12px; color: #888; }
+
+    #toast { position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%); color: #fff; padding: 11px 22px; border-radius: 22px; font-size: 14px; font-weight: 600; box-shadow: 0 8px 24px rgba(0,0,0,0.25); z-index: 999; white-space: nowrap; display: none; }
   </style>
 </head>
 <body>
 
+<!-- PRINT AREA (hidden except when printing) -->
+<div id="print-area">
+  <h1>🌿 Master Gardeners Plant Sale</h1>
+  <h2 id="print-title"></h2>
+  <div id="print-content"></div>
+  <div class="print-footer" id="print-footer"></div>
+</div>
+
 <!-- LOGIN SCREEN -->
-<div id="login-screen" class="hidden">
+<div id="login-screen">
   <div class="login-logo">🌿</div>
   <div class="login-title">Plant Sale</div>
   <div class="login-subtitle">Master Gardeners</div>
   <div class="login-card">
-    <div class="login-field">
-      <label class="login-label" for="login-email">Email</label>
-      <input class="login-input" id="login-email" type="email" placeholder="you@example.com" autocomplete="email"/>
-    </div>
-    <div class="login-field">
-      <label class="login-label" for="login-password">Password</label>
-      <input class="login-input" id="login-password" type="password" placeholder="••••••••" autocomplete="current-password"/>
-    </div>
+    <input class="login-input" id="login-email" type="email" placeholder="Email" autocomplete="email"/>
+    <input class="login-input" id="login-password" type="password" placeholder="Password" autocomplete="current-password"/>
     <button class="login-btn" id="login-btn" onclick="handleLogin()">Sign In</button>
-    <div class="login-error hidden" id="login-error"></div>
+    <div class="login-msg hidden" id="login-msg"></div>
   </div>
 </div>
 
 <!-- APP -->
 <div id="app" class="hidden">
-<div id="header">
-  <div class="header-inner">
-    <div>
-      <div class="header-label">Master Gardeners</div>
-      <div class="header-title">Plant Sale</div>
-    </div>
-    <div class="total-badge">
-      <div class="total-label">THIS SALE</div>
-      <div class="total-amount" id="grand-total">$0.00</div>
-      <div class="total-items" id="total-items">0 plants</div>
-    </div>
-  </div>
-  <div class="db-status">
-    <span class="db-dot" id="db-dot"></span>
-    <span class="db-label" id="db-label">Connecting…</span>
-  </div>
-  <div class="user-bar">
-    <span class="user-email" id="user-email"></span>
-    <div style="display:flex;gap:12px;align-items:center">
-      <span class="session-timer" id="session-timer">10:00</span>
-      <button class="logout-btn" onclick="openChangePassword()">Change Password</button>
-      <button class="logout-btn" onclick="handleLogout()">Sign Out</button>
-    </div>
-  </div>
-  <div class="tabs">
-    <button class="tab active" onclick="showTab('checkout')">🌱 Sale</button>
-    <button class="tab" onclick="showTab('history')">🧾 Sessions</button>
-    <button class="tab" onclick="showTab('reports')">📊 Reports</button>
-  </div>
-</div>
 
-<div id="content">
-
-  <!-- ── CHECKOUT TAB ── -->
-  <div id="tab-checkout">
-    <div class="grid" id="price-grid"></div>
-    <div class="actions">
-      <button class="btn" onclick="resetCounts()">Clear</button>
-      <button class="btn btn-primary" id="upload-btn" onclick="uploadSale()">Save to Database ↑</button>
+  <div id="header">
+    <div class="header-inner">
+      <div>
+        <div class="header-label">Master Gardeners</div>
+        <div class="header-title">Plant Sale</div>
+      </div>
+      <div class="total-badge">
+        <div class="total-label">THIS SALE</div>
+        <div class="total-amount" id="grand-total">$0.00</div>
+        <div class="total-items" id="total-items">0 plants</div>
+      </div>
     </div>
-    <div class="sync-note hidden" id="sync-note"></div>
-    <div class="error-box hidden" id="error-box"></div>
-    <div class="summary-card hidden" id="summary-card">
-      <div class="section-title">Session Summary</div>
-      <div id="summary-rows"></div>
+    <div class="user-bar">
+      <div class="user-left">
+        <span class="db-dot" id="db-dot"></span>
+        <span class="user-email" id="user-email"></span>
+        <span class="session-timer" id="session-timer">10:00</span>
+      </div>
+      <div class="user-right">
+        <button class="hdr-btn" onclick="openChangePassword()">Change PW</button>
+        <button class="hdr-btn" onclick="handleLogout()">Sign Out</button>
+      </div>
+    </div>
+    <div class="tabs">
+      <button class="tab active" onclick="showTab('checkout')">🌱 Sale</button>
+      <button class="tab" onclick="showTab('history')">🧾 Sessions</button>
+      <button class="tab" onclick="showTab('reports')">📊 Reports</button>
+      <button class="tab" onclick="showTab('buyers')">👥 Buyers</button>
     </div>
   </div>
 
-  <!-- ── HISTORY TAB ── -->
-  <div id="tab-history" class="hidden">
-    <div class="stat-banner hidden" id="history-banner">
-      <div class="stat-item"><div class="stat-val" id="h-revenue">$0</div><div class="stat-label">REVENUE</div></div>
-      <div class="stat-divider"></div>
-      <div class="stat-item"><div class="stat-val" id="h-plants">0</div><div class="stat-label">PLANTS</div></div>
-      <div class="stat-divider"></div>
-      <div class="stat-item"><div class="stat-val" id="h-sessions">0</div><div class="stat-label">SESSIONS</div></div>
+  <div id="content">
+
+    <!-- ── CHECKOUT TAB ── -->
+    <div id="tab-checkout">
+      <div class="grid" id="price-grid"></div>
+
+      <!-- Buyer Info (collapsible) -->
+      <div class="buyer-card">
+        <div class="buyer-card-header">
+          <div class="section-title" style="margin:0">Buyer Info <span style="color:#ccc;font-weight:400">(optional)</span></div>
+          <button class="buyer-toggle" onclick="toggleBuyerForm()">+ Add</button>
+        </div>
+        <div id="buyer-form" class="hidden">
+          <div class="field"><label class="field-label">Name</label><input class="field-input" id="buyer-name" type="text" placeholder="Jane Smith"/></div>
+          <div class="field"><label class="field-label">Email</label><input class="field-input" id="buyer-email" type="email" placeholder="jane@example.com"/></div>
+          <div class="field"><label class="field-label">Phone</label><input class="field-input" id="buyer-phone" type="tel" placeholder="555-867-5309"/></div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn" onclick="resetCounts()">Clear</button>
+        <button class="btn btn-primary" id="upload-btn" onclick="uploadSale()">Save to Database ↑</button>
+      </div>
+      <div class="sync-note hidden" id="sync-note"></div>
+      <div class="error-box hidden" id="error-box"></div>
+
+      <div class="summary-card hidden" id="summary-card">
+        <div class="section-title">Session Summary</div>
+        <div id="summary-rows"></div>
+      </div>
     </div>
-    <div class="error-box hidden" id="history-error"></div>
-    <button class="refresh-btn" onclick="loadSessions()">↻ Refresh</button>
-    <div id="session-list"><div class="empty-state">Loading…</div></div>
+
+    <!-- ── HISTORY TAB ── -->
+    <div id="tab-history" class="hidden">
+      <div class="stat-banner hidden" id="history-banner">
+        <div class="stat-item"><div class="stat-val" id="h-revenue">$0</div><div class="stat-label">REVENUE</div></div>
+        <div class="stat-divider"></div>
+        <div class="stat-item"><div class="stat-val" id="h-plants">0</div><div class="stat-label">PLANTS</div></div>
+        <div class="stat-divider"></div>
+        <div class="stat-item"><div class="stat-val" id="h-sessions">0</div><div class="stat-label">SESSIONS</div></div>
+      </div>
+      <div class="error-box hidden" id="history-error"></div>
+      <button class="refresh-btn" onclick="loadSessions()">↻ Refresh</button>
+      <div id="session-list"><div class="empty-state">Loading…</div></div>
+    </div>
+
+    <!-- ── REPORTS TAB ── -->
+    <div id="tab-reports" class="hidden">
+      <div class="report-controls">
+        <button class="report-period-btn active" onclick="setPeriod('daily')">Daily</button>
+        <button class="report-period-btn" onclick="setPeriod('monthly')">Monthly</button>
+        <button class="report-period-btn" onclick="setPeriod('annual')">Annual</button>
+      </div>
+      <div class="report-nav">
+        <button class="report-nav-btn" onclick="navReport(-1)">‹</button>
+        <div class="report-nav-label" id="report-nav-label">—</div>
+        <button class="report-nav-btn" onclick="navReport(1)">›</button>
+      </div>
+      <div class="error-box hidden" id="report-error"></div>
+      <div id="report-content"><div class="empty-state">Loading…</div></div>
+    </div>
+
+    <!-- ── BUYERS TAB ── -->
+    <div id="tab-buyers" class="hidden">
+      <div class="buyer-list-controls">
+        <button class="buyer-view-btn active" onclick="setBuyerView('simple')">Simple</button>
+        <button class="buyer-view-btn" onclick="setBuyerView('detailed')">Detailed</button>
+        <button class="print-btn" onclick="printBuyerList()" style="margin:0;margin-left:auto">🖨 Print</button>
+      </div>
+      <div class="error-box hidden" id="buyers-error"></div>
+      <div id="buyers-list"><div class="empty-state">Loading…</div></div>
+    </div>
+
+  </div><!-- end #content -->
+
+  <!-- VOID MODAL -->
+  <div class="modal-overlay hidden" id="void-modal">
+    <div class="modal">
+      <div class="modal-title">Void this sale?</div>
+      <div class="modal-sub" id="void-modal-body"></div>
+      <div class="modal-actions">
+        <button class="btn" style="flex:1" onclick="closeVoidModal()">Cancel</button>
+        <button class="btn btn-danger" style="flex:1" onclick="confirmVoid()">Void Sale</button>
+      </div>
+    </div>
   </div>
 
-  <!-- ── REPORTS TAB ── -->
-  <div id="tab-reports" class="hidden">
-    <div class="report-controls">
-      <button class="report-period-btn active" onclick="setPeriod('daily')">Daily</button>
-      <button class="report-period-btn" onclick="setPeriod('monthly')">Monthly</button>
-      <button class="report-period-btn" onclick="setPeriod('annual')">Annual</button>
-    </div>
-    <div class="report-nav">
-      <button class="report-nav-btn" onclick="navReport(-1)">‹</button>
-      <div class="report-nav-label" id="report-nav-label">—</div>
-      <button class="report-nav-btn" onclick="navReport(1)">›</button>
-    </div>
-    <div class="error-box hidden" id="report-error"></div>
-    <div id="report-content"><div class="empty-state">Loading…</div></div>
-  </div>
-
-</div>
-
-<!-- VOID CONFIRM MODAL -->
-<div class="modal-overlay hidden" id="void-modal">
-  <div class="modal">
-    <div class="modal-title">Void this sale?</div>
-    <div class="modal-body" id="void-modal-body">This will mark the sale as voided. It will be excluded from all reports.</div>
-    <div class="modal-actions">
-      <button class="btn" style="flex:1" onclick="closeVoidModal()">Cancel</button>
-      <button class="btn btn-danger" style="flex:1;border:none;background:#DC2626;color:#fff;" onclick="confirmVoid()">Void Sale</button>
+  <!-- RECEIPT MODAL -->
+  <div class="modal-overlay hidden" id="receipt-modal">
+    <div class="modal">
+      <div class="modal-title">📄 Send Receipt</div>
+      <div class="modal-sub">Send a copy of this sale to the shopper.</div>
+      <div class="receipt-summary" id="receipt-summary"></div>
+      <div class="field"><label class="field-label">Name (optional)</label><input class="field-input" id="r-name" type="text" placeholder="Jane Smith"/></div>
+      <div class="field"><label class="field-label">Email or Phone</label><input class="field-input" id="r-contact" type="text" placeholder="email@example.com or 555-867-5309"/></div>
+      <div class="send-btns">
+        <button class="send-btn-email" onclick="sendReceiptEmail()">✉️ Email</button>
+        <button class="send-btn-sms" onclick="sendReceiptSMS()">💬 Text</button>
+      </div>
+      <button class="btn" style="width:100%" onclick="closeReceiptModal()">Cancel</button>
     </div>
   </div>
-</div>
 
-<!-- RECEIPT MODAL -->
-<div class="receipt-modal-overlay hidden" id="receipt-modal">
-  <div class="receipt-modal">
-    <div class="receipt-modal-title">📄 Send Receipt</div>
-    <div class="receipt-modal-sub">Send a copy of this sale to the shopper.</div>
-    <div class="receipt-summary" id="receipt-summary"></div>
-    <div class="receipt-field">
-      <label class="receipt-label" for="receipt-contact">Email or Phone Number</label>
-      <input class="receipt-input" id="receipt-contact" type="text" placeholder="email@example.com or 555-867-5309"/>
-    </div>
-    <div class="receipt-send-btns">
-      <button class="receipt-btn-email" onclick="sendReceiptEmail()">✉️ Email</button>
-      <button class="receipt-btn-sms" onclick="sendReceiptSMS()">💬 Text</button>
-    </div>
-    <button class="receipt-btn-cancel" onclick="closeReceiptModal()">Cancel</button>
-  </div>
-</div>
-
-<!-- CHANGE PASSWORD MODAL -->
-<div class="pw-modal-overlay hidden" id="pw-modal">
-  <div class="pw-modal">
-    <div class="pw-modal-title">Change Password</div>
-    <div class="pw-modal-sub" id="pw-modal-sub">Enter and confirm your new password.</div>
-    <div class="pw-field">
-      <label class="pw-label" for="pw-new">New Password</label>
-      <input class="pw-input" id="pw-new" type="password" placeholder="Min. 6 characters"/>
-      <div class="pw-error hidden" id="pw-new-error"></div>
-    </div>
-    <div class="pw-field">
-      <label class="pw-label" for="pw-confirm">Confirm Password</label>
-      <input class="pw-input" id="pw-confirm" type="password" placeholder="Repeat new password"/>
-      <div class="pw-error hidden" id="pw-confirm-error"></div>
-    </div>
-    <div class="pw-success hidden" id="pw-success">✓ Password changed successfully!</div>
-    <div class="actions" style="margin-top:8px">
-      <button class="btn" style="flex:1" onclick="closeChangePassword()">Cancel</button>
-      <button class="btn btn-primary" style="flex:2" id="pw-save-btn" onclick="handleChangePassword()">Save Password</button>
+  <!-- CHANGE PASSWORD MODAL -->
+  <div class="modal-overlay hidden" id="pw-modal">
+    <div class="modal">
+      <div class="modal-title">Change Password</div>
+      <div class="modal-sub">Enter and confirm your new password.</div>
+      <div class="field"><label class="field-label">New Password</label><input class="field-input" id="pw-new" type="password" placeholder="Min. 6 characters"/><div class="pw-error hidden" id="pw-new-error"></div></div>
+      <div class="field"><label class="field-label">Confirm Password</label><input class="field-input" id="pw-confirm" type="password" placeholder="Repeat new password"/><div class="pw-error hidden" id="pw-confirm-error"></div></div>
+      <div class="pw-success hidden" id="pw-success">✓ Password changed successfully!</div>
+      <div class="modal-actions">
+        <button class="btn" style="flex:1" onclick="closeChangePassword()">Cancel</button>
+        <button class="btn btn-primary" style="flex:2" id="pw-save-btn" onclick="handleChangePassword()">Save Password</button>
+      </div>
     </div>
   </div>
-</div>
+
 </div><!-- end #app -->
+
 <div id="toast"></div>
 
 <script>
 const SUPABASE_URL = "https://ctqtsgbojejlczyobkvm.supabase.co";
 const SUPABASE_KEY = "sb_publishable_KzokaEu5KYWGO6Vpk9Uu_g_qvryS4_g";
 
-const PRICE_TIERS = [
-  { price: 1,  color: "#FFFFFF", border: "#ccc",    text: "#333" },
-  { price: 2,  color: "#F9A8D4", border: "#EC4899",  text: "#831843" },
-  { price: 3,  color: "#FDE68A", border: "#F59E0B",  text: "#78350F" },
-  { price: 4,  color: "#86EFAC", border: "#22C55E",  text: "#14532D" },
-  { price: 5,  color: "#FDE68A", border: "#F59E0B",  text: "#78350F" },
-  { price: 6,  color: "#93C5FD", border: "#3B82F6",  text: "#1E3A8A" },
-  { price: 7,  color: "#FCA5A5", border: "#EF4444",  text: "#7F1D1D" },
-  { price: 8,  color: "#C4B5FD", border: "#8B5CF6",  text: "#3B0764" },
-  { price: 9,  color: "#6EE7B7", border: "#10B981",  text: "#064E3B" },
-  { price: 10, color: "#FCD34D", border: "#D97706",  text: "#451A03" },
+const TIERS = [
+  { price:1,  color:"#FFFFFF", border:"#ccc",    text:"#333"    },
+  { price:2,  color:"#F9A8D4", border:"#EC4899",  text:"#831843" },
+  { price:3,  color:"#FDE68A", border:"#F59E0B",  text:"#78350F" },
+  { price:4,  color:"#86EFAC", border:"#22C55E",  text:"#14532D" },
+  { price:5,  color:"#FDE68A", border:"#F59E0B",  text:"#78350F" },
+  { price:6,  color:"#93C5FD", border:"#3B82F6",  text:"#1E3A8A" },
+  { price:7,  color:"#FCA5A5", border:"#EF4444",  text:"#7F1D1D" },
+  { price:8,  color:"#C4B5FD", border:"#8B5CF6",  text:"#3B0764" },
+  { price:9,  color:"#6EE7B7", border:"#10B981",  text:"#064E3B" },
+  { price:10, color:"#FCD34D", border:"#D97706",  text:"#451A03" },
 ];
 
 // ── State ──────────────────────────────────────────────
 let counts = {};
-PRICE_TIERS.forEach(t => counts[t.price] = 0);
+TIERS.forEach(t => counts[t.price] = 0);
 try { const s = localStorage.getItem("plant-counts"); if (s) counts = {...counts, ...JSON.parse(s)}; } catch {}
-
 let allSessions = [];
-let reportPeriod = "daily";
-let reportOffset = 0;
+let reportPeriod = "daily", reportOffset = 0;
+let buyerView = "simple";
 let pendingVoidId = null;
+let receiptSale = null;
+let authToken = null, currentUser = null;
 const sessionMap = {};
-let currentUser = null;
 
 function saveCounts() { try { localStorage.setItem("plant-counts", JSON.stringify(counts)); } catch {} }
 function getDeviceId() {
@@ -376,14 +393,11 @@ function getDeviceId() {
 }
 
 // ── Supabase ───────────────────────────────────────────
-let authToken = null;
-
 async function sbFetch(path, options = {}) {
   const sep = path.includes("?") ? "&" : "?";
   const url = `${SUPABASE_URL}/rest/v1/${path}${sep}apikey=${SUPABASE_KEY}`;
   const headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
+    "Content-Type": "application/json", "Accept": "application/json",
     "apikey": SUPABASE_KEY,
     ...(authToken ? { "Authorization": "Bearer " + authToken } : {}),
     ...(options.headers || {}),
@@ -407,12 +421,59 @@ async function sbSignIn(email, password) {
 
 async function sbSignOut() {
   if (!authToken) return;
-  await fetch(`${SUPABASE_URL}/auth/v1/logout?apikey=${SUPABASE_KEY}`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json", "apikey": SUPABASE_KEY, "Authorization": "Bearer " + authToken },
-  });
-  authToken = null;
-  currentUser = null;
+  try {
+    await fetch(`${SUPABASE_URL}/auth/v1/logout?apikey=${SUPABASE_KEY}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "apikey": SUPABASE_KEY, "Authorization": "Bearer " + authToken },
+    });
+  } catch {}
+  authToken = null; currentUser = null;
+}
+
+// ── Inactivity Timer ───────────────────────────────────
+const INACTIVITY_SECS = 10 * 60;
+let countdownInterval = null;
+let secondsRemaining = INACTIVITY_SECS;
+
+function formatTime(s) { return `${String(Math.floor(s/60)).padStart(2,"0")}:${String(s%60).padStart(2,"0")}`; }
+
+function updateTimerDisplay() {
+  const el = document.getElementById("session-timer");
+  if (!el) return;
+  el.textContent = formatTime(secondsRemaining);
+  el.className = "session-timer" + (secondsRemaining <= 60 ? " danger" : secondsRemaining <= 120 ? " warning" : "");
+}
+
+function resetInactivityTimer() {
+  secondsRemaining = INACTIVITY_SECS;
+  updateTimerDisplay();
+}
+
+function startActivityTracking() {
+  ["click","touchstart","keydown","scroll","mousemove"].forEach(e =>
+    document.addEventListener(e, resetInactivityTimer, { passive: true })
+  );
+  secondsRemaining = INACTIVITY_SECS;
+  updateTimerDisplay();
+  countdownInterval = setInterval(() => {
+    secondsRemaining = Math.max(0, secondsRemaining - 1);
+    updateTimerDisplay();
+    if (secondsRemaining <= 0) forceLogout("You have been logged out due to inactivity.");
+  }, 1000);
+}
+
+function stopActivityTracking() {
+  ["click","touchstart","keydown","scroll","mousemove"].forEach(e =>
+    document.removeEventListener(e, resetInactivityTimer)
+  );
+  clearInterval(countdownInterval);
+  countdownInterval = null;
+}
+
+async function forceLogout(reason) {
+  stopActivityTracking();
+  await sbSignOut();
+  showLoginScreen(reason);
 }
 
 // ── DB Status ──────────────────────────────────────────
@@ -420,12 +481,8 @@ async function checkDb() {
   try {
     await sbFetch("sales?limit=1");
     document.getElementById("db-dot").className = "db-dot ok";
-    document.getElementById("db-label").className = "db-label ok";
-    document.getElementById("db-label").textContent = "Connected to Supabase";
-  } catch(e) {
+  } catch {
     document.getElementById("db-dot").className = "db-dot error";
-    document.getElementById("db-label").className = "db-label error";
-    document.getElementById("db-label").textContent = "DB Unreachable — " + e.message;
   }
 }
 
@@ -433,10 +490,8 @@ async function checkDb() {
 let toastTimer;
 function showToast(msg, type="success") {
   const el = document.getElementById("toast");
-  el.textContent = msg;
-  el.style.background = type === "error" ? "#EF4444" : "#16A34A";
-  el.style.display = "block";
-  clearTimeout(toastTimer);
+  el.textContent = msg; el.style.background = type==="error" ? "#EF4444" : "#16A34A";
+  el.style.display = "block"; clearTimeout(toastTimer);
   toastTimer = setTimeout(() => el.style.display = "none", 3000);
 }
 
@@ -444,19 +499,19 @@ function showToast(msg, type="success") {
 function renderGrid() {
   const grid = document.getElementById("price-grid");
   grid.innerHTML = "";
-  PRICE_TIERS.forEach(tier => {
-    const count = counts[tier.price] || 0;
+  TIERS.forEach(t => {
+    const count = counts[t.price] || 0;
     const card = document.createElement("div");
     card.className = "card";
-    card.style.cssText = `background:${tier.color};border-color:${tier.border}`;
+    card.style.cssText = `background:${t.color};border-color:${t.border}`;
     card.innerHTML = `
-      <div class="price-tag" style="color:${tier.text}">$${tier.price}</div>
+      <div class="price-tag" style="color:${t.text}">$${t.price}</div>
       <div class="stepper">
-        <button class="step-btn" style="border-color:${tier.border};color:${tier.text}" onclick="adjust(${tier.price},-1)">−</button>
-        <span class="count-num" style="color:${tier.text}" id="count-${tier.price}">${count}</span>
-        <button class="step-btn" style="border-color:${tier.border};color:${tier.text}" onclick="adjust(${tier.price},1)">+</button>
+        <button class="step-btn" style="border-color:${t.border};color:${t.text}" onclick="adjust(${t.price},-1)">−</button>
+        <span class="count-num" style="color:${t.text}" id="count-${t.price}">${count}</span>
+        <button class="step-btn" style="border-color:${t.border};color:${t.text}" onclick="adjust(${t.price},1)">+</button>
       </div>
-      <div class="subtotal" style="color:${tier.text}" id="sub-${tier.price}">${count>0?"$"+(count*tier.price).toFixed(2):"—"}</div>`;
+      <div class="subtotal" style="color:${t.text}" id="sub-${t.price}">${count>0?"$"+(count*t.price).toFixed(2):"—"}</div>`;
     grid.appendChild(card);
   });
   updateTotals();
@@ -472,7 +527,7 @@ function adjust(price, delta) {
 
 function updateTotals() {
   let grand=0, total=0;
-  PRICE_TIERS.forEach(t => { grand += t.price*(counts[t.price]||0); total += counts[t.price]||0; });
+  TIERS.forEach(t => { grand += t.price*(counts[t.price]||0); total += counts[t.price]||0; });
   document.getElementById("grand-total").textContent = "$"+grand.toFixed(2);
   document.getElementById("total-items").textContent = total+" plant"+(total!==1?"s":"");
   renderSummary(grand, total);
@@ -484,7 +539,7 @@ function renderSummary(grand, total) {
   card.classList.remove("hidden");
   const rows = document.getElementById("summary-rows");
   rows.innerHTML = "";
-  PRICE_TIERS.filter(t=>counts[t.price]>0).forEach(t => {
+  TIERS.filter(t=>counts[t.price]>0).forEach(t => {
     const r = document.createElement("div"); r.className = "summary-row";
     r.innerHTML = `<span class="summary-dot" style="background:${t.border}"></span>
       <span class="summary-text">$${t.price} × ${counts[t.price]}</span>
@@ -493,13 +548,29 @@ function renderSummary(grand, total) {
   });
   const d = document.createElement("div"); d.className = "summary-divider"; rows.appendChild(d);
   const tot = document.createElement("div"); tot.className = "summary-row"; tot.style.fontWeight="700";
-  tot.innerHTML = `<span style="flex:1">Grand Total</span><span class="grand-total-amt">$${grand.toFixed(2)}</span>`;
+  tot.innerHTML = `<span style="flex:1">Grand Total</span><span style="font-size:16px;font-weight:800;color:#1C1C1E">$${grand.toFixed(2)}</span>`;
   rows.appendChild(tot);
 }
 
+function toggleBuyerForm() {
+  const f = document.getElementById("buyer-form");
+  const btn = document.querySelector(".buyer-toggle");
+  const hidden = f.classList.toggle("hidden");
+  btn.textContent = hidden ? "+ Add" : "− Hide";
+}
+
+function getBuyerInfo() {
+  return {
+    buyer_name:  document.getElementById("buyer-name").value.trim() || null,
+    buyer_email: document.getElementById("buyer-email").value.trim() || null,
+    buyer_phone: document.getElementById("buyer-phone").value.trim() || null,
+  };
+}
+
 function resetCounts() {
-  PRICE_TIERS.forEach(t => counts[t.price]=0);
+  TIERS.forEach(t => counts[t.price]=0);
   saveCounts(); renderGrid();
+  ["buyer-name","buyer-email","buyer-phone"].forEach(id => document.getElementById(id).value = "");
   document.getElementById("error-box").classList.add("hidden");
   document.getElementById("sync-note").classList.add("hidden");
   showToast("Sheet cleared!");
@@ -508,28 +579,23 @@ function resetCounts() {
 // ── Upload ─────────────────────────────────────────────
 async function uploadSale() {
   let grand=0, total=0;
-  PRICE_TIERS.forEach(t => { grand += t.price*(counts[t.price]||0); total += counts[t.price]||0; });
+  TIERS.forEach(t => { grand += t.price*(counts[t.price]||0); total += counts[t.price]||0; });
   if (total===0) { showToast("Add some items first!", "error"); return; }
   const btn = document.getElementById("upload-btn");
   btn.disabled=true; btn.textContent="Saving…";
   document.getElementById("error-box").classList.add("hidden");
   try {
+    const buyer = getBuyerInfo();
     await sbFetch("sales", {
       method:"POST",
       headers:{"Prefer":"return=representation"},
-      body: JSON.stringify({ device_id:getDeviceId(), counts, total_items:total, grand_total:grand, voided:false }),
+      body: JSON.stringify({ device_id:getDeviceId(), counts, total_items:total, grand_total:grand, voided:false, ...buyer }),
     });
-    const note = document.getElementById("sync-note");
-    note.textContent = "✓ Synced at "+new Date().toLocaleTimeString();
-    note.classList.remove("hidden");
+    document.getElementById("sync-note").textContent = "✓ Synced at "+new Date().toLocaleTimeString();
+    document.getElementById("sync-note").classList.remove("hidden");
     showToast(`✓ Saved! $${grand.toFixed(2)} · ${total} plants`);
-    // Offer receipt for the just-saved sale
-    const justSaved = {
-      created_at: new Date().toISOString(),
-      counts: {...counts},
-      total_items: total,
-      grand_total: grand,
-    };
+    // Open receipt modal
+    const justSaved = { created_at:new Date().toISOString(), counts:{...counts}, total_items:total, grand_total:grand, ...buyer };
     setTimeout(() => openReceiptModal(justSaved), 600);
   } catch(e) {
     const eb = document.getElementById("error-box");
@@ -543,9 +609,8 @@ async function loadSessions() {
   document.getElementById("session-list").innerHTML = '<div class="empty-state">Loading…</div>';
   document.getElementById("history-error").classList.add("hidden");
   try {
-    allSessions = await sbFetch("sales?order=created_at.desc&limit=200") || [];
-    // Normalize voided field - Supabase may return null for old rows
-    allSessions = allSessions.map(s => ({...s, voided: s.voided === true}));
+    const rows = await sbFetch("sales?order=created_at.desc&limit=200") || [];
+    allSessions = rows.map(s => ({...s, voided: s.voided===true}));
     renderSessions();
   } catch(e) {
     document.getElementById("history-error").textContent = "Error: "+e.message;
@@ -556,51 +621,46 @@ async function loadSessions() {
 
 function renderSessions() {
   const list = document.getElementById("session-list");
-  const active = allSessions.filter(s => s.voided !== true);
+  const active = allSessions.filter(s=>!s.voided);
   const rev = active.reduce((a,s)=>a+Number(s.grand_total||0),0);
   const plants = active.reduce((a,s)=>a+Number(s.total_items||0),0);
-
-  if (allSessions.length > 0) {
+  if (allSessions.length>0) {
     document.getElementById("h-revenue").textContent = "$"+rev.toFixed(2);
     document.getElementById("h-plants").textContent = plants;
     document.getElementById("h-sessions").textContent = active.length;
     document.getElementById("history-banner").classList.remove("hidden");
   }
-
-  if (allSessions.length === 0) {
-    list.innerHTML = '<div class="empty-state">No sessions yet.<br>Go to Sale and save one!</div>'; return;
-  }
+  if (allSessions.length===0) { list.innerHTML = '<div class="empty-state">No sessions yet.</div>'; return; }
   list.innerHTML = "";
   allSessions.forEach(s => {
-    const voided = s.voided === true;
-    const card = document.createElement("div");
-    card.className = "session-card" + (voided ? " voided" : "");
     sessionMap[s.id] = s;
-    const pills = PRICE_TIERS.filter(t=>s.counts?.[t.price]>0).map(t =>
+    const voided = s.voided===true;
+    const card = document.createElement("div");
+    card.className = "session-card"+(voided?" voided":"");
+    const pills = TIERS.filter(t=>s.counts?.[t.price]>0).map(t =>
       `<span class="history-pill" style="background:${t.color};border-color:${t.border};color:${t.text}">$${t.price}×${s.counts[t.price]}</span>`
     ).join("");
-    const amount = "$"+Number(s.grand_total).toFixed(2);
+    const buyerLine = s.buyer_name || s.buyer_email || s.buyer_phone
+      ? `<div class="session-buyer">👤 ${[s.buyer_name, s.buyer_email, s.buyer_phone].filter(Boolean).join(" · ")}</div>` : "";
     card.innerHTML = `
       <div class="session-header">
         <span class="session-time">${new Date(s.created_at).toLocaleString()}</span>
-        <span class="session-total ${voided?'voided':''}">$${Number(s.grand_total).toFixed(2)}</span>
+        <span class="session-total ${voided?"voided":""}">${voided?"":""}$${Number(s.grand_total).toFixed(2)}</span>
       </div>
+      ${buyerLine}
       <div class="session-meta">${s.total_items} plants · Device ${(s.device_id||"").slice(-4)}</div>
       <div class="session-tiers">${pills}</div>
-      <div style="display:flex;justify-content:space-between;align-items:center">
+      <div class="session-actions">
         ${voided
-          ? '<span class="voided-badge">VOIDED</span>'
-          : `<button class="void-btn" id="void-${s.id}">Void Sale</button>`}
-        ${!voided ? `<button class="receipt-send-btn" id="receipt-${s.id}" style="font-size:12px;font-weight:600;color:#1B3A2D;background:#DCFCE7;border:none;border-radius:8px;padding:5px 12px;cursor:pointer;font-family:inherit;">📄 Receipt</button>` : ''}
+          ? '<span class="voided-badge">VOIDED</span><span></span>'
+          : `<button class="void-btn" id="vb-${s.id}">Void</button>
+             <div style="display:flex;gap:6px">
+               <button class="receipt-btn" id="rb-${s.id}">📄 Receipt</button>
+             </div>`}
       </div>`;
-    // Attach event listeners directly
     if (!voided) {
-      card.querySelector(".void-btn").addEventListener("click", () => {
-        openVoidModal(s.id, amount);
-      });
-      card.querySelector(".receipt-send-btn").addEventListener("click", () => {
-        openReceiptModal(s);
-      });
+      card.querySelector(".void-btn").addEventListener("click", () => openVoidModal(s.id, "$"+Number(s.grand_total).toFixed(2)));
+      card.querySelector(".receipt-btn").addEventListener("click", () => openReceiptModal(s));
     }
     list.appendChild(card);
   });
@@ -609,152 +669,137 @@ function renderSessions() {
 // ── Void ───────────────────────────────────────────────
 function openVoidModal(id, amount) {
   pendingVoidId = id;
-  document.getElementById("void-modal-body").textContent =
-    `This will void the ${amount} sale and exclude it from all reports. This cannot be undone.`;
+  document.getElementById("void-modal-body").textContent = `This will void the ${amount} sale and exclude it from all reports. This cannot be undone.`;
   document.getElementById("void-modal").classList.remove("hidden");
 }
-function closeVoidModal() {
-  pendingVoidId = null;
-  document.getElementById("void-modal").classList.add("hidden");
-}
+function closeVoidModal() { pendingVoidId = null; document.getElementById("void-modal").classList.add("hidden"); }
 async function confirmVoid() {
-  const idToVoid = pendingVoidId;
+  const id = pendingVoidId;
   closeVoidModal();
-  if (!idToVoid || idToVoid === "null") {
-    alert("Error: no sale ID captured. Please refresh and try again.");
-    return;
-  }
+  if (!id || id==="null") { showToast("Error: no sale ID", "error"); return; }
   try {
-    await sbFetch(`sales?id=eq.${idToVoid}`, {
-      method: "PATCH",
-      headers: { "Prefer": "return=representation", "Content-Type": "application/json" },
-      body: JSON.stringify({ voided: true }),
-    });
+    await sbFetch(`sales?id=eq.${id}`, { method:"PATCH", headers:{"Prefer":"return=representation","Content-Type":"application/json"}, body:JSON.stringify({voided:true}) });
     showToast("Sale voided ✓");
-    await loadSessions();
-    if (!document.getElementById("tab-reports").classList.contains("hidden")) await renderReport();
-  } catch(e) {
-    showToast("Failed to void: "+e.message, "error");
-  }
+    loadSessions();
+    if (!document.getElementById("tab-reports").classList.contains("hidden")) renderReport();
+    if (!document.getElementById("tab-buyers").classList.contains("hidden")) loadBuyers();
+  } catch(e) { showToast("Failed to void: "+e.message, "error"); }
+}
+
+// ── Receipt ────────────────────────────────────────────
+function buildReceiptText(sale) {
+  const date = new Date(sale.created_at||Date.now()).toLocaleString("en-US",{weekday:"long",year:"numeric",month:"long",day:"numeric",hour:"numeric",minute:"2-digit"});
+  const lines = [];
+  TIERS.forEach(t => { const c=Number(sale.counts?.[t.price]||0); if(c>0) lines.push(`  $${t.price}.00 x ${c} = $${(t.price*c).toFixed(2)}`); });
+  const greeting = sale.buyer_name ? `Hi ${sale.buyer_name},\n\nHere is your receipt from today's plant sale.\n\n` : "";
+  return `${greeting}Master Gardeners Plant Sale\n─────────────────────────\n${date}\n\nITEMS PURCHASED:\n${lines.join("\n")}\n─────────────────────────\nTOTAL: $${Number(sale.grand_total).toFixed(2)}\n\nThank you for supporting the\nMaster Gardeners program!`;
+}
+
+function openReceiptModal(sale) {
+  receiptSale = sale;
+  const lines = [];
+  TIERS.forEach(t => { const c=Number(sale.counts?.[t.price]||0); if(c>0) lines.push(`$${t.price}.00 × ${c} = $${(t.price*c).toFixed(2)}`); });
+  document.getElementById("receipt-summary").innerHTML = lines.join("<br>")+`<br><strong>Total: $${Number(sale.grand_total).toFixed(2)}</strong>`;
+  document.getElementById("r-name").value = sale.buyer_name || "";
+  document.getElementById("r-contact").value = sale.buyer_email || sale.buyer_phone || "";
+  document.getElementById("receipt-modal").classList.remove("hidden");
+  setTimeout(()=>document.getElementById("r-contact").focus(), 100);
+}
+
+function closeReceiptModal() { document.getElementById("receipt-modal").classList.add("hidden"); receiptSale = null; }
+
+function sendReceiptEmail() {
+  if (!receiptSale) return;
+  const contact = document.getElementById("r-contact").value.trim();
+  const name = document.getElementById("r-name").value.trim();
+  if (name && !receiptSale.buyer_name) receiptSale.buyer_name = name;
+  const to = contact.includes("@") ? encodeURIComponent(contact) : "";
+  const subject = encodeURIComponent("Your Master Gardeners Plant Sale Receipt");
+  const body = encodeURIComponent(buildReceiptText(receiptSale));
+  window.location.href = `mailto:${to}?subject=${subject}&body=${body}`;
+  closeReceiptModal();
+}
+
+function sendReceiptSMS() {
+  if (!receiptSale) return;
+  const contact = document.getElementById("r-contact").value.trim();
+  const name = document.getElementById("r-name").value.trim();
+  if (name && !receiptSale.buyer_name) receiptSale.buyer_name = name;
+  const digits = contact.replace(/\D/g, "");
+  const body = encodeURIComponent(buildReceiptText(receiptSale));
+  const sep = /iPhone|iPad|iPod/i.test(navigator.userAgent) ? "&" : "?";
+  window.location.href = `sms:${digits}${sep}body=${body}`;
+  closeReceiptModal();
 }
 
 // ── Reports ────────────────────────────────────────────
-function setPeriod(period) {
-  reportPeriod = period; reportOffset = 0;
-  document.querySelectorAll(".report-period-btn").forEach((b,i) => {
-    b.classList.toggle("active", ["daily","monthly","annual"][i]===period);
-  });
+function setPeriod(p) {
+  reportPeriod=p; reportOffset=0;
+  document.querySelectorAll(".report-period-btn").forEach((b,i)=>b.classList.toggle("active",["daily","monthly","annual"][i]===p));
   renderReport();
 }
-
-function navReport(dir) {
-  reportOffset += dir;
-  renderReport();
-}
+function navReport(d) { reportOffset+=d; renderReport(); }
 
 function getPeriodBounds() {
   const now = new Date();
   let start, end, label;
-  if (reportPeriod === "daily") {
-    const d = new Date(now); d.setDate(d.getDate() + reportOffset);
-    start = new Date(d.getFullYear(), d.getMonth(), d.getDate());
-    end   = new Date(d.getFullYear(), d.getMonth(), d.getDate()+1);
-    label = start.toLocaleDateString("en-US", {weekday:"long", month:"long", day:"numeric", year:"numeric"});
-  } else if (reportPeriod === "monthly") {
-    const d = new Date(now.getFullYear(), now.getMonth() + reportOffset, 1);
-    start = new Date(d.getFullYear(), d.getMonth(), 1);
-    end   = new Date(d.getFullYear(), d.getMonth()+1, 1);
-    label = start.toLocaleDateString("en-US", {month:"long", year:"numeric"});
+  if (reportPeriod==="daily") {
+    const d=new Date(now); d.setDate(d.getDate()+reportOffset);
+    start=new Date(d.getFullYear(),d.getMonth(),d.getDate()); end=new Date(d.getFullYear(),d.getMonth(),d.getDate()+1);
+    label=start.toLocaleDateString("en-US",{weekday:"long",month:"long",day:"numeric",year:"numeric"});
+  } else if (reportPeriod==="monthly") {
+    const d=new Date(now.getFullYear(),now.getMonth()+reportOffset,1);
+    start=new Date(d.getFullYear(),d.getMonth(),1); end=new Date(d.getFullYear(),d.getMonth()+1,1);
+    label=start.toLocaleDateString("en-US",{month:"long",year:"numeric"});
   } else {
-    const yr = now.getFullYear() + reportOffset;
-    start = new Date(yr, 0, 1); end = new Date(yr+1, 0, 1);
-    label = String(yr);
+    const yr=now.getFullYear()+reportOffset;
+    start=new Date(yr,0,1); end=new Date(yr+1,0,1); label=String(yr);
   }
-  return { start, end, label };
+  return {start,end,label};
 }
 
 async function renderReport() {
-  const content = document.getElementById("report-content");
-  content.innerHTML = '<div class="empty-state">Loading…</div>';
+  document.getElementById("report-content").innerHTML='<div class="empty-state">Loading…</div>';
   document.getElementById("report-error").classList.add("hidden");
-
-  const { start, end, label } = getPeriodBounds();
+  const {start,end,label} = getPeriodBounds();
   document.getElementById("report-nav-label").textContent = label;
-
-  // Disable forward nav if at current period
-  document.querySelectorAll(".report-nav-btn")[1].disabled = reportOffset >= 0;
-
+  document.querySelectorAll(".report-nav-btn")[1].disabled = reportOffset>=0;
   try {
-    const startISO = start.toISOString();
-    const endISO   = end.toISOString();
-    const rows = await sbFetch(
-      `sales?created_at=gte.${encodeURIComponent(startISO)}&created_at=lt.${encodeURIComponent(endISO)}&order=created_at.asc&limit=500`
-    ) || [];
-
-    const normalized = rows.map(s => ({...s, voided: s.voided === true}));
-    const active = normalized.filter(s => !s.voided);
-    const voided = normalized.filter(s => s.voided);
-
-    if (active.length === 0 && voided.length === 0) {
-      content.innerHTML = '<div class="empty-state">No sales in this period.</div>'; return;
-    }
-
-    // Aggregate by price tier
-    const tierTotals = {};
-    PRICE_TIERS.forEach(t => tierTotals[t.price] = { count: 0, revenue: 0 });
-    active.forEach(s => {
-      PRICE_TIERS.forEach(t => {
-        const c = Number(s.counts?.[t.price]||0);
-        tierTotals[t.price].count += c;
-        tierTotals[t.price].revenue += c * t.price;
+    const rows = await sbFetch(`sales?created_at=gte.${encodeURIComponent(start.toISOString())}&created_at=lt.${encodeURIComponent(end.toISOString())}&order=created_at.asc&limit=500`) || [];
+    const active = rows.filter(s=>s.voided!==true);
+    const voided = rows.filter(s=>s.voided===true);
+    if (active.length===0 && voided.length===0) { document.getElementById("report-content").innerHTML='<div class="empty-state">No sales in this period.</div>'; return; }
+    const tierTotals={};
+    TIERS.forEach(t=>tierTotals[t.price]={count:0,revenue:0});
+    active.forEach(s=>TIERS.forEach(t=>{const c=Number(s.counts?.[t.price]||0);tierTotals[t.price].count+=c;tierTotals[t.price].revenue+=c*t.price;}));
+    const totalRev=active.reduce((a,s)=>a+Number(s.grand_total||0),0);
+    const totalPlants=active.reduce((a,s)=>a+Number(s.total_items||0),0);
+    const avgSale=active.length>0?totalRev/active.length:0;
+    const maxRev=Math.max(...TIERS.map(t=>tierTotals[t.price].revenue),1);
+    let breakdownHTML="";
+    if (reportPeriod!=="daily") {
+      const groups={};
+      active.forEach(s=>{
+        const d=new Date(s.created_at);
+        const key=reportPeriod==="monthly"?`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`:`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}`;
+        const lbl=reportPeriod==="monthly"?d.toLocaleDateString("en-US",{weekday:"short",month:"short",day:"numeric"}):d.toLocaleDateString("en-US",{month:"long",year:"numeric"});
+        if(!groups[key])groups[key]={label:lbl,revenue:0,plants:0,sessions:0};
+        groups[key].revenue+=Number(s.grand_total||0);groups[key].plants+=Number(s.total_items||0);groups[key].sessions++;
       });
-    });
-
-    const totalRev = active.reduce((a,s)=>a+Number(s.grand_total||0),0);
-    const totalPlants = active.reduce((a,s)=>a+Number(s.total_items||0),0);
-    const avgSale = active.length > 0 ? totalRev / active.length : 0;
-    const maxRev = Math.max(...PRICE_TIERS.map(t=>tierTotals[t.price].revenue), 1);
-
-    // For monthly/annual, also build sub-period breakdown
-    let breakdownHTML = "";
-    if (reportPeriod === "monthly" || reportPeriod === "annual") {
-      const groups = {};
-      active.forEach(s => {
-        const d = new Date(s.created_at);
-        const key = reportPeriod === "monthly"
-          ? `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`
-          : `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}`;
-        const lbl = reportPeriod === "monthly"
-          ? d.toLocaleDateString("en-US",{weekday:"short",month:"short",day:"numeric"})
-          : d.toLocaleDateString("en-US",{month:"long",year:"numeric"});
-        if (!groups[key]) groups[key] = { label: lbl, revenue: 0, plants: 0, sessions: 0 };
-        groups[key].revenue += Number(s.grand_total||0);
-        groups[key].plants  += Number(s.total_items||0);
-        groups[key].sessions++;
-      });
-      const maxGroupRev = Math.max(...Object.values(groups).map(g=>g.revenue), 1);
-      const rows_html = Object.entries(groups).sort((a,b)=>a[0]<b[0]?-1:1).map(([,g]) => `
-        <div class="report-row">
-          <div class="report-row-label">${g.label}</div>
-          <div class="bar-wrap"><div class="bar-fill" style="width:${(g.revenue/maxGroupRev*100).toFixed(1)}%"></div></div>
-          <div class="report-row-count">${g.sessions} sales</div>
-          <div class="report-row-amt">$${g.revenue.toFixed(2)}</div>
-        </div>`).join("");
-      const subTitle = reportPeriod === "monthly" ? "Daily Breakdown" : "Monthly Breakdown";
-      breakdownHTML = `<div class="report-section"><div class="report-section-title">${subTitle}</div>${rows_html}</div>`;
+      const maxG=Math.max(...Object.values(groups).map(g=>g.revenue),1);
+      const rr=Object.entries(groups).sort((a,b)=>a[0]<b[0]?-1:1).map(([,g])=>`
+        <div class="report-row"><div class="report-row-label">${g.label}</div><div class="bar-wrap"><div class="bar-fill" style="width:${(g.revenue/maxG*100).toFixed(1)}%"></div></div><div class="report-row-count">${g.sessions} sales</div><div class="report-row-amt">$${g.revenue.toFixed(2)}</div></div>`).join("");
+      breakdownHTML=`<div class="report-section"><div class="report-section-title">${reportPeriod==="monthly"?"Daily":"Monthly"} Breakdown</div>${rr}</div>`;
     }
-
-    // Price tier breakdown
-    const tierRows = PRICE_TIERS.filter(t=>tierTotals[t.price].count>0).map(t => `
+    const tierRows=TIERS.filter(t=>tierTotals[t.price].count>0).map(t=>`
       <div class="report-row">
-        <span class="summary-dot" style="background:${t.border};width:10px;height:10px;border-radius:50%;flex-shrink:0;display:inline-block"></span>
-        <div class="report-row-label" style="margin-left:4px">$${t.price} plants</div>
+        <span class="summary-dot" style="background:${t.border};margin-right:4px"></span>
+        <div class="report-row-label">$${t.price} plants</div>
         <div class="bar-wrap"><div class="bar-fill" style="width:${(tierTotals[t.price].revenue/maxRev*100).toFixed(1)}%"></div></div>
         <div class="report-row-count">${tierTotals[t.price].count} sold</div>
         <div class="report-row-amt">$${tierTotals[t.price].revenue.toFixed(2)}</div>
       </div>`).join("");
-
-    content.innerHTML = `
+    document.getElementById("report-content").innerHTML=`
       <div class="stat-banner">
         <div class="stat-item"><div class="stat-val">$${totalRev.toFixed(2)}</div><div class="stat-label">REVENUE</div></div>
         <div class="stat-divider"></div>
@@ -767,335 +812,203 @@ async function renderReport() {
       ${breakdownHTML}
       <div class="report-section">
         <div class="report-section-title">By Price Tier</div>
-        ${tierRows || '<div style="color:#8E8E93;font-size:14px">No data</div>'}
-        <div class="report-total-row">
-          <span class="report-total-label">Total</span>
-          <span class="report-total-amt">$${totalRev.toFixed(2)}</span>
-        </div>
+        ${tierRows||'<div style="color:#8E8E93;font-size:13px">No data</div>'}
+        <div class="report-total-row"><span class="report-total-label">Total</span><span class="report-total-amt">$${totalRev.toFixed(2)}</span></div>
       </div>
-      ${voided.length > 0 ? `<div class="report-section" style="border:1.5px solid #FCA5A5">
-        <div class="report-section-title" style="color:#DC2626">Voided Sales (${voided.length})</div>
-        ${voided.map(s=>`<div class="report-row">
-          <div class="report-row-label">${new Date(s.created_at).toLocaleString()}</div>
-          <div class="report-row-amt" style="text-decoration:line-through;color:#8E8E93">$${Number(s.grand_total).toFixed(2)}</div>
-        </div>`).join("")}
-      </div>` : ""}
-    `;
+      ${voided.length>0?`<div class="report-section" style="border:1.5px solid #FCA5A5"><div class="report-section-title" style="color:#DC2626">Voided Sales (${voided.length})</div>${voided.map(s=>`<div class="report-row"><div class="report-row-label">${new Date(s.created_at).toLocaleString()}</div><div class="report-row-amt" style="text-decoration:line-through;color:#8E8E93">$${Number(s.grand_total).toFixed(2)}</div></div>`).join("")}</div>`:""}`;
   } catch(e) {
-    document.getElementById("report-error").textContent = "Error: "+e.message;
+    document.getElementById("report-error").textContent="Error: "+e.message;
     document.getElementById("report-error").classList.remove("hidden");
-    content.innerHTML = "";
+    document.getElementById("report-content").innerHTML="";
   }
 }
 
-// ── Tabs ───────────────────────────────────────────────
-function showTab(tab) {
-  ["checkout","history","reports"].forEach(t => {
-    document.getElementById("tab-"+t).classList.toggle("hidden", t!==tab);
-  });
-  document.querySelectorAll(".tab").forEach((el,i) => {
-    el.classList.toggle("active", ["checkout","history","reports"][i]===tab);
-  });
-  if (tab==="history") loadSessions();
-  if (tab==="reports") renderReport();
+// ── Buyers Tab ─────────────────────────────────────────
+let buyersData = [];
+
+function setBuyerView(v) {
+  buyerView = v;
+  document.querySelectorAll(".buyer-view-btn").forEach((b,i)=>b.classList.toggle("active",["simple","detailed"][i]===v));
+  renderBuyerList();
 }
 
-// ── Receipt ────────────────────────────────────────────
-let receiptSale = null;
-
-function buildReceiptText(sale) {
-  const date = new Date(sale.created_at || Date.now()).toLocaleString("en-US", {
-    weekday:"long", year:"numeric", month:"long", day:"numeric",
-    hour:"numeric", minute:"2-digit"
-  });
-  const PRICE_TIERS = [1,2,3,4,5,6,7,8,9,10];
-  let lines = [];
-  PRICE_TIERS.forEach(p => {
-    const c = Number(sale.counts?.[p] || 0);
-    if (c > 0) lines.push(`  $${p}.00 x ${c} = $${(p*c).toFixed(2)}`);
-  });
-  return [
-    "Master Gardeners Plant Sale",
-    "─────────────────────────",
-    date,
-    "",
-    "ITEMS PURCHASED:",
-    ...lines,
-    "─────────────────────────",
-    `TOTAL: $${Number(sale.grand_total).toFixed(2)}`,
-    "",
-    "Thank you for supporting the",
-    "Master Gardeners program!",
-  ].join("\n");
-}
-
-function buildReceiptHTML(sale) {
-  const date = new Date(sale.created_at || Date.now()).toLocaleString("en-US", {
-    weekday:"long", year:"numeric", month:"long", day:"numeric",
-    hour:"numeric", minute:"2-digit"
-  });
-  const PRICE_TIERS = [1,2,3,4,5,6,7,8,9,10];
-  let rows = "";
-  PRICE_TIERS.forEach(p => {
-    const c = Number(sale.counts?.[p] || 0);
-    if (c > 0) rows += `<tr><td>$${p}.00 plant x ${c}</td><td style="text-align:right">$${(p*c).toFixed(2)}</td></tr>`;
-  });
-  return `
-    <h2 style="color:#1B3A2D;margin:0 0 4px">Master Gardeners Plant Sale</h2>
-    <p style="color:#666;margin:0 0 16px;font-size:14px">${date}</p>
-    <table style="width:100%;border-collapse:collapse;font-size:15px;margin-bottom:12px">
-      ${rows}
-      <tr style="border-top:2px solid #eee;font-weight:bold;font-size:17px">
-        <td style="padding-top:8px">Total</td>
-        <td style="padding-top:8px;text-align:right">$${Number(sale.grand_total).toFixed(2)}</td>
-      </tr>
-    </table>
-    <p style="color:#1B3A2D;font-weight:600;font-size:14px">Thank you for supporting the Master Gardeners program!</p>
-  `;
-}
-
-function openReceiptModal(sale) {
-  receiptSale = sale;
-  // Build preview
-  const PRICE_TIERS_LIST = [1,2,3,4,5,6,7,8,9,10];
-  let lines = [];
-  PRICE_TIERS_LIST.forEach(p => {
-    const c = Number(sale.counts?.[p] || 0);
-    if (c > 0) lines.push(`$${p}.00 × ${c} = $${(p*c).toFixed(2)}`);
-  });
-  document.getElementById("receipt-summary").innerHTML =
-    lines.join("<br>") + `<br><strong>Total: $${Number(sale.grand_total).toFixed(2)}</strong>`;
-  document.getElementById("receipt-contact").value = "";
-  document.getElementById("receipt-modal").classList.remove("hidden");
-  setTimeout(() => document.getElementById("receipt-contact").focus(), 100);
-}
-
-function closeReceiptModal() {
-  document.getElementById("receipt-modal").classList.add("hidden");
-  receiptSale = null;
-}
-
-function sendReceiptEmail() {
-  if (!receiptSale) return;
-  const contact = document.getElementById("receipt-contact").value.trim();
-  const subject = encodeURIComponent("Your Master Gardeners Plant Sale Receipt");
-  const body = encodeURIComponent(buildReceiptText(receiptSale));
-  const to = contact.includes("@") ? encodeURIComponent(contact) : "";
-  window.location.href = `mailto:${to}?subject=${subject}&body=${body}`;
-  closeReceiptModal();
-}
-
-function sendReceiptSMS() {
-  if (!receiptSale) return;
-  const contact = document.getElementById("receipt-contact").value.trim();
-  const body = encodeURIComponent(buildReceiptText(receiptSale));
-  // iOS uses & Android uses ?, handle both
-  const sep = /iPhone|iPad|iPod/i.test(navigator.userAgent) ? "&" : "?";
-  const to = contact.replace(/\D/g,""); // strip non-digits for phone
-  window.location.href = `sms:${to}${sep}body=${body}`;
-  closeReceiptModal();
-}
-
-// ── Change Password ────────────────────────────────────
-function openChangePassword() {
-  document.getElementById("pw-new").value = "";
-  document.getElementById("pw-confirm").value = "";
-  document.getElementById("pw-new-error").classList.add("hidden");
-  document.getElementById("pw-confirm-error").classList.add("hidden");
-  document.getElementById("pw-success").classList.add("hidden");
-  document.getElementById("pw-modal-sub").textContent = "Enter and confirm your new password.";
-  document.getElementById("pw-save-btn").disabled = false;
-  document.getElementById("pw-save-btn").textContent = "Save Password";
-  document.getElementById("pw-modal").classList.remove("hidden");
-}
-
-function closeChangePassword() {
-  document.getElementById("pw-modal").classList.add("hidden");
-}
-
-async function handleChangePassword() {
-  const newPw = document.getElementById("pw-new").value;
-  const confirm = document.getElementById("pw-confirm").value;
-  const newErr = document.getElementById("pw-new-error");
-  const confirmErr = document.getElementById("pw-confirm-error");
-  const success = document.getElementById("pw-success");
-
-  // Reset errors
-  newErr.classList.add("hidden");
-  confirmErr.classList.add("hidden");
-  success.classList.add("hidden");
-
-  let valid = true;
-  if (!newPw || newPw.length < 6) {
-    newErr.textContent = "Password must be at least 6 characters.";
-    newErr.classList.remove("hidden");
-    valid = false;
-  }
-  if (newPw !== confirm) {
-    confirmErr.textContent = "Passwords do not match.";
-    confirmErr.classList.remove("hidden");
-    valid = false;
-  }
-  if (!valid) return;
-
-  const btn = document.getElementById("pw-save-btn");
-  btn.disabled = true; btn.textContent = "Saving…";
-
+async function loadBuyers() {
+  document.getElementById("buyers-list").innerHTML='<div class="empty-state">Loading…</div>';
+  document.getElementById("buyers-error").classList.add("hidden");
   try {
-    const res = await fetch(`${SUPABASE_URL}/auth/v1/user?apikey=${SUPABASE_KEY}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        "apikey": SUPABASE_KEY,
-        "Authorization": "Bearer " + authToken,
-      },
-      body: JSON.stringify({ password: newPw }),
-    });
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.msg || data.message || "Failed to update password");
-    success.classList.remove("hidden");
-    btn.textContent = "Saved!";
-    setTimeout(() => closeChangePassword(), 1500);
+    const rows = await sbFetch("sales?voided=eq.false&order=created_at.desc&limit=500") || [];
+    buyersData = rows.filter(s=>s.voided!==true && (s.buyer_name||s.buyer_email||s.buyer_phone));
+    renderBuyerList();
   } catch(e) {
-    newErr.textContent = "Error: " + e.message;
-    newErr.classList.remove("hidden");
-    btn.disabled = false; btn.textContent = "Save Password";
+    document.getElementById("buyers-error").textContent="Error: "+e.message;
+    document.getElementById("buyers-error").classList.remove("hidden");
+    document.getElementById("buyers-list").innerHTML="";
   }
+}
+
+function renderBuyerList() {
+  const list = document.getElementById("buyers-list");
+  if (buyersData.length===0) {
+    list.innerHTML='<div class="empty-state">No buyers with contact info yet.<br>Add buyer info when saving a sale.</div>'; return;
+  }
+  list.innerHTML="";
+  buyersData.forEach(s => {
+    const card = document.createElement("div");
+    card.className = "session-card";
+    const tierDetail = buyerView==="detailed"
+      ? "<div class='session-tiers' style='margin-top:8px'>"+TIERS.filter(t=>s.counts?.[t.price]>0).map(t=>`<span class="history-pill" style="background:${t.color};border-color:${t.border};color:${t.text}">$${t.price}×${s.counts[t.price]}</span>`).join("")+"</div>" : "";
+    card.innerHTML=`
+      <div class="session-header">
+        <span class="session-time">${new Date(s.created_at).toLocaleString()}</span>
+        <span class="session-total">$${Number(s.grand_total).toFixed(2)}</span>
+      </div>
+      <div class="session-buyer">👤 ${s.buyer_name||"—"}</div>
+      <div class="session-meta">
+        ${s.buyer_email?`✉️ ${s.buyer_email}`:""}${s.buyer_email&&s.buyer_phone?" · ":""}${s.buyer_phone?`📞 ${s.buyer_phone}`:""}
+      </div>
+      ${tierDetail}
+      <div style="display:flex;justify-content:flex-end;margin-top:8px">
+        <button class="receipt-btn" id="brb-${s.id}">📄 Receipt</button>
+      </div>`;
+    card.querySelector(".receipt-btn").addEventListener("click", ()=>openReceiptModal(s));
+    list.appendChild(card);
+  });
+}
+
+// ── Print Buyer List ───────────────────────────────────
+function printBuyerList() {
+  if (buyersData.length===0) { showToast("No buyers to print","error"); return; }
+  const title = `Buyer List — ${new Date().toLocaleDateString("en-US",{month:"long",day:"numeric",year:"numeric"})}`;
+  const isDetailed = buyerView==="detailed";
+
+  let rows = buyersData.map(s => {
+    const tierDetail = isDetailed
+      ? TIERS.filter(t=>s.counts?.[t.price]>0).map(t=>`$${t.price}×${s.counts[t.price]}`).join(", ")
+      : "";
+    return `<tr>
+      <td>${s.buyer_name||"—"}</td>
+      <td>${s.buyer_email||"—"}</td>
+      <td>${s.buyer_phone||"—"}</td>
+      <td style="text-align:right;font-weight:700">$${Number(s.grand_total).toFixed(2)}</td>
+      ${isDetailed?`<td>${tierDetail}</td>`:""}
+    </tr>`;
+  }).join("");
+
+  const totalRev = buyersData.reduce((a,s)=>a+Number(s.grand_total||0),0);
+
+  document.getElementById("print-title").textContent = title;
+  document.getElementById("print-content").innerHTML = `
+    <table>
+      <thead><tr>
+        <th>Name</th><th>Email</th><th>Phone</th><th style="text-align:right">Total</th>
+        ${isDetailed?"<th>Items</th>":""}
+      </tr></thead>
+      <tbody>${rows}</tbody>
+      <tfoot><tr style="font-weight:bold;background:#f0f9f4">
+        <td colspan="${isDetailed?4:3}">Total Revenue (${buyersData.length} buyers)</td>
+        <td style="text-align:right">$${totalRev.toFixed(2)}</td>
+        ${isDetailed?"<td></td>":""}
+      </tr></tfoot>
+    </table>`;
+  document.getElementById("print-footer").textContent = `Printed ${new Date().toLocaleString()} · Master Gardeners Plant Sale`;
+  window.print();
 }
 
 // ── Auth UI ────────────────────────────────────────────
 function showLoginScreen(msg) {
   document.getElementById("login-screen").classList.remove("hidden");
   document.getElementById("app").classList.add("hidden");
-  document.getElementById("login-email").value = "";
-  document.getElementById("login-password").value = "";
-  const err = document.getElementById("login-error");
-  if (msg) {
-    err.textContent = msg;
-    err.style.background = "#FEF9C3";
-    err.style.color = "#854D0E";
-    err.classList.remove("hidden");
-  } else {
-    err.classList.add("hidden");
-    err.style.background = "";
-    err.style.color = "";
-  }
+  document.getElementById("login-email").value="";
+  document.getElementById("login-password").value="";
+  const el=document.getElementById("login-msg");
+  if (msg) { el.textContent=msg; el.className="login-msg info"; el.classList.remove("hidden"); }
+  else { el.classList.add("hidden"); }
 }
 
 function showApp() {
   document.getElementById("login-screen").classList.add("hidden");
   document.getElementById("app").classList.remove("hidden");
-  document.getElementById("user-email").textContent = currentUser?.email || "";
-  renderGrid();
-  checkDb();
-}
-
-// ── Inactivity Timer ───────────────────────────────────
-const INACTIVITY_SECS = 10 * 60; // 10 minutes
-let countdownInterval = null;
-let secondsRemaining = INACTIVITY_SECS;
-let lastActivity = Date.now();
-
-function formatTime(secs) {
-  const m = Math.floor(secs / 60);
-  const s = secs % 60;
-  return `${String(m).padStart(2,"0")}:${String(s).padStart(2,"0")}`;
-}
-
-function updateTimerDisplay() {
-  const el = document.getElementById("session-timer");
-  if (!el) return;
-  el.textContent = formatTime(secondsRemaining);
-  el.className = "session-timer";
-  if (secondsRemaining <= 60) el.classList.add("danger");
-  else if (secondsRemaining <= 120) el.classList.add("warning");
-}
-
-function resetInactivityTimer() {
-  lastActivity = Date.now();
-  secondsRemaining = INACTIVITY_SECS;
-  updateTimerDisplay();
-}
-
-function startActivityTracking() {
-  // Reset on any user interaction
-  ["click", "touchstart", "keydown", "scroll", "mousemove"].forEach(evt =>
-    document.addEventListener(evt, resetInactivityTimer, { passive: true })
-  );
-
-  // Tick every second
-  secondsRemaining = INACTIVITY_SECS;
-  updateTimerDisplay();
-  countdownInterval = setInterval(() => {
-    secondsRemaining = Math.max(0, secondsRemaining - 1);
-    updateTimerDisplay();
-    if (secondsRemaining <= 0) {
-      forceLogout("You have been logged out due to inactivity.");
-    }
-  }, 1000);
-}
-
-function stopActivityTracking() {
-  ["click", "touchstart", "keydown", "scroll", "mousemove"].forEach(evt =>
-    document.removeEventListener(evt, resetInactivityTimer)
-  );
-  clearInterval(countdownInterval);
-  countdownInterval = null;
-  // Hide timer
-  const el = document.getElementById("session-timer");
-  if (el) el.textContent = "";
-}
-
-async function forceLogout(reason) {
-  stopActivityTracking();
-  await sbSignOut();
-  showLoginScreen(reason);
+  document.getElementById("user-email").textContent = currentUser?.email||"";
+  renderGrid(); checkDb();
 }
 
 async function handleLogin() {
-  const email = document.getElementById("login-email").value.trim();
-  const password = document.getElementById("login-password").value;
-  const btn = document.getElementById("login-btn");
-  const err = document.getElementById("login-error");
-  err.classList.add("hidden");
-  if (!email || !password) { err.textContent = "Please enter email and password."; err.classList.remove("hidden"); return; }
-  btn.disabled = true; btn.textContent = "Signing in…";
+  const email=document.getElementById("login-email").value.trim();
+  const password=document.getElementById("login-password").value;
+  const btn=document.getElementById("login-btn");
+  const msg=document.getElementById("login-msg");
+  msg.classList.add("hidden");
+  if (!email||!password) { msg.textContent="Please enter email and password."; msg.className="login-msg error"; msg.classList.remove("hidden"); return; }
+  btn.disabled=true; btn.textContent="Signing in…";
   try {
-    const data = await sbSignIn(email, password);
-    authToken = data.access_token;
-    currentUser = data.user;
-    // No persistent storage — session lives only in memory
-    showApp();
-    startActivityTracking();
+    const data=await sbSignIn(email,password);
+    authToken=data.access_token; currentUser=data.user;
+    showApp(); startActivityTracking();
   } catch(e) {
-    err.textContent = e.message;
-    err.classList.remove("hidden");
-  } finally {
-    btn.disabled = false; btn.textContent = "Sign In";
-  }
+    msg.textContent=e.message; msg.className="login-msg error"; msg.classList.remove("hidden");
+  } finally { btn.disabled=false; btn.textContent="Sign In"; }
 }
 
 async function handleLogout() {
-  stopActivityTracking();
-  await sbSignOut();
-  showLoginScreen();
+  stopActivityTracking(); await sbSignOut(); showLoginScreen();
 }
 
-// Allow Enter key on login form
-document.getElementById("login-password").addEventListener("keydown", e => {
-  if (e.key === "Enter") handleLogin();
-});
-document.getElementById("login-email").addEventListener("keydown", e => {
-  if (e.key === "Enter") handleLogin();
-});
+// ── Change Password ────────────────────────────────────
+function openChangePassword() {
+  ["pw-new","pw-confirm"].forEach(id=>document.getElementById(id).value="");
+  ["pw-new-error","pw-confirm-error","pw-success"].forEach(id=>document.getElementById(id).classList.add("hidden"));
+  document.getElementById("pw-save-btn").disabled=false;
+  document.getElementById("pw-save-btn").textContent="Save Password";
+  document.getElementById("pw-modal").classList.remove("hidden");
+}
+function closeChangePassword() { document.getElementById("pw-modal").classList.add("hidden"); }
 
-// Allow Enter key on change password fields
-document.getElementById("pw-confirm").addEventListener("keydown", e => {
-  if (e.key === "Enter") handleChangePassword();
-});
+async function handleChangePassword() {
+  const newPw=document.getElementById("pw-new").value;
+  const confirm=document.getElementById("pw-confirm").value;
+  ["pw-new-error","pw-confirm-error","pw-success"].forEach(id=>document.getElementById(id).classList.add("hidden"));
+  let valid=true;
+  if (!newPw||newPw.length<6) { document.getElementById("pw-new-error").textContent="Min. 6 characters."; document.getElementById("pw-new-error").classList.remove("hidden"); valid=false; }
+  if (newPw!==confirm) { document.getElementById("pw-confirm-error").textContent="Passwords do not match."; document.getElementById("pw-confirm-error").classList.remove("hidden"); valid=false; }
+  if (!valid) return;
+  const btn=document.getElementById("pw-save-btn");
+  btn.disabled=true; btn.textContent="Saving…";
+  try {
+    const res=await fetch(`${SUPABASE_URL}/auth/v1/user?apikey=${SUPABASE_KEY}`,{
+      method:"PUT", headers:{"Content-Type":"application/json","apikey":SUPABASE_KEY,"Authorization":"Bearer "+authToken},
+      body:JSON.stringify({password:newPw}),
+    });
+    const data=await res.json();
+    if (!res.ok) throw new Error(data.msg||data.message||"Failed");
+    document.getElementById("pw-success").classList.remove("hidden");
+    btn.textContent="Saved!";
+    setTimeout(()=>closeChangePassword(),1500);
+  } catch(e) {
+    document.getElementById("pw-new-error").textContent="Error: "+e.message;
+    document.getElementById("pw-new-error").classList.remove("hidden");
+    btn.disabled=false; btn.textContent="Save Password";
+  }
+}
+
+// ── Tabs ───────────────────────────────────────────────
+function showTab(tab) {
+  ["checkout","history","reports","buyers"].forEach(t=>{
+    document.getElementById("tab-"+t).classList.toggle("hidden",t!==tab);
+  });
+  document.querySelectorAll(".tab").forEach((el,i)=>{
+    el.classList.toggle("active",["checkout","history","reports","buyers"][i]===tab);
+  });
+  if (tab==="history") loadSessions();
+  if (tab==="reports") renderReport();
+  if (tab==="buyers") loadBuyers();
+}
+
+// ── Key handlers ───────────────────────────────────────
+document.getElementById("login-password").addEventListener("keydown",e=>{if(e.key==="Enter")handleLogin();});
+document.getElementById("login-email").addEventListener("keydown",e=>{if(e.key==="Enter")handleLogin();});
+document.getElementById("pw-confirm").addEventListener("keydown",e=>{if(e.key==="Enter")handleChangePassword();});
 
 // ── Init ───────────────────────────────────────────────
-// No session persistence — always require login on load
 showLoginScreen();
 </script>
 </body>
