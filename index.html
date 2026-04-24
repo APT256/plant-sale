@@ -559,11 +559,11 @@ function toggleCustomerForm() {
   btn.textContent = hidden ? "+ Add" : "− Hide";
 }
 
-function getCustomerInfo() {
+function getBuyerInfo() {
   return {
-    customer_name:  document.getElementById("customer-name").value.trim() || null,
-    customer_email: document.getElementById("customer-email").value.trim() || null,
-    customer_phone: document.getElementById("customer-phone").value.trim() || null,
+    buyer_name:  document.getElementById("customer-name").value.trim() || null,
+    buyer_email: document.getElementById("customer-email").value.trim() || null,
+    buyer_phone: document.getElementById("customer-phone").value.trim() || null,
   };
 }
 
@@ -585,7 +585,7 @@ async function uploadSale() {
   btn.disabled=true; btn.textContent="Saving…";
   document.getElementById("error-box").classList.add("hidden");
   try {
-    const customer = getCustomerInfo();
+    const customer = getBuyerInfo();
     await sbFetch("sales", {
       method:"POST",
       headers:{"Prefer":"return=representation"},
@@ -640,8 +640,8 @@ function renderSessions() {
     const pills = TIERS.filter(t=>s.counts?.[t.price]>0).map(t =>
       `<span class="history-pill" style="background:${t.color};border-color:${t.border};color:${t.text}">$${t.price}×${s.counts[t.price]}</span>`
     ).join("");
-    const customerLine = s.customer_name || s.customer_email || s.customer_phone
-      ? `<div class="session-customer">👤 ${[s.customer_name, s.customer_email, s.customer_phone].filter(Boolean).join(" · ")}</div>` : "";
+    const customerLine = s.buyer_name || s.buyer_email || s.buyer_phone
+      ? `<div class="session-customer">👤 ${[s.buyer_name, s.buyer_email, s.buyer_phone].filter(Boolean).join(" · ")}</div>` : "";
     card.innerHTML = `
       <div class="session-header">
         <span class="session-time">${new Date(s.created_at).toLocaleString()}</span>
@@ -694,7 +694,7 @@ function buildReceiptText(sale) {
   const date = new Date(sale.created_at||Date.now()).toLocaleString("en-US",{weekday:"long",year:"numeric",month:"long",day:"numeric",hour:"numeric",minute:"2-digit"});
   const lines = [];
   TIERS.forEach(t => { const c=Number(sale.counts?.[t.price]||0); if(c>0) lines.push(`  $${t.price}.00 x ${c} = $${(t.price*c).toFixed(2)}`); });
-  const greeting = sale.customer_name ? `Hi ${sale.customer_name},\n\nHere is your receipt from today's plant sale.\n\n` : "";
+  const greeting = sale.buyer_name ? `Hi ${sale.buyer_name},\n\nHere is your receipt from today's plant sale.\n\n` : "";
   return `${greeting}Alabama Master Gardeners - Morgan County\nPlant Sale Receipt\n─────────────────────────\n${date}\n\nITEMS PURCHASED:\n${lines.join("\n")}\n─────────────────────────\nTOTAL: $${Number(sale.grand_total).toFixed(2)}\n\nThank you for supporting the\nAlabama Master Gardeners - Morgan County!`;
 }
 
@@ -706,7 +706,7 @@ function buildReceiptHTML(sale) {
     const c = Number(sale.counts?.[t.price]||0);
     if (c>0) rows.push(`<tr><td style="padding:6px 12px;border-bottom:1px solid #e8f5e9">$${t.price}.00 plants</td><td style="padding:6px 12px;border-bottom:1px solid #e8f5e9;text-align:center">${c}</td><td style="padding:6px 12px;border-bottom:1px solid #e8f5e9;text-align:right;font-weight:600">$${(t.price*c).toFixed(2)}</td></tr>`);
   });
-  const greeting = sale.customer_name ? `<p style="font-size:16px;color:#333;margin:0 0 16px">Hi <strong>${sale.customer_name}</strong>,<br>Thank you for your purchase at today's plant sale!</p>` : `<p style="font-size:16px;color:#333;margin:0 0 16px">Thank you for your purchase at today's plant sale!</p>`;
+  const greeting = sale.buyer_name ? `<p style="font-size:16px;color:#333;margin:0 0 16px">Hi <strong>${sale.buyer_name}</strong>,<br>Thank you for your purchase at today's plant sale!</p>` : `<p style="font-size:16px;color:#333;margin:0 0 16px">Thank you for your purchase at today's plant sale!</p>`;
   return `<!DOCTYPE html><html><body style="margin:0;padding:0;background:#f0f9f4;font-family:-apple-system,BlinkMacSystemFont,sans-serif">
   <div style="max-width:480px;margin:20px auto;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.1)">
     <div style="background:#1B3A2D;padding:24px;text-align:center">
@@ -742,8 +742,8 @@ function openReceiptModal(sale) {
   const lines = [];
   TIERS.forEach(t => { const c=Number(sale.counts?.[t.price]||0); if(c>0) lines.push(`$${t.price}.00 × ${c} = $${(t.price*c).toFixed(2)}`); });
   document.getElementById("receipt-summary").innerHTML = lines.join("<br>")+`<br><strong>Total: $${Number(sale.grand_total).toFixed(2)}</strong>`;
-  document.getElementById("r-name").value = sale.customer_name || "";
-  document.getElementById("r-contact").value = sale.customer_email || sale.customer_phone || "";
+  document.getElementById("r-name").value = sale.buyer_name || "";
+  document.getElementById("r-contact").value = sale.buyer_email || sale.buyer_phone || "";
   document.getElementById("receipt-modal").classList.remove("hidden");
   setTimeout(()=>document.getElementById("r-contact").focus(), 100);
 }
@@ -754,7 +754,7 @@ function sendReceiptEmail() {
   if (!receiptSale) return;
   const contact = document.getElementById("r-contact").value.trim();
   const name = document.getElementById("r-name").value.trim();
-  if (name && !receiptSale.customer_name) receiptSale.customer_name = name;
+  if (name && !receiptSale.buyer_name) receiptSale.buyer_name = name;
   const to = contact.includes("@") ? encodeURIComponent(contact) : "";
   const subject = encodeURIComponent("Your Alabama Master Gardeners Plant Sale Receipt");
 
@@ -777,7 +777,7 @@ function sendReceiptSMS() {
   if (!receiptSale) return;
   const contact = document.getElementById("r-contact").value.trim();
   const name = document.getElementById("r-name").value.trim();
-  if (name && !receiptSale.customer_name) receiptSale.customer_name = name;
+  if (name && !receiptSale.buyer_name) receiptSale.buyer_name = name;
   const digits = contact.replace(/\D/g, "");
   const body = encodeURIComponent(buildReceiptText(receiptSale));
   const sep = /iPhone|iPad|iPod/i.test(navigator.userAgent) ? "&" : "?";
@@ -890,7 +890,7 @@ async function loadCustomers() {
   document.getElementById("customers-error").classList.add("hidden");
   try {
     const rows = await sbFetch("sales?voided=eq.false&order=created_at.desc&limit=500") || [];
-    customersData = rows.filter(s=>s.voided!==true && (s.customer_name||s.customer_email||s.customer_phone));
+    customersData = rows.filter(s=>s.voided!==true && (s.buyer_name||s.buyer_email||s.buyer_phone));
     renderCustomerList();
   } catch(e) {
     document.getElementById("customers-error").textContent="Error: "+e.message;
@@ -915,9 +915,9 @@ function renderCustomerList() {
         <span class="session-time">${new Date(s.created_at).toLocaleString()}</span>
         <span class="session-total">$${Number(s.grand_total).toFixed(2)}</span>
       </div>
-      <div class="session-customer">👤 ${s.customer_name||"—"}</div>
+      <div class="session-customer">👤 ${s.buyer_name||"—"}</div>
       <div class="session-meta">
-        ${s.customer_email?`✉️ ${s.customer_email}`:""}${s.customer_email&&s.customer_phone?" · ":""}${s.customer_phone?`📞 ${s.customer_phone}`:""}
+        ${s.buyer_email?`✉️ ${s.buyer_email}`:""}${s.buyer_email&&s.buyer_phone?" · ":""}${s.buyer_phone?`📞 ${s.buyer_phone}`:""}
       </div>
       ${tierDetail}
       <div style="display:flex;justify-content:flex-end;margin-top:8px">
@@ -939,9 +939,9 @@ function printCustomerList() {
       ? TIERS.filter(t=>s.counts?.[t.price]>0).map(t=>`$${t.price}×${s.counts[t.price]}`).join(", ")
       : "";
     return `<tr>
-      <td>${s.customer_name||"—"}</td>
-      <td>${s.customer_email||"—"}</td>
-      <td>${s.customer_phone||"—"}</td>
+      <td>${s.buyer_name||"—"}</td>
+      <td>${s.buyer_email||"—"}</td>
+      <td>${s.buyer_phone||"—"}</td>
       <td style="text-align:right;font-weight:700">$${Number(s.grand_total).toFixed(2)}</td>
       ${isDetailed?`<td>${tierDetail}</td>`:""}
     </tr>`;
