@@ -331,9 +331,10 @@
       <div class="field"><label class="field-label">Name (optional)</label><input class="field-input" id="r-name" type="text" placeholder="Jane Smith"/></div>
       <div class="field"><label class="field-label">Email or Phone</label><input class="field-input" id="r-contact" type="text" placeholder="email@example.com or 555-867-5309"/></div>
       <div class="send-btns">
-        <button class="send-btn-email" onclick="sendReceiptEmail()">✉️ Email</button>
+        <button class="send-btn-email" onclick="sendReceiptEmail()">✉️ Open Receipt</button>
         <button class="send-btn-sms" onclick="sendReceiptSMS()">💬 Text</button>
       </div>
+      <p style="font-size:11px;color:#8E8E93;text-align:center;margin:-4px 0 10px">Opening the receipt shows the logo. Use Share → Mail in Safari to send it.</p>
       <button class="btn" style="width:100%" onclick="closeReceiptModal()">Cancel</button>
     </div>
   </div>
@@ -753,24 +754,16 @@ function closeReceiptModal() { document.getElementById("receipt-modal").classLis
 
 function sendReceiptEmail() {
   if (!receiptSale) return;
-  const contact = document.getElementById("r-contact").value.trim();
   const name = document.getElementById("r-name").value.trim();
   if (name && !receiptSale.buyer_name) receiptSale.buyer_name = name;
-  const to = contact.includes("@") ? encodeURIComponent(contact) : "";
-  const subject = encodeURIComponent("Your Alabama Master Gardeners Plant Sale Receipt");
 
-  // Open HTML receipt in new tab for printing/forwarding,
-  // AND open mailto with plain-text fallback so Mail app launches
+  // Build the HTML receipt and open it in a new tab.
+  // On iOS Safari: tap the Share button → Mail to send with logo intact.
+  // Alternatively tap Share → Print for a printed copy.
   const htmlContent = buildReceiptHTML(receiptSale);
   const blob = new Blob([htmlContent], {type:"text/html"});
   const blobUrl = URL.createObjectURL(blob);
   window.open(blobUrl, "_blank");
-
-  // Also trigger native mail app with plain text so user can send directly
-  const body = encodeURIComponent(buildReceiptText(receiptSale));
-  setTimeout(() => {
-    window.location.href = `mailto:${to}?subject=${subject}&body=${body}`;
-  }, 300);
   closeReceiptModal();
 }
 
